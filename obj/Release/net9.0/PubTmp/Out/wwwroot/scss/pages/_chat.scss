@@ -1,0 +1,21 @@
+//
+// _chat.scss
+//
+
+// Chat List
+.chat-list {
+    .list-group-item {
+        padding: 12px 15px !important;
+        border: none;
+        border-radius: $border-radius;
+        margin-top: 0 !important;
+    }
+}
+
+// Chat items
+.chat-item {
+    .chat-message {
+        max-width: 400px;
+        font-weight: $font-weight-medium;
+    }
+}

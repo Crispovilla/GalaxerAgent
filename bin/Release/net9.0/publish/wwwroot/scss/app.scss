@@ -1,0 +1,98 @@
+/**
+ * Template Name: INSPINIA - Multipurpose Admin & Dashboard Template
+ * By (Author): WebAppLayers
+ * Module/App (File Name): App CSS File
+ * Version: 4.2.0
+*/
+
+
+// Core files
+@import "./node_modules/bootstrap/scss/functions";
+@import "./node_modules/bootstrap/scss/variables";
+
+@import "variables";
+@import "variables-dark";
+
+@import "./node_modules/bootstrap/scss/bootstrap";
+
+@import "config/root";
+@import "config/theme-classic"; // Default Theme
+@import "config/theme-saas";
+@import "config/theme-modern";
+@import "config/theme-material";
+@import "config/theme-minimal";
+@import "config/theme-flat";
+@import "config/theme-galaxy";
+
+// Structure
+@import "structure/topbar";
+@import "structure/sidenav";
+@import "structure/horizontal";
+@import "structure/layout";
+@import "structure/footer";
+
+// Components
+@import "components/background";
+@import "components/accordions";
+@import "components/alert";
+@import "components/avatar";
+@import "components/breadcrumb";
+@import "components/buttons";
+@import "components/badge";
+@import "components/card";
+@import "components/dropdown";
+@import "components/forms";
+@import "components/modal";
+@import "components/nav";
+@import "components/pagination";
+@import "components/popover";
+@import "components/print";
+@import "components/progress";
+@import "components/reboot";
+@import "components/tables";
+@import "components/tooltip";
+@import "components/preloader";
+@import "components/widgets";
+@import "components/list-group";
+
+
+// Pages
+@import "pages/authentication";
+@import "pages/chat";
+@import "pages/email";
+@import "pages/error";
+@import "pages/kanban-board";
+@import "pages/landing";
+@import "pages/outlook";
+@import "pages/pin-board";
+@import "pages/timeline";
+
+
+// Plugins
+@import "plugins/apexcharts";
+@import "plugins/calendar";
+@import "plugins/choice";
+@import "plugins/colorpicker";
+@import "plugins/datatables";
+@import "plugins/daterangepicker";
+@import "plugins/diff";
+@import "plugins/dropzone";
+@import "plugins/filepond";
+@import "plugins/flatpickr";
+@import "plugins/jvectormap";
+@import "plugins/ladda";
+@import "plugins/noui-rangeslider";
+@import "plugins/pass-bar";
+@import "plugins/prismjs";
+@import "plugins/quill-editor";
+@import "plugins/select2";
+@import "plugins/simplebar";
+@import "plugins/sortablejs";
+@import "plugins/summernote";
+@import "plugins/sweetalert2";
+@import "plugins/tagify";
+@import "plugins/touchpin";
+@import "plugins/tour";
+@import "plugins/treeview";
+@import "plugins/typehead";
+@import "plugins/wizard";

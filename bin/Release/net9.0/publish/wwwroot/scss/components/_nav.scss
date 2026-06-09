@@ -1,0 +1,61 @@
+//
+// _nav.scss
+//
+
+.nav-tabs,
+.nav-pills {
+    >li {
+        >a {
+            font-weight: $font-weight-semibold;
+        }
+    }
+}
+
+// nav-pills Colors
+@each $color,
+$value in $theme-colors {
+    .nav-pills-#{$color} {
+        --#{$prefix}nav-pills-link-active-bg: #{$value};
+        --#{$prefix}nav-link-hover-color: #{$value};
+    }
+}
+
+// nav-bordered
+.nav-tabs {
+    &.nav-bordered {
+        border-bottom: 1px solid var(--#{$prefix}border-color);
+
+        .nav-item {
+
+            .nav-link {
+                border: 0;
+
+                &.active {
+                    border-bottom: 1px solid var(--#{$prefix}primary);
+                }
+            }
+        }
+    }
+}
+
+@each $color,
+$value in $theme-colors {
+    .nav-tabs {
+        &.nav-bordered-#{$color} {
+            .nav-item {
+                .nav-link {
+
+                    &:hover,
+                    &:focus {
+                        color: #{$value};
+                    }
+
+                    &.active {
+                        border-bottom: 1px solid $value;
+                        color: #{$value};
+                    }
+                }
+            }
+        }
+    }
+}

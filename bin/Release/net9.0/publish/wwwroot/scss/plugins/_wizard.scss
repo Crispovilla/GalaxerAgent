@@ -1,0 +1,56 @@
+//
+// _wizard.scss
+//
+
+.wizard-tabs {
+    border: 0;
+    gap: 5px;
+
+    .nav-link {
+        border: 1px dashed var(--#{$prefix}border-color) !important;
+        border-radius: 5px !important;
+        color: var(--#{$prefix}secondary-color);
+
+        &.active {
+            background-color: rgba(var(--#{$prefix}light-rgb), 0.5);
+            color: var(--#{$prefix}secondary-color);
+
+            i {
+                color: var(--#{$prefix}body-color);
+            }
+        }
+
+        &.wizard-item-done {
+            background-color: rgba(var(--#{$prefix}success-rgb), 0.1);
+            border-color: rgba(var(--#{$prefix}success-rgb), 0.9) !important;
+            color: var(--#{$prefix}success);
+
+            i,
+            .text-body {
+                color: var(--#{$prefix}success) !important;
+            }
+        }
+    }
+
+    &.wizard-bordered {
+        .nav-link {
+            border: 0 !important;
+            border-left: 3px solid transparent !important;
+
+            &.wizard-item-done {
+                border-color: var(--#{$prefix}success) !important;
+            }
+        }
+    }
+}
+
+[data-wizard-animation] .tab-pane {
+    opacity: 0;
+    transform: translateX(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+[data-wizard-animation] .tab-pane.active.show {
+    opacity: 1;
+    transform: translateX(0);
+}

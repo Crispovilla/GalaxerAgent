@@ -1,0 +1,137 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    // Capturamos el controlador y la acción actual desde el contexto de la ruta de ASP.NET
+    string controladorActual = ViewContext.RouteData.Values["controller"]?.ToString() ?? string.Empty;
+    string accionActual = ViewContext.RouteData.Values["action"]?.ToString() ?? string.Empty;
+}
+
+@model IEnumerable<Base_MVC_Core9.Dtos.SistemaDto>
+
+<div class="sidenav-menu">
+
+    <!-- Brand Logo -->
+    <a href=@Url.Action("Index", "Home") class="logo">
+        <span class="logo logo-light py-4">
+            @* <span class="logo-lg logo-uchile d-inline-block"></span> *@
+            <span class="logo-lg"><img src="~/images/logo.png" style="width: 170px; height: auto;" alt="logo"></span>
+            <span class="logo-sm"><img src="~/images/logo-sm.png" style="width: 40px; height: auto;" alt="small logo"></span>
+        </span>
+
+        <span class="logo logo-dark">
+            <span class="logo-lg"><img src="~/images/logo.png" style="width: 170px; height: auto;" alt="dark logo"></span>
+            <span class="logo-sm"><img src="~/images/logo-sm.png" style="width: 40px; height: auto;" alt="small logo"></span>
+        </span>
+    </a>
+
+    <!-- Sidebar Hover Menu Toggle Button -->
+    <button class="button-on-hover">
+        <i class="ti ti-menu-4 fs-22 align-middle"></i>
+    </button>
+
+    <!-- Full Sidebar Menu Close Button -->
+    <button class="button-close-offcanvas">
+        <i class="ti ti-x align-middle"></i>
+    </button>
+
+    <div class="scrollbar" data-simplebar>
+        <ul class="side-nav">
+            <li class="side-nav-title">Menu</li>
+
+            @if (Model != null && Model.Any())
+            {
+                foreach (var sistema in Model)
+                {
+                    // 1. Verificamos si este sistema contiene la página que el usuario está viendo actualmente
+                    bool esSistemaActivo = TieneHijoActivo(sistema.SubMenus, controladorActual, accionActual);
+
+                    <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#sidebarSist_@sistema.SistemaId" aria-expanded="@(esSistemaActivo ? "true" : "false")"
+                           aria-controls="sidebarSist_@sistema.SistemaId" class="side-nav-link">
+                            <span class="menu-icon"><i data-lucide="@sistema.SistemaIcono"></i></span>
+                            <span class="menu-text"> @sistema.SistemaNombre </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse @(esSistemaActivo ? "show" : "")" id="sidebarSist_@sistema.SistemaId">
+                            <ul class="sub-menu">
+                                @{
+                                    await RenderizarNivelMenu(sistema.SubMenus);
+                                }
+                            </ul>
+                        </div>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+
+    @* --- RECURSIVIDAD COMPATIBLE CON RAZOR (Sustituye todo tu @code por esto) --- *@
+
+    @{
+        // Definimos una función local lambda compatible con el motor de renderizado de Razor
+        async Task RenderizarNivelMenu(List<Base_MVC_Core9.Dtos.MenuNodoDto> nodos)
+        {
+            if (nodos == null || !nodos.Any()) return;
+
+            foreach (var nodo in nodos)
+            {
+                if (nodo.EsSubMenu)
+                {
+                    bool esSubMenuActivo = EsEsteNodoActivo(nodo, controladorActual, accionActual) || TieneHijoActivo(nodo.Hijos, controladorActual, accionActual);
+
+                    <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#sidebarNodo_@nodo.Id" aria-expanded="@(esSubMenuActivo ? "true" : "false")"
+                           aria-controls="sidebarNodo_@nodo.Id" class="side-nav-link">
+                            @if (!string.IsNullOrEmpty(nodo.Icono))
+                            {
+                                <i data-lucide="@nodo.Icono"></i>
+                            }
+                            <span class="menu-text">@nodo.Nombre</span>
+                            <span class="menu-arrow"></span>
+                        </a>
+
+                        <div class="collapse @(esSubMenuActivo ? "show" : "")" id="sidebarNodo_@nodo.Id">
+                            <ul class="sub-menu">
+                                @{
+                                    await RenderizarNivelMenu(nodo.Hijos);
+                                }
+                            </ul>
+                        </div>
+                    </li>
+                }
+                else
+                {
+                    bool esHijoActivo = EsEsteNodoActivo(nodo, controladorActual, accionActual);
+
+                    <li class="side-nav-item @(esHijoActivo ? "active" : "")">
+                        <a href="@Url.Action(nodo.Accion, nodo.Controlador)" class="side-nav-link">
+                            <span class="menu-text">@nodo.Nombre</span>
+                        </a>
+                    </li>
+                }
+            }
+        }
+
+        // Funciones lógicas puras de C# (Estas no llevan HTML adentro)
+        bool EsEsteNodoActivo(Base_MVC_Core9.Dtos.MenuNodoDto n, string ctrl, string act)
+        {
+            return n.Controlador != null && n.Accion != null &&
+                   n.Controlador.Equals(ctrl, StringComparison.OrdinalIgnoreCase) &&
+                   n.Accion.Equals(act, StringComparison.OrdinalIgnoreCase);
+        }
+
+        bool TieneHijoActivo(List<Base_MVC_Core9.Dtos.MenuNodoDto> hijos, string ctrl, string act)
+        {
+            if (hijos == null) return false;
+            foreach (var h in hijos)
+            {
+                if (!h.EsSubMenu && EsEsteNodoActivo(h, ctrl, act)) return true;
+                if (h.EsSubMenu && TieneHijoActivo(h.Hijos, ctrl, act)) return true;
+            }
+            return false;
+        }
+    }
+
+</div>
+<!-- Sidenav Menu End -->

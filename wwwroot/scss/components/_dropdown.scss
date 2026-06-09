@@ -1,0 +1,120 @@
+//
+// _dropdown.scss
+//
+
+.dropdown-menu {
+    box-shadow: var(--#{$prefix}dropdown-box-shadow);
+    animation-name: DropDownSlideUp;
+    animation-duration: 0.3s;
+    animation-fill-mode: both;
+    will-change: transform;
+    position: absolute;
+    z-index: 1000;
+
+    &[data-popper-placement="top-start"],
+    &[data-popper-placement="top"] {
+        animation-name: DropDownSlideDown;
+    }
+}
+
+// Dropdwon Animation
+@keyframes DropDownSlideUp {
+    100% {
+        margin-top: 0px;
+    }
+
+    0% {
+        margin-top: 3px;
+    }
+}
+
+@keyframes DropDownSlideDown {
+    100% {
+        margin-bottom: 0;
+    }
+
+    0% {
+        margin-bottom: 2px;
+    }
+}
+
+
+//Custom Dropdown Sizes
+$dropdown-menu-xxl-width: 740px;
+$dropdown-menu-xl-width: 600px;
+$dropdown-menu-lg-width: 320px;
+$dropdown-menu-md-width: 250px;
+
+@include media-breakpoint-up(md) {
+    .dropdown-menu-xxl {
+        width: $dropdown-menu-xxl-width;
+    }
+
+    .dropdown-menu-xl {
+        width: $dropdown-menu-xl-width;
+    }   
+}
+
+@include media-breakpoint-up(sm) {
+    .dropdown-menu-lg {
+        width: $dropdown-menu-lg-width;
+    }
+
+    .dropdown-menu-md {
+        width: $dropdown-menu-md-width;
+    }
+
+    .dropdown-menu-full {
+        // width: 100vw;
+        width: auto;
+        position: fixed !important;
+        left: 10px !important;
+        right: 10px !important;
+    }
+}
+
+// Dropdown arrow hide
+.drop-arrow-none {
+    &:after {
+        display: none;
+    }
+}
+
+// Dropdown Split Style
+.dropdown-toggle-split {
+    &:before {
+        content: "";
+        position: absolute;
+        background-color: rgba($white, 0.12);
+        top: calc(#{$btn-border-width} * -1);
+        bottom: calc(#{$btn-border-width} * -1);
+        right: calc(#{$btn-border-width} * -1);
+        left: 0;
+        border-radius: 0 $btn-border-radius $btn-border-radius 0;
+    }
+}
+
+.dropstart {
+    .dropdown-toggle-split {
+        &::before {
+            inset: auto;
+            border-radius: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        &::after {
+            content: "";
+            display: inline-block;
+            position: absolute;
+            background-color: rgba($dark, 0.1);
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            border-radius: $btn-border-radius 0 0 $btn-border-radius;
+            border: none;
+            margin-left: 0;
+        }
+    }
+}

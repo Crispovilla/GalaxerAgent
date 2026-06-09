@@ -1,0 +1,22 @@
+// 
+// _footer.scss
+//
+
+.footer {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    padding: calc($grid-gutter-width * .5);
+    color: var(--#{$prefix}emphasis-color);
+    transition: margin-left .25s ease-in-out;
+    background-color: $card-bg;
+    border-top: 1px solid $card-border-color;
+    margin: auto calc($grid-gutter-width * -0.5) 0;
+}
+
+// Used for account authentication pages
+.footer-alt {
+    border: none;
+    text-align: center;
+    justify-content: center;
+}

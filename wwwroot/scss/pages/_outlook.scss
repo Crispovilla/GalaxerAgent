@@ -1,0 +1,78 @@
+//
+// _outlook.scss
+//
+
+.outlook-box {
+    display: flex;
+    height: calc(100vh - var(--#{$prefix}topbar-height) - 40px - 42px - calc($spacer * 2));
+
+    &.outlook-box-full {
+        margin: -$spacer;
+        height: calc(100vh - var(--#{$prefix}topbar-height) - 40px - 42px);
+
+        .outlook-left-menu {
+            border-right: 1px solid var(--#{$prefix}border-color) !important;
+        }
+    }
+
+    .outlook-list {
+        .nav-link.active {
+            background-color: rgba(var(--#{$prefix}light-rgb), 0.45);
+        }
+    }
+
+    html[data-layout="topnav"] & {
+        margin-bottom: 30px;
+
+        &.outlook-box-full {
+            margin: 0 0 30px 0;
+        }
+    }
+}
+
+.outlook-left-menu {
+    width: 280px;
+
+    &.outlook-left-menu-sm {
+        width: 225px;
+    }
+
+    &.outlook-left-menu-md {
+        width: 250px;
+    }
+
+    &.outlook-left-menu-lg {
+        width: 320px;
+    }
+}
+
+@include media-breakpoint-down(lg) {
+    .outlook-box {
+        position: relative;
+        overflow: hidden;
+
+        .offcanvas-lg {
+            position: absolute;
+        }
+
+        .offcanvas-backdrop {
+            position: absolute;
+        }
+    }
+
+    .outlook-left-menu {
+        max-width: 280px;
+
+        &.outlook-left-menu-sm {
+            max-width: 225px;
+        }
+
+        &.outlook-left-menu-md {
+            max-width: 250px;
+        }
+
+        &.outlook-left-menu-lg {
+            max-width: 320px;
+        }
+    }
+}

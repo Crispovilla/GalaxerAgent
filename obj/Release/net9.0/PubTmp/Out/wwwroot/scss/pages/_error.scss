@@ -1,0 +1,166 @@
+//
+// _error.scss
+//
+
+// Glitch Animation Style
+.error-glitch {
+    position: relative;
+    font-size: 120px;
+    letter-spacing: 5px;
+    font-weight: $font-weight-bold;
+    animation: flicker 2s infinite;
+
+    &::before,
+    &::after {
+        content: attr(data-text);
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    &::before {
+        color: $primary;
+        z-index: -1;
+        animation: glitchTop 2s infinite;
+    }
+
+    &::after {
+        color: $danger;
+        z-index: -1;
+        animation: glitchBottom 2s infinite;
+    }
+}
+
+@keyframes glitchTop {
+    0% {
+        clip-path: inset(0 0 80% 0);
+        transform: translate(-3px, -3px);
+    }
+
+    20% {
+        clip-path: inset(0 0 20% 0);
+        transform: translate(3px, -2px);
+    }
+
+    40% {
+        clip-path: inset(0 0 60% 0);
+        transform: translate(-1px, 2px);
+    }
+
+    60% {
+        clip-path: inset(0 0 40% 0);
+        transform: translate(2px, -1px);
+    }
+
+    80% {
+        clip-path: inset(0 0 70% 0);
+        transform: translate(-3px, 3px);
+    }
+
+    100% {
+        clip-path: inset(0 0 90% 0);
+        transform: translate(0, 0);
+    }
+}
+
+@keyframes glitchBottom {
+    0% {
+        clip-path: inset(80% 0 0 0);
+        transform: translate(3px, 2px);
+    }
+
+    20% {
+        clip-path: inset(20% 0 0 0);
+        transform: translate(-2px, -1px);
+    }
+
+    40% {
+        clip-path: inset(60% 0 0 0);
+        transform: translate(1px, 2px);
+    }
+
+    60% {
+        clip-path: inset(40% 0 0 0);
+        transform: translate(-2px, 1px);
+    }
+
+    80% {
+        clip-path: inset(70% 0 0 0);
+        transform: translate(3px, -3px);
+    }
+
+    100% {
+        clip-path: inset(90% 0 0 0);
+        transform: translate(0, 0);
+    }
+}
+
+@keyframes flicker {
+
+    0%,
+    19%,
+    21%,
+    23%,
+    25%,
+    54%,
+    56%,
+    100% {
+        opacity: 1;
+    }
+
+    20%,
+    24%,
+    55% {
+        opacity: 0.6;
+    }
+}
+
+// Wave Animation Style
+.error-wave-container {
+    display: flex;
+    font-size: 120px;
+    font-weight: 900;
+}
+
+.error-wave-char {
+    display: inline-block;
+    animation: wave 2s infinite ease-in-out;
+    background: linear-gradient(90deg, $primary, $purple);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.error-wave-char:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.error-wave-char:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.error-wave-char:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes wave {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+// Gradient Text
+.error-text-alt {
+    .error-wave-char {
+        background: radial-gradient(circle, $warning 0%, $danger 100%);
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+}

@@ -1,0 +1,55 @@
+// 
+// _theme-default.scss
+//
+
+// Google fonts
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+:root {
+
+    // Logo
+    --#{$prefix}logo-lg-height:                 26px;
+    --#{$prefix}logo-sm-height:                 26px;
+
+    // Sidebar
+    --#{$prefix}sidenav-width:                          235px;
+    --#{$prefix}sidenav-width-md:                       160px;
+    --#{$prefix}sidenav-width-sm:                       75px;
+
+    // Topbar
+    --#{$prefix}topbar-height:                           65px;
+
+    // Menu items
+    --#{$prefix}sidenav-item-icon-size:                  1.125rem;
+    --#{$prefix}sidenav-item-gap:                        12px;
+    --#{$prefix}sidenav-item-padding-x:                  10px;
+    --#{$prefix}sidenav-item-padding-y:                  10px;
+    --#{$prefix}sidenav-item-font-size:                  0.875rem;
+    --#{$prefix}sidenav-item-font-weight:                500;
+
+    // Sub Menu Items
+    --#{$prefix}sidenav-sub-item-font-size:              0.825rem;
+    --#{$prefix}sidenav-sub-item-font-weight:            500;
+    --#{$prefix}sidenav-sub-item-gap:                    4px;
+    --#{$prefix}sidenav-sub-item-padding-x:              10px;
+    --#{$prefix}sidenav-sub-item-padding-y:              7px;
+
+    --#{$prefix}theme-card-border-width:                 1px;
+    --#{$prefix}theme-card-box-shadow:                   none;
+    --#{$prefix}theme-card-border-color:                 var(--#{$prefix}border-color);
+
+    --#{$prefix}font-weight-medium:                      500;
+    --#{$prefix}font-weight-semibold:                    600;
+    --#{$prefix}font-weight-bold:                        700;
+
+    --#{$prefix}font-size-xxs:                           11px;
+    --#{$prefix}font-size-xs:                            12px;
+    --#{$prefix}font-size-base:                          13px;
+    --#{$prefix}font-size-sm:                            14px;
+    --#{$prefix}font-size-md:                            15px;
+    --#{$prefix}font-size-lg:                            16px;
+    --#{$prefix}font-size-xl:                            18px;
+    --#{$prefix}font-size-xxl:                           20px;
+}

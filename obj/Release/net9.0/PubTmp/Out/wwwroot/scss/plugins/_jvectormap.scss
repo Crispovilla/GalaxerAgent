@@ -1,0 +1,29 @@
+//
+// _jvectormap.scss
+//
+
+.jvm-tooltip {
+    font-family: $font-family-base;
+    background-color: #223058;
+    font-size: $font-size-base;
+    padding: 4px 10px;
+}
+
+.jvm-container {
+    text.jvm-marker {
+        fill: var(--#{$prefix}body-color);
+        font-family: $font-family-base;
+    }
+}
+
+.jvm-zoom-btn {
+    background-color: #2b2c34;
+    height: 20px;
+    width: 20px;
+    text-align: center;
+    line-height: 14px;
+}
+
+.jvm-zoom-btn.jvm-zoomin {
+    top: 6px;
+}

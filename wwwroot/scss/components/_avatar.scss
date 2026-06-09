@@ -1,0 +1,93 @@
+//
+// _avatar.scss (avatar thumbnail sizes)
+//
+
+// Avatar Sizes
+.avatar-xxs {
+    height: 1rem;
+    width: 1rem;
+}
+
+.avatar-xs {
+    height: 1.5rem;
+    width: 1.5rem;
+}
+
+.avatar-sm {
+    height: 2rem;
+    width: 2rem;
+}
+
+.avatar-md {
+    height: 2.25rem;
+    width: 2.25rem;
+}
+
+.avatar-lg {
+    height: 2.75rem;
+    width: 2.75rem;
+}
+
+.avatar-xl {
+    height: 3rem;
+    width: 3rem;
+}
+
+.avatar-xxl {
+    height: 5rem;
+    width: 5rem;
+}
+
+// Avatar Title
+.avatar-title {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    width: 100%;
+}
+
+// avatar group
+.avatar-group {
+    padding-left: 0.75rem;
+    @extend .d-flex;
+    @extend .flex-wrap;
+    @extend .align-items-center;
+    line-height: 1;
+
+    .avatar {
+        margin-left: -0.75rem;
+        transition: all 0.2s;
+        line-height: 1;
+
+        &:hover {
+            position: relative;
+            transform: translateY(-2px);
+            z-index: 1;
+        }
+    }
+
+    &.avatar-group-sm {
+        padding-left: 0.5rem;
+
+        .avatar {
+            margin-left: -0.5rem;
+        }
+    }
+
+    &.avatar-group-xs {
+        padding-left: 0.35rem;
+
+        .avatar {
+            margin-left: -0.35rem;
+        }
+    }
+}
+
+//
+// Font Based Image Size
+//
+.avatar-img-size {
+    height: 1em;
+    width: 1em;
+}

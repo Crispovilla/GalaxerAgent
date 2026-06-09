@@ -1,0 +1,67 @@
+//
+// _summernote.scss
+//
+
+.note-toolbar {
+    gap: 5px !important;
+}
+
+.note-editor {
+    margin-bottom: 0;
+
+    &.note-airframe,
+    &.note-frame {
+        border-color: var(--#{$prefix}border-color);
+    }
+
+    &.note-airframe .note-statusbar,
+    &.note-frame .note-statusbar {
+        background: var(--#{$prefix}light);
+        border-top-color: var(--#{$prefix}border-color);
+    }
+}
+
+.note-btn-group {
+    .note-btn {
+        border: 0;
+        padding: .28rem .5rem;
+    }
+}
+
+.note-editor .note-toolbar .note-color .note-dropdown-menu .note-palette .note-holder-custom .note-color-btn,
+.note-popover .popover-content .note-color .note-dropdown-menu .note-palette .note-holder-custom .note-color-btn {
+    border-color: var(--#{$prefix}border-color);
+}
+
+.note-editor .note-toolbar .note-color .note-dropdown-menu .note-palette .note-palette-title,
+.note-popover .popover-content .note-color .note-dropdown-menu .note-palette .note-palette-title {
+    border-bottom: 0;
+}
+
+.note-editor .note-toolbar .note-para .note-dropdown-menu,
+.note-popover .popover-content .note-para .note-dropdown-menu {
+    min-width: 235px;
+}
+
+.note-modal {
+    .modal-dialog {
+        box-shadow: none;
+    }
+
+    .modal-body {
+        overflow-x: hidden !important;
+    }
+}
+
+.help-list-item {
+    margin: 12px 0;
+}
+
+.note-form-group {
+    margin-bottom: 10px;
+
+    .note-form-label {
+        margin-bottom: 5px;
+        font-weight: $font-weight-medium;
+    }
+}

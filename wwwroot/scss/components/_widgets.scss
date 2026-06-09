@@ -1,0 +1,66 @@
+//
+// widgets.scss
+//
+
+// App Search
+.app-search {
+    position: relative;
+
+    .form-control {
+        padding-left: 40px;
+    }
+
+    .app-search-icon {
+        width: 40px;
+        @extend .translate-middle-y;
+        @extend .d-flex;
+        @extend .position-absolute;
+        @extend .top-50;
+        @extend .justify-content-center;
+        z-index: 5;
+    }
+
+    svg {
+        height: 18px;
+    }
+
+    &.app-search-sm {
+        .form-control {
+            padding-left: 30px;
+        }
+    
+        .app-search-icon {
+            width: 30px;
+        }
+    
+        svg {
+            height: 16px;
+        }
+    }
+
+    &.app-search-lg {
+        .form-control {
+            padding-left: 50px;
+        }
+    
+        .app-search-icon {
+            width: 50px;
+        }
+    
+        svg {
+            height: 24px;
+        }
+    }
+
+    &.app-search-pill {
+        .form-control {
+            border-top-left-radius: 50rem; 
+            border-bottom-left-radius: 50rem;
+        }
+
+        .btn {
+            border-top-right-radius: 50rem; 
+            border-bottom-right-radius: 50rem;
+        }
+    }
+}

@@ -1,0 +1,242 @@
+//
+// _topbar.scss
+//
+
+.app-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 1001;
+    background: $topbar-bg;
+    box-shadow: $card-box-shadow;
+    height: $topbar-height;
+    margin-left: $sidenav-width;
+    transition: margin-left .25s ease-in-out;
+
+    .topbar-menu {
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+        border-bottom: $card-border-width solid $card-border-color;
+        padding-left: $grid-gutter-width;
+        padding-right: $grid-gutter-width;
+
+        .topbar-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: $topbar-height;
+
+            .topbar-link {
+                z-index: 1;
+                border: none;
+                background-color: transparent;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                color: $topbar-item-color;
+                position: relative;
+
+                &:hover,
+                &:active,
+                &:focus {
+                    color: $topbar-item-hover-color;
+                }
+
+            }
+
+            .topbar-badge {
+                position: absolute;
+                top: -10px;
+                right: -1px;
+            }
+        }
+    }
+
+    ul {
+        list-style-type: none;
+        margin-bottom: 0;
+    }
+}
+
+// Topbar Logo
+.logo-topbar {
+    float: left;
+    display: none;
+    line-height: $topbar-height;
+    padding: 0 $spacer * 0.5;
+
+    .logo-sm {
+        display: none;
+    }
+
+    .logo-light {
+        display: none;
+    }
+
+    .logo-dark {
+        display: block;
+    }
+}
+
+html[data-topbar-color="dark"],
+html[data-bs-theme="dark"] {
+    .logo-topbar {
+        .logo-light {
+            display: block;
+        }
+
+        .logo-dark {
+            display: none;
+        }
+    }
+}
+
+html[data-topbar-color="dark"],
+html[data-topbar-color="gradient"] {
+    .app-topbar {
+        .btn-primary {
+            background-color: rgba(var(--#{$prefix}white-rgb), 0.1);
+            border-color: transparent !important;
+        }
+    }
+
+        &:not([data-bs-theme="dark"]) {
+            .app-topbar {
+                .app-search {
+                    .app-search-icon {
+                        color: rgba(var(--#{$prefix}white-rgb), 0.5) !important;
+                    }
+    
+                    input::placeholder {
+                        color: rgba(var(--#{$prefix}white-rgb), 0.5) !important;
+                    }
+                }
+            }
+        }
+}
+
+
+// Topbar light/Dark Mode icon 
+#light-dark-mode {
+    .mode-light-sun {
+        display: none;
+    }
+}
+html[data-bs-theme="dark"] {
+    #light-dark-mode {
+        .mode-light-sun {
+            display: block;
+        }
+        .mode-light-moon {
+            display: none;
+        }
+    }
+}
+
+.nav-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: $topbar-height;
+    transition: none;
+
+    &::before {
+        content: "";
+        height: 18px;
+        opacity: 0.35;
+        width: 1px;
+        border-left: 1px solid $topbar-item-color;
+    }
+}
+
+
+@media (max-width: 375px) {
+    .logo-topbar {
+        display: none !important;
+    }
+}
+
+@include media-breakpoint-down(sm) {
+    .app-topbar {
+
+        .topbar-menu {
+            position: initial;
+
+            .topbar-badge {
+                top: 10px;
+            }
+        }
+
+        .dropdown {
+            position: static;
+
+            .dropdown-menu {
+                width: 90%;
+            }
+        }
+    }
+}
+
+@include media-breakpoint-down(md) {
+    .logo-topbar {
+        display: block;
+
+        span.logo-lg {
+            display: none;
+        }
+
+        span.logo-sm {
+            display: block;
+        }
+    }
+}
+
+//
+// Topbar Search
+//
+.topbar-search {
+    width: 230px;
+    padding: $input-padding-y $input-padding-x;
+    background-color: $topbar-search-bg !important;
+    color: $topbar-item-color !important;
+    border-color: $topbar-search-border !important;
+    line-height: $input-line-height;
+    @include border-radius($input-border-radius, 0);
+}
+
+//
+// Notification
+//
+.notification-item {
+    position: relative;
+    cursor: pointer;
+
+    .notification-badge {
+        height: 22px;
+        width: 22px;
+        text-align: center;
+        color: $white;
+        top: -12px;
+        right: -8px;
+        border: 2px solid $card-bg;
+        line-height: 18px;
+        font-size: 11px;
+    }
+}
+
+// Manage for light & dark logo
+html[data-menu-color="light"][data-topbar-color="dark"],
+html[data-menu-color="light"][data-topbar-color="gradient"] {
+    .sidenav-menu {
+        .logo {
+            background: $topbar-bg;
+            width: calc(100% + 1px);
+        }
+
+        .sidenav-user {
+            margin-top: 10px;
+        }
+    }
+}

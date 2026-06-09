@@ -1,0 +1,28 @@
+//
+// _sortable.scss
+//
+
+.nested-sortable {
+    .nested-sortable {
+        margin-top: 10px;
+    }
+}
+.nested-sortable-handle {
+    .nested-sortable-handle {
+        margin-top: 10px;
+    }
+}
+
+.sort-handle {
+    padding-right: 10px;
+    font-size: 16px;
+    cursor: move;
+
+    &:hover {
+        color: var(--#{$prefix}primary);
+    }
+}
+
+.sortable-item-ghost {
+    background-color: var(--#{$prefix}light-bg-subtle);
+}

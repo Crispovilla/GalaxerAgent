@@ -1,0 +1,137 @@
+﻿@model Base_MVC_Core9.Models.Persona.PersonaEditViewModel
+
+@{
+    ViewData["Title"] = "Editar Usuario";
+}
+
+<div class="container">
+    <div class="row py-3">
+        <div class="col-10">
+            <div class="page-title-box">
+                <h4 class="mb-0">@ViewData["Title"]</h4>
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a asp-action="Index">Usuarios</a></li>
+                    <li class="breadcrumb-item active">Modificar Usuario</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-10">
+            <form asp-action="Edit" method="post" class="show-loader">
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="Token" />
+                <input type="hidden" asp-for="Uname" />
+
+                <div class="card">
+
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <div>
+                            <h4 class="card-title text-warning">Editar Persona: @Model.Uname</h4>
+                            <p class="text-muted mb-0">Actualice la información necesaria del perfil.</p>
+                        </div>
+                        <i data-lucide="user-cog" class="text-warning fs-2"></i>
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="row mb-3">
+                            <label class="col-lg-2 col-form-label fw-semibold">Nombres</label>
+                            <div class="col-lg-5">
+                                <input asp-for="Nombre1" class="form-control" placeholder="Primer Nombre" />
+                                <span asp-validation-for="Nombre1" class="text-danger small"></span>
+                            </div>
+                            <div class="col-lg-5">
+                                <input asp-for="Nombre2" class="form-control" placeholder="Segundo Nombre" />
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-lg-2 col-form-label fw-semibold">Apellidos</label>
+                            <div class="col-lg-5">
+                                <input asp-for="Apellido1" class="form-control" placeholder="Apellido Paterno" />
+                                <span asp-validation-for="Apellido1" class="text-danger small"></span>
+                            </div>
+                            <div class="col-lg-5">
+                                <input asp-for="Apellido2" class="form-control" placeholder="Apellido Materno" />
+                            </div>
+                        </div>
+
+                        <div class="border-top border-dashed my-3"></div>
+
+
+                        <div class="row mb-9">
+                            <label class="col-lg-2 col-form-label fw-semibold">Nombre de Usuario</label>
+                            <div class="col-lg-4">
+                                <div class="app-search">
+                                    <input asp-for="Uname" class="form-control bg-light-subtle" disabled />
+                                    <i data-lucide="lock" class="app-search-icon"></i>
+                                </div>
+                                <div class="form-text small text-info">El nombre de usuario no es editable por seguridad.</div>
+                            </div>
+
+
+                            <label class="col-lg-2 col-form-label fw-semibold text-center">RUT</label>
+                            <div class="col-lg-4">
+                                <div class="input-group">
+                                    <input asp-for="Rut" class="form-control" id="txtRut" maxlength="8" autocomplete="off" />
+                                    <span class="input-group-text">-</span>
+                                    <input asp-for="Dv" class="form-control text-center fw-bold" id="txtDv" style="max-width: 60px;" maxlength="1" />
+                                    <span class="input-group-text bg-light" id="lblStatus" style="min-width: 45px;">
+                                        <i id="statusIcon" data-lucide="help-circle" style="width: 16px;"></i>
+                                    </span>
+                                </div>
+                                <span asp-validation-for="Rut" class="text-danger small"></span>
+                                <span asp-validation-for="Dv" class="text-danger small mx-3"></span>
+                            </div>
+
+                        </div>
+
+                        <div class="border-top border-dashed my-3"></div>
+
+                        <div class="row mb-9">
+                            <label asp-for="Correo" class="col-lg-2 col-form-label fw-semibold">Correo Electrónico</label>
+                            <div class="col-lg-4">
+                                <div class="app-search">
+                                    <input asp-for="Correo" class="form-control" type="email" />
+                                    <i data-lucide="mail" class="app-search-icon"></i>
+                                </div>
+                                <span asp-validation-for="Correo" class="text-danger small"></span>
+                            </div>
+
+                            <label asp-for="Genero" class="col-lg-2 col-form-label fw-semibold text-center">Género</label>
+
+                            <div class="col-lg-4">
+                                <select asp-for="Genero" class="form-select">
+                                    <option value="">Seleccione...</option>
+                                    <option value="Masculino">Masculino</option>
+                                    <option value="Femenino">Femenino</option>
+                                    <option value="Otro">Otro</option>
+                                </select>
+                                <span asp-validation-for="Genero" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+
+
+                    </div> <div class="card-footer bg-light-subtle d-flex justify-content-end gap-2">
+                        <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-warning px-4 swal-confirm text-dark">
+                            <i data-lucide="refresh-cw" class="me-1"></i> Actualizar Usuario
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/js/app-rut-validator.js"></script>
+}

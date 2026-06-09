@@ -1,0 +1,50 @@
+﻿<div id="firmaModalContainer" style="display:none; position:fixed; top:0; left:0;
+     width:100%; height:100%; background:rgba(0,0,0,0.5);
+     z-index:9999; align-items:center; justify-content:center;">
+
+    <div style="background:#fff; border-radius:16px; padding:32px;
+                width:480px; max-width:95vw; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0 fw-bold">
+                <i class="fas fa-signature text-primary me-2"></i>
+                Firma Digital
+            </h5>
+            <button type="button" onclick="FirmaModal.cerrar()" class="btn-close"></button>
+        </div>
+
+        <p class="text-muted small mb-3">
+            Por favor, firme directamente en la tablet Wacom conectada.
+        </p>
+
+        <div style="border:2px dashed #cbd5e1; border-radius:12px;
+                    height:200px; overflow:hidden; background:#f8fafc;
+                    display:flex; align-items:center; justify-content:center; position:relative;">
+
+            <span class="text-muted small" id="firma-modal-placeholder">
+                Haz clic en "Conectar Tablet" para iniciar
+            </span>
+
+            <canvas id="firma-modal-canvas" width="320" height="200"
+                    style="display:none; width:100%; height:100%; object-fit:contain;"></canvas>
+        </div>
+
+        <div id="firma-modal-status" class="text-muted small mt-2 fw-bold"></div>
+
+        <div class="d-flex justify-content-between mt-4">
+            <div>
+                <button type="button" class="btn btn-outline-primary" id="btn-conectar-wacom" onclick="FirmaModal.conectarWacom()">
+                    <i class="fas fa-plug"></i> Conectar Tablet
+                </button>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-outline-danger" onclick="FirmaModal.limpiarTablet()" id="btn-limpiar-modal" style="display:none;">
+                    Limpiar
+                </button>
+                <button type="button" class="btn btn-success" onclick="FirmaModal.guardarFirma()" id="btn-guardar-modal" style="display:none;">
+                    Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

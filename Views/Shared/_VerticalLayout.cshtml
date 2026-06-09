@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+
+@{
+    var html_attributes = ViewBag.HTMLAttributes != null ? ViewBag.HTMLAttributes : "";
+    var html_class = ViewBag.HTMLClass != null ? ViewBag.HTMLClass : "";
+}
+
+<html lang="es" data-bs-theme="light" class="@html_class" @html_attributes>
+
+<head>
+    @await Html.PartialAsync("~/Views/Shared/Partials/_TitleMeta.cshtml")
+    @RenderSection("styles", false)
+    @await Html.PartialAsync("~/Views/Shared/Partials/_HeadCSS.cshtml")
+</head>
+
+<body>
+
+    <div class="wrapper">
+
+        @if (User?.Identity?.IsAuthenticated == true && ViewData["HideNav"] == null)
+        {
+            <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
+                <div class="position-sticky">
+                    @await Component.InvokeAsync("NavMenu")
+                </div>
+            </nav>
+
+            @await Html.PartialAsync("~/Views/Shared/Partials/_TopBar.cshtml")
+
+        }
+
+        <div class="@(ViewData["HideNav"] != null ? "container mt-5" : "content-page")">
+            @RenderBody()
+        </div>
+            @await Html.PartialAsync("~/Views/Shared/Partials/_Footer.cshtml")
+            @await Html.PartialAsync("~/Views/Shared/Partials/_FooterScripts.cshtml")
+    </div>
+
+
+
+    <input type="hidden" id="tempSuccess" value="@Html.Raw(TempData["Success"])" />
+    <input type="hidden" id="tempError" value="@Html.Raw(TempData["Error"])" />
+    <input type="hidden" id="tempWarning" value="@Html.Raw(TempData["Warning"])" />
+
+
+    <environment include="Development, Production">
+        @* <script src="~/plugins/jquery/jquery.min.js"></script> *@
+        <script src="~/plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script src="~/js/app-sweetalertl2.js" asp-append-version="true"></script>
+        <script src="~/js/app-datatable.js" asp-append-version="true"></script>
+    </environment>
+    @* @RenderSection("scripts", required: false) *@
+    @await Html.PartialAsync("_FirmaModal")
+    @await RenderSectionAsync("Scripts", required: false)
+    
+
+</body>
+</html>

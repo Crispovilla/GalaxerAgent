@@ -1,0 +1,228 @@
+//
+// _datatables.scss
+//
+
+div.dt-container {
+    margin-top: -0.625rem;
+
+    div.dt-length select {
+        width: auto;
+        display: inline-block;
+        margin-right: .5em;
+    }
+
+    div.dt-search {
+        text-align: right;
+
+        input {
+            margin-left: .5em;
+            display: inline-block;
+            width: auto;
+        }
+    }
+
+    div.dt-layout-table>div {
+        display: block !important;
+    }
+
+    div.dt-layout-full {
+        width: 100%;
+    }
+}
+
+.dt-paging {
+    .pagination {
+        margin-bottom: 0;
+        padding-top: calc(var(--#{$prefix}card-spacer-y) - .625rem);
+    }
+}
+
+.dt-info {
+    padding-top: calc(var(--#{$prefix}card-spacer-y) - .625rem);
+}
+
+table.dataTable {
+    >tbody {
+        >tr {
+            .child span.dtr-title {
+                font-weight: $font-weight-semibold;
+            }
+        }
+    }
+}
+
+// SCSS for DataTables Sorting Arrows with Tabler Icons
+table.dataTable {
+    thead {
+        th {
+            position: relative;
+            cursor: pointer;
+
+            &:after {
+                content: "\eaa5";
+                position: absolute;
+                right: $table-cell-padding-x;
+                bottom: 5px;
+                color: var(--#{$prefix}secondary-color);
+                font-size: 16px;
+                font-weight: normal;
+                font-family: tabler-icons !important;
+                display: none;
+            }
+
+            &[aria-sort="ascending"]:after {
+                content: "\eb26";
+            }
+
+            &[aria-sort="descending"]:after {
+                content: "\eb27";
+            }
+
+            &:hover,
+            &.dt-ordering-asc,
+            &.dt-ordering-desc {
+                &::after {
+                    display: block;
+                }
+            }
+
+            &.dt-orderable-none {
+                cursor: default;
+
+                &::after {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    tbody {
+
+        >tr.selected,
+        >tr>.selected {
+            background-color: rgba(var(--#{$prefix}warning-rgb), 0.1);
+            color: inherit;
+
+            td {
+                background-color: rgba(var(--#{$prefix}warning-rgb), 0.1);
+                color: inherit;
+            }
+        }
+    }
+}
+
+// Select Info
+.select-info {
+    background-color: var(--#{$prefix}warning-bg-subtle);
+    padding: 3px 6px;
+    border-radius: 3px;
+    font-weight: $font-weight-semibold;
+
+    .select-item {
+        margin: 0 !important;
+    }
+}
+
+// Data Table copy button
+div.dt-button-info {
+    background-color: var(--#{$prefix}primary);
+    border: none;
+    color: $white;
+    box-shadow: none;
+    border-radius: 3px;
+    text-align: center;
+    z-index: 21;
+
+    h2 {
+        border-bottom: none;
+        background-color: rgba($white, 0.2);
+        color: $white;
+    }
+}
+
+// Scrollbar
+div.dt-scroll-body thead tr,
+div.dt-scroll-body tfoot tr {
+    height: 0 !important;
+    display: none !important;
+}
+
+.dt-column-header {
+    padding-right: 30px;
+}
+
+.dt-column-title {
+    padding-right: 30px;
+}
+
+.dt-child-rows-btn {
+    width: 1% !important;
+    cursor: pointer;
+
+    .dt-column-header {
+        padding-right: 0;
+    }
+
+    .dt-hasChild & {
+        .ti-square-rounded-plus-filled {
+            &::before {
+                content: "\fb40";
+            }
+        }
+    }
+}
+
+// Column Search
+.column-search-input-bar {
+    th {
+        cursor: default !important;
+
+        &::after {
+            content: none !important;
+        }
+
+        .dt-column-header {
+            display: flex;
+            width: 100%;
+            padding-right: 0 !important;
+        }
+
+        .dt-column-title {
+            padding-right: 0 !important;
+        }
+    }
+}
+
+// checkbox-select-datatable
+.checkbox-select-datatable {
+    .dt-column-header,
+    .dt-column-title {
+        padding-right: 0;
+    }
+}
+
+// Fixed Header
+table.dataTable.fixedHeader-floating,
+table.dataTable.fixedHeader-locked {
+    background-color: var(--#{$prefix}body-bg);
+}
+
+@media screen and (max-width: 767px) {
+
+    div.dt-container div.dt-length,
+    div.dt-container div.dt-search,
+    div.dt-container div.dt-info,
+    div.dt-container div.dt-paging {
+        text-align: center;
+    }
+
+    .dt-paging {
+        .pagination {
+            justify-content: center;
+        }
+    }
+
+    .dt-length {
+        margin-bottom: 10px;
+    }
+}

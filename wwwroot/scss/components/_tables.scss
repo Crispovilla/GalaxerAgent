@@ -1,0 +1,47 @@
+//
+// tables.scss
+//
+
+// Custom table Small head
+.thead-sm {
+    > * > * {
+        padding: $table-cell-padding-y-sm $table-cell-padding-x-sm !important;
+    }
+}
+
+// Custom Table
+.table-custom {
+    tfoot > tr > th:first-child, 
+    thead > tr > th:first-child, 
+    tr th:first-child, 
+    tr td:first-child {
+        padding-left: calc($table-cell-padding-y * 1.5) !important;
+    }
+
+    tfoot > tr > th:last-child, 
+    thead > tr > th:last-child, 
+    tr th:last-child, 
+    tr td:last-child {
+        padding-right: calc($table-cell-padding-y * 1.5) !important;
+    }
+}
+
+// Tables fluid
+.table-nowrap {
+    th,
+    td {
+        white-space: nowrap;
+    }
+}
+
+// Table select
+.table-select:has(.form-check-input:checked) {
+    tr:has(.form-check-input:checked) {
+        background-color: rgba(var(--#{$prefix}warning-rgb), 0.1);
+    }
+}
+
+// Table with Dropdown
+.table tr>td .dropdown {
+    position: static;
+}

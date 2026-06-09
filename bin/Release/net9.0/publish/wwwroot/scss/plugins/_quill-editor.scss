@@ -1,0 +1,153 @@
+//
+// _quill-editor.scss
+//
+
+.ql-editor {
+    text-align: left;
+    @extend .lh-lg;
+
+    ol,
+    ul {
+        padding-left: 1.5em;
+        padding-right: 0;
+    }
+
+    li:not(.ql-direction-rtl)::before {
+        margin-left: -1.5em;
+        margin-right: 0.3em;
+        text-align: right;
+    }
+}
+
+.ql-container {
+    font-family: $font-family-base;
+
+    &.ql-snow {
+        border-color: $input-border-color;
+        border-radius: 0 0 $input-border-radius $input-border-radius;
+        min-block-size: 12rem;
+    }
+}
+
+// Toolbar
+.ql-toolbar {
+    font-family: $font-family-base !important;
+
+    span {
+        outline: none !important;
+        color: $dropdown-link-color;
+
+        &:hover {
+            color: $primary !important;
+        }
+    }
+
+    &.ql-snow {
+        border-radius: $input-border-radius $input-border-radius 0 0;
+        border-color: $input-border-color;
+        display: flex;
+        flex-wrap: wrap;
+        row-gap: 8px;
+
+        .ql-picker.ql-expanded {
+            .ql-picker-label {
+                border-color: transparent;
+            }
+        }
+
+        .ql-picker-options {
+            box-shadow: $dropdown-box-shadow;
+            border-radius: $dropdown-border-radius;
+        }
+
+        .ql-formats {
+            border: 1px solid $input-border-color;
+            margin-right: 10px;
+            border-radius: 3px;
+
+            button,span {
+                i {
+                    line-height: 18px;
+                    color: var(--#{$prefix}body-color);
+                }
+
+                &:hover {
+                    i {
+                        color: var(--#{$prefix}primary);
+                    }
+                }
+            }
+        }
+    }
+
+    .ql-picker-label {
+        display: flex;
+
+        svg {
+            height: 16px;
+            width: 16px;
+        }
+    }
+}
+
+.ql-snow {
+
+    a {
+        color: $link-color;
+    }
+
+    .ql-picker {
+        font-size: $font-size-base;
+    }
+
+    .ql-picker.ql-expanded .ql-picker-label {
+        color: var(--#{$prefix}body-color) !important;
+    }
+
+    .ql-picker-options {
+        background-color: $dropdown-bg;
+        border-color: $dropdown-border-color !important;
+    }
+
+    .ql-tooltip {
+        background-color: $dropdown-bg;
+        border-color: var(--#{$prefix}border-color);
+        box-shadow: $dropdown-box-shadow;
+        color: var(--#{$prefix}body-color);
+        padding: 8px 16px;
+
+        input[type=text] {
+            border: $input-border-width solid $input-border-color !important;
+            border-radius: $input-border-radius;
+
+            &:focus,&:focus-visible {
+                border: $input-border-width solid $input-border-color !important;
+            }
+        }
+    }
+}
+
+
+// Quill Bubble tyle
+.ql-bubble {
+    border: $input-border-width solid $input-border-color;
+    border-radius: $input-border-radius;
+
+    .ql-tooltip-editor {
+        input::placeholder {
+            color: $input-placeholder-color;
+        }
+    }
+}
+
+.ql-tooltip {
+    .ql-toolbar {
+        button {
+            color: $white !important;
+
+            &:hover {
+                color: var(--#{$prefix}primary) !important;
+            }
+        }
+    }
+}

@@ -1,0 +1,45 @@
+{
+    "name": "inspinia",
+    "version": "4.0.0",
+    "description": "INSPINIA - Fully Responsive Bootstrap Web Application ui kit",
+    "main": "index.js",
+    "scripts": {
+        "dev": "cross-env NODE_OPTIONS=--no-deprecation gulp",
+        "build": "cross-env NODE_OPTIONS=--no-deprecation gulp build",
+        "rtl": "cross-env NODE_OPTIONS=--no-deprecation gulp rtl",
+        "rtl-build": "cross-env NODE_OPTIONS=--no-deprecation gulp rtlBuild"
+    },
+    "author": "WebApplayers",
+    "repository": {
+        "url": "https://webapplayers.com/inspinia/"
+    },
+    "private": true,
+    "devDependencies": {
+        "@popperjs/core": "^2.11.8",
+        "@svgdotjs/svg.panzoom.js": "^2.1.2",
+        "browser-sync": "^3.0.3",
+        "clean-css": "^5.3.1",
+        "cross-env": "^7.0.3",
+        "del": "^6.1.1",
+        "eslint": "^10.0.3",
+        "gulp": "^4.0.2",
+        "gulp-autoprefixer": "^8.0.0",
+        "gulp-clean-css": "^4.2.0",
+        "gulp-concat": "^2.6.1",
+        "gulp-file-include": "^2.3.0",
+        "gulp-newer": "^1.4.0",
+        "gulp-rename": "^2.0.0",
+        "gulp-rtlcss": "^2.0.0",
+        "gulp-sass": "^5.1.0",
+        "gulp-sourcemaps": "^3.0.0",
+        "gulp-uglify": "^3.0.2",
+        "sass": "1.77.6"
+    },
+    "dependencies": {
+        "@tabler/icons-webfont": "^3.31.0",
+        "bootstrap": "^5.3.8",
+        "jquery": "3.7.1",
+        "lucide": "^0.510.0",
+        "simplebar": "^6.3.0"
+    }
+}

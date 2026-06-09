@@ -1,0 +1,87 @@
+//
+// _treeview.scss
+//
+
+.jstree-default {
+    padding: 2px 6px;
+    height: auto;
+
+    .jstree-clicked,
+    .jstree-hovered {
+        background: var(--#{$prefix}tertiary-bg);
+        box-shadow: none;
+    }
+
+    .jstree-clicked {
+        background-color: rgba(var(--#{$prefix}primary-rgb), 0.1);
+        color: var(--#{$prefix}primary);
+    }
+
+    .jstree-anchor,
+    .jstree-icon,
+    .jstree-icon:empty {
+        line-height: 22px;
+        height: 22px;
+        border-radius: 4px;
+    }
+
+    .jstree-node,
+    .jstree-icon {
+        background-image: url(../images/treeview.png);
+    }
+
+    .jstree-last {
+        background: transparent;
+    }
+
+    .jstree-themeicon-custom {
+        background-color: transparent;
+        background-image: none;
+        background-position: 0 0;
+    }
+
+    .jstree-disabled {
+        color: $list-group-disabled-color;
+    }
+}
+
+.jstree-wholerow {
+
+    &.jstree-wholerow-clicked,
+    &.jstree-wholerow-hovered {
+        background: var(--#{$prefix}tertiary-bg);
+    }
+}
+
+.vakata-context,
+.vakata-context ul {
+    background-color: $dropdown-bg;
+    border: $dropdown-border-width solid $dropdown-border-color;
+    box-shadow: $dropdown-box-shadow;
+    border-radius: $dropdown-border-radius;
+
+    .vakata-context-hover>a {
+        box-shadow: none !important;
+        background-color: $dropdown-link-hover-bg;
+    }
+
+    .vakata-context-separator,
+    .vakata-contextmenu-sep,
+    li>a>i:empty {
+        display: none !important;
+    }
+
+    li>a {
+        text-shadow: none;
+        color: $dropdown-link-color;
+
+        &:hover {
+            background-color: $dropdown-link-hover-bg;
+            color: $dropdown-link-hover-color;
+        }
+    }
+
+    ul {
+        margin-left: 0;
+    }
+}

@@ -1,0 +1,668 @@
+﻿<!-- Sidenav Menu Start -->
+<div class="sidenav-menu">
+
+    <!-- Brand Logo -->
+    <a href=@Url.Action("Index", "Home") class="logo">
+        <span class="logo logo-light py-4">
+            @* <span class="logo-lg logo-uchile d-inline-block"></span> *@
+            <span class="logo-lg"><img src="~/images/logo.png" style="width: 170px; height: auto;" alt="logo"></span>
+            <span class="logo-sm"><img src="~/images/logo-sm.png" style="width: 40px; height: auto;" alt="small logo"></span>
+        </span>
+
+        @* <span class="logo logo-dark">
+            <span class="logo-lg"><img src="~/images/logo-black.png" alt="dark logo"></span>
+            <span class="logo-sm"><img src="~/images/logo-sm.png" alt="small logo"></span>
+        </span> *@
+        <span class="logo logo-dark">
+            <span class="logo-lg"><img src="~/images/logo.png" style="width: 170px; height: auto;" alt="dark logo"></span>
+            <span class="logo-sm"><img src="~/images/logo-sm.png" style="width: 40px; height: auto;" alt="small logo"></span>
+        </span>
+    </a>
+
+    <!-- Sidebar Hover Menu Toggle Button -->
+    <button class="button-on-hover">
+        <i class="ti ti-menu-4 fs-22 align-middle"></i>
+    </button>
+
+    <!-- Full Sidebar Menu Close Button -->
+    <button class="button-close-offcanvas">
+        <i class="ti ti-x align-middle"></i>
+    </button>
+
+    <div class="scrollbar" data-simplebar>
+
+        <!-- User -->
+        @* <div class="sidenav-user">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <a href="#" class="link-reset">
+                        <img src="~/images/users/user-2.jpg" alt="user-image" class="rounded-circle mb-2 avatar-md">
+                        <span class="sidenav-user-name fw-bold">Clínicas Jurídicas</span>
+                        <span class="fs-12 fw-semibold">Fac. Derecho UChile</span>
+                    </a>
+                </div>
+                <div>
+                    <a class="dropdown-toggle drop-arrow-none link-reset sidenav-user-set-icon"
+                        data-bs-toggle="dropdown" data-bs-offset="0,12" href="#!" aria-haspopup="false"
+                        aria-expanded="false">
+                        <i class="ti ti-settings fs-24 align-middle ms-1"></i>
+                    </a>
+
+                    <div class="dropdown-menu">
+                        <!-- Header -->
+                        <div class="dropdown-header noti-title">
+                            <h6 class="text-overflow m-0">Welcome back!</h6>
+                        </div>
+
+                        <!-- My Profile -->
+                        <a href="#" class="dropdown-item">
+                            <i class="ti ti-user-circle me-2 fs-17 align-middle"></i>
+                            <span class="align-middle">Profile</span>
+                        </a>
+
+                        <!-- Notifications -->
+                        <a href="javascript:void(0);" class="dropdown-item">
+                            <i class="ti ti-bell-ringing me-2 fs-17 align-middle"></i>
+                            <span class="align-middle">Notifications</span>
+                        </a>
+
+                        <!-- Wallet -->
+                        <a href="javascript:void(0);" class="dropdown-item">
+                            <i class="ti ti-credit-card me-2 fs-17 align-middle"></i>
+                            <span class="align-middle">Balance: <span class="fw-semibold">$985.25</span></span>
+                        </a>
+
+                        <!-- Settings -->
+                        <a href="javascript:void(0);" class="dropdown-item">
+                            <i class="ti ti-settings-2 me-2 fs-17 align-middle"></i>
+                            <span class="align-middle">Account Settings</span>
+                        </a>
+
+                        <!-- Support -->
+                        <a href="javascript:void(0);" class="dropdown-item">
+                            <i class="ti ti-headset me-2 fs-17 align-middle"></i>
+                            <span class="align-middle">Support Center</span>
+                        </a>
+
+                        <!-- Divider -->
+                        <div class="dropdown-divider"></div>
+
+                        <!-- Lock -->
+                        <a href=@Url.Action("LockScreen", "Auth1") class="dropdown-item">
+                            <i class="ti ti-lock me-2 fs-17 align-middle"></i>
+                            <span class="align-middle">Lock Screen</span>
+                        </a>
+
+                        <!-- Logout -->
+                        <a href="javascript:void(0);" class="dropdown-item text-danger fw-semibold">
+                            <i class="ti ti-logout-2 me-2 fs-17 align-middle"></i>
+                            <span class="align-middle">Log Out</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div> *@
+
+        <!--- Sidenav Menu -->
+        <ul class="side-nav">
+            <li class="side-nav-title">Menu</li>
+
+            <li class="side-nav-item">
+                <a href=@Url.Action("Index", "Users") class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-users"></i></span>
+                    <span class="menu-text">Usuarios</span>
+                    @* <span class="badge text-bg-danger">01</span> *@
+                </a>
+            </li>
+
+            <li class="side-nav-item">
+                <a href=@Url.Action("Index", "Roles") class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-key"></i></span>
+                    <span class="menu-text">Roles</span>
+                </a>
+            </li>
+
+            
+            @* <li class="side-nav-item">
+                <a href=@Url.Action("Index", "Ingreso") class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-folder-symlink"></i></span>
+                    <span class="menu-text">Ingresos</span>
+                </a>
+            </li> *@
+
+            <li class="side-nav-item">
+                <a href=@Url.Action("Privacy", "Home") class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-lock"></i></span>
+                    <span class="menu-text">Privacy</span>
+                </a>
+            </li>
+
+
+            @* <li class="side-nav-title mt-2">Custom Pages</li> *@
+
+            @* <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarPagesAuth" aria-expanded="false"
+                    aria-controls="sidebarPagesAuth" class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-lock"></i></span>
+                    <span class="menu-text"> Authentication </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarPagesAuth">
+                    <ul class="sub-menu">
+                        <li class="side-nav-item">
+                            <a data-bs-toggle="collapse" href="#sidebarOneAuth" aria-expanded="false"
+                                aria-controls="sidebarOneAuth" class="side-nav-link">
+                                <span class="menu-text"> Version 1 </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <div class="collapse" id="sidebarOneAuth">
+                                <ul class="sub-menu">
+                                    <li class="side-nav-item">
+                                        <a href=@Url.Action("SignIn", "Auth1") class="side-nav-link">
+                                            <span class="menu-text">Sign In</span>
+                                        </a>
+                                    </li>
+                                    <li class="side-nav-item">
+                                        <a href=@Url.Action("SignUp", "Auth1") class="side-nav-link">
+                                            <span class="menu-text">Sign Up</span>
+                                        </a>
+                                    </li>
+                                    <li class="side-nav-item">
+                                        <a href=@Url.Action("ResetPass", "Auth1") class="side-nav-link">
+                                            <span class="menu-text">Reset Password</span>
+                                        </a>
+                                    </li>
+                                    <li class="side-nav-item">
+                                        <a href=@Url.Action("NewPass", "Auth1") class="side-nav-link">
+                                            <span class="menu-text">New Password</span>
+                                        </a>
+                                    </li>
+                                    <li class="side-nav-item">
+                                        <a href=@Url.Action("TwoFactor", "Auth1") class="side-nav-link">
+                                            <span class="menu-text">Two Factor</span>
+                                        </a>
+                                    </li>
+                                    <li class="side-nav-item">
+                                        <a href=@Url.Action("LockScreen", "Auth1") class="side-nav-link">
+                                            <span class="menu-text">Lock Screen</span>
+                                        </a>
+                                    </li>
+                                    <li class="side-nav-item">
+                                        <a href=@Url.Action("SuccessMail", "Auth1") class="side-nav-link">
+                                            <span class="menu-text">Success Mail</span>
+                                        </a>
+                                    </li>
+                                    <li class="side-nav-item">
+                                        <a href=@Url.Action("LoginPin", "Auth1") class="side-nav-link">
+                                            <span class="menu-text">Login with PIN</span>
+                                        </a>
+                                    </li>
+                                    <li class="side-nav-item">
+                                        <a href=@Url.Action("DeleteAccount", "Auth1") class="side-nav-link">
+                                            <span class="menu-text">Delete
+                                                Account</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="side-nav-item">
+                            <a data-bs-toggle="collapse" href="#sidebarTwoAuth" aria-expanded="false"
+                                aria-controls="sidebarTwoAuth" class="side-nav-link">
+                                <span class="menu-text"> Version 2 </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <div class="collapse" id="sidebarTwoAuth">
+                                <ul class="sub-menu">
+                                    <li class="side-nav-item">
+                                        <a href=@Url.Action("SignIn", "Auth2") class="side-nav-link">
+                                            <span class="menu-text">Sign In</span>
+                                        </a>
+                                    </li>
+                                    <li class="side-nav-item">
+                                        <a href=@Url.Action("SignUp", "Auth2") class="side-nav-link">
+                                            <span class="menu-text">Sign Up</span>
+                                        </a>
+                                    </li>
+                                    <li class="side-nav-item">
+                                        <a href=@Url.Action("ResetPass", "Auth2") class="side-nav-link">
+                                            <span class="menu-text">Reset Password</span>
+                                        </a>
+                                    </li>
+                                    <li class="side-nav-item">
+                                        <a href=@Url.Action("NewPass", "Auth2") class="side-nav-link">
+                                            <span class="menu-text">New Password</span>
+                                        </a>
+                                    </li>
+                                    <li class="side-nav-item">
+                                        <a href=@Url.Action("TwoFactor", "Auth2") class="side-nav-link">
+                                            <span class="menu-text">Two Factor</span>
+                                        </a>
+                                    </li>
+                                    <li class="side-nav-item">
+                                        <a href=@Url.Action("LockScreen", "Auth2") class="side-nav-link">
+                                            <span class="menu-text">Lock Screen</span>
+                                        </a>
+                                    </li>
+                                    <li class="side-nav-item">
+                                        <a href=@Url.Action("SuccessMail", "Auth2") class="side-nav-link">
+                                            <span class="menu-text">Success Mail</span>
+                                        </a>
+                                    </li>
+                                    <li class="side-nav-item">
+                                        <a href=@Url.Action("LoginPin", "Auth2") class="side-nav-link">
+                                            <span class="menu-text">Login with PIN</span>
+                                        </a>
+                                    </li>
+                                    <li class="side-nav-item">
+                                        <a href=@Url.Action("DeleteAccount", "Auth2") class="side-nav-link">
+                                            <span class="menu-text">Delete
+                                                Account</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="side-nav-item">
+                            <a data-bs-toggle="collapse" href="#sidebarThreeAuth" aria-expanded="false"
+                                aria-controls="sidebarThreeAuth" class="side-nav-link">
+                                <span class="menu-text"> Version 3 </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <div class="collapse" id="sidebarThreeAuth">
+                                <ul class="sub-menu">
+                                    <li class="side-nav-item">
+                                        <a href=@Url.Action("SignIn", "Auth3") class="side-nav-link">
+                                            <span class="menu-text">Sign In</span>
+                                        </a>
+                                    </li>
+                                    <li class="side-nav-item">
+                                        <a href=@Url.Action("SignUp", "Auth3") class="side-nav-link">
+                                            <span class="menu-text">Sign Up</span>
+                                        </a>
+                                    </li>
+                                    <li class="side-nav-item">
+                                        <a href=@Url.Action("ResetPass", "Auth3") class="side-nav-link">
+                                            <span class="menu-text">Reset Password</span>
+                                        </a>
+                                    </li>
+                                    <li class="side-nav-item">
+                                        <a href=@Url.Action("NewPass", "Auth3") class="side-nav-link">
+                                            <span class="menu-text">New Password</span>
+                                        </a>
+                                    </li>
+                                    <li class="side-nav-item">
+                                        <a href=@Url.Action("TwoFactor", "Auth3") class="side-nav-link">
+                                            <span class="menu-text">Two Factor</span>
+                                        </a>
+                                    </li>
+                                    <li class="side-nav-item">
+                                        <a href=@Url.Action("LockScreen", "Auth3") class="side-nav-link">
+                                            <span class="menu-text">Lock Screen</span>
+                                        </a>
+                                    </li>
+                                    <li class="side-nav-item">
+                                        <a href=@Url.Action("SuccessMail", "Auth3") class="side-nav-link">
+                                            <span class="menu-text">Success Mail</span>
+                                        </a>
+                                    </li>
+                                    <li class="side-nav-item">
+                                        <a href=@Url.Action("LoginPin", "Auth3") class="side-nav-link">
+                                            <span class="menu-text">Login with PIN</span>
+                                        </a>
+                                    </li>
+                                    <li class="side-nav-item">
+                                        <a href=@Url.Action("DeleteAccount", "Auth3") class="side-nav-link">
+                                            <span class="menu-text">Delete
+                                                Account</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </li> *@
+
+            @* <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarPagesError" aria-expanded="false"
+                    aria-controls="sidebarPagesError" class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-alert-hexagon"></i></span>
+                    <span class="menu-text"> Error Pages </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarPagesError">
+                    <ul class="sub-menu">
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("Error400", "Error") class="side-nav-link">
+                                <span class="menu-text">400</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("Error401", "Error") class="side-nav-link">
+                                <span class="menu-text">401</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("Error403", "Error") class="side-nav-link">
+                                <span class="menu-text">403</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("Error404", "Error") class="side-nav-link">
+                                <span class="menu-text">404</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("Error408", "Error") class="side-nav-link">
+                                <span class="menu-text">408</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("Error500", "Error") class="side-nav-link">
+                                <span class="menu-text">500</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("Maintenance", "Error") class="side-nav-link">
+                                <span class="menu-text">Maintenance</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <li class="side-nav-title mt-2">Layouts</li>
+
+
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarLayouts" aria-expanded="false" aria-controls="sidebarLayouts"
+                    class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-layout"></i></span>
+                    <span class="menu-text"> Layout Options </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarLayouts">
+                    <ul class="sub-menu">
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("Scrollable", "Layouts") target="_blank" class="side-nav-link">
+                                <span class="menu-text" data-lang="layouts-scrollable">Scrollable</span>
+                            </a>
+                        </li>
+
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("Compact", "Layouts") target="_blank" class="side-nav-link">
+                                <span class="menu-text" data-lang="layouts-compact">Compact</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("Boxed", "Layouts") target="_blank" class="side-nav-link">
+                                <span class="menu-text" data-lang="layouts-boxed">Boxed</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("Horizontal", "Layouts") target="_blank" class="side-nav-link">
+                                <span class="menu-text" data-lang="layouts-horizontal">Horizontal</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("Outlook", "Layouts") target="_blank" class="side-nav-link">
+                                <span class="menu-text">Outlook</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("Preloader", "Layouts") target="_blank" class="side-nav-link">
+                                <span class="menu-text" data-lang="layouts-preloader">Preloader</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#themeSkin" aria-expanded="false" aria-controls="themeSkin"
+                    class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-layout"></i></span>
+                    <span class="menu-text"> Skin Options </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="themeSkin">
+                    <ul class="sub-menu">
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("Classic", "Skin") target="_blank" class="side-nav-link">
+                                <span class="menu-text">Classic (Default)</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("Saas", "Skin") target="_blank" class="side-nav-link">
+                                <span class="menu-text">SaaS</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("Material", "Skin") target="_blank" class="side-nav-link">
+                                <span class="menu-text">Material</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("Modern", "Skin") target="_blank" class="side-nav-link">
+                                <span class="menu-text">Modern</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("Minimal", "Skin") target="_blank" class="side-nav-link">
+                                <span class="menu-text">Minimal</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("Flat", "Skin") target="_blank" class="side-nav-link">
+                                <span class="menu-text">Flat</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarSidebars" aria-expanded="false"
+                    aria-controls="sidebarSidebars" class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-layout-sidebar"></i></span>
+                    <span class="menu-text"> Sidebars </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarSidebars">
+                    <ul class="sub-menu">
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("Light", "Sidebar") target="_blank" class="side-nav-link">
+                                <span class="menu-text" data-lang="sidebar-light">Light Menu</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("Gradient", "Sidebar") target="_blank" class="side-nav-link">
+                                <span class="menu-text" data-lang="sidebar-gradient">Gradient Menu</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("Gray", "Sidebar") target="_blank" class="side-nav-link">
+                                <span class="menu-text" data-lang="sidebar-gray">Gray Menu</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("Image", "Sidebar") target="_blank" class="side-nav-link">
+                                <span class="menu-text" data-lang="sidebar-image">Image Menu</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("Compact", "Sidebar") target="_blank" class="side-nav-link">
+                                <span class="menu-text" data-lang="sidebar-compact">Compact Menu</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("IconView", "Sidebar") target="_blank" class="side-nav-link">
+                                <span class="menu-text" data-lang="sidebar-icon-view">Icon View Menu</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("OnHover", "Sidebar") target="_blank" class="side-nav-link">
+                                <span class="menu-text" data-lang="sidebar-on-hover">On Hover Menu</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("OnHoverActive", "Sidebar") target="_blank" class="side-nav-link">
+                                <span class="menu-text" data-lang="sidebar-on-hover-active">On Hover Active</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("Offcanvas", "Sidebar") target="_blank" class="side-nav-link">
+                                <span class="menu-text" data-lang="sidebar-offcanvas">Offcanvas Menu</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("NoIcons", "Sidebar") target="_blank" class="side-nav-link">
+                                <span class="menu-text" data-lang="sidebar-no-icons">No Icons with Lines</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("WithLines", "Sidebar") target="_blank" class="side-nav-link">
+                                <span class="menu-text" data-lang="sidebar-with-lines">Sidebar with Lines</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarTopbars" aria-expanded="false" aria-controls="sidebarTopbars"
+                    class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-layout-bottombar"></i></span>
+                    <span class="menu-text"> Topbar </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarTopbars">
+                    <ul class="sub-menu">
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("Dark", "Topbar") target="_blank" class="side-nav-link">
+                                <span class="menu-text" data-lang="topbar-dark">Dark Topbar</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("Gray", "Topbar") target="_blank" class="side-nav-link">
+                                <span class="menu-text" data-lang="topbar-gray">Gray Topbar</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("Gradient", "Topbar") target="_blank" class="side-nav-link">
+                                <span class="menu-text" data-lang="topbar-gradient">Gradient Topbar</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("SubItems", "Topbar") class="side-nav-link">
+                                <span class="menu-text" data-lang="topbar-sub-items">Topbar with Sub Items</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href=@Url.Action("Tools", "Topbar") class="side-nav-link">
+                                <span class="menu-text" data-lang="topbar-tools">Topbar with Tools</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+
+
+            <li class="side-nav-title mt-2">Menu Items</li>
+
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarMenuLevels" aria-expanded="false"
+                    aria-controls="sidebarMenuLevels" class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-sitemap"></i></span>
+                    <span class="menu-text"> Menu Levels </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarMenuLevels">
+                    <ul class="sub-menu">
+                        <li class="side-nav-item">
+                            <a data-bs-toggle="collapse" href="#sidebarSecondLevel" aria-expanded="false"
+                                aria-controls="sidebarSecondLevel" class="side-nav-link">
+                                <span class="menu-text"> Second Level </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <div class="collapse" id="sidebarSecondLevel">
+                                <ul class="sub-menu">
+                                    <li class="side-nav-item">
+                                        <a href="javascript: void(0);" class="side-nav-link">
+                                            <span class="menu-text">Item 2.1</span>
+                                        </a>
+                                    </li>
+                                    <li class="side-nav-item">
+                                        <a href="javascript: void(0);" class="side-nav-link">
+                                            <span class="menu-text">Item 2.2</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="side-nav-item">
+                            <a data-bs-toggle="collapse" href="#sidebarThirdLevel" aria-expanded="false"
+                                aria-controls="sidebarThirdLevel" class="side-nav-link">
+                                <span class="menu-text"> Third Level </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <div class="collapse" id="sidebarThirdLevel">
+                                <ul class="sub-menu">
+                                    <li class="side-nav-item">
+                                        <a href="javascript: void(0);" class="side-nav-link">Item 1</a>
+                                    </li>
+                                    <li class="side-nav-item">
+                                        <a data-bs-toggle="collapse" href="#sidebarFourthLevel" aria-expanded="false"
+                                            aria-controls="sidebarFourthLevel" class="side-nav-link">
+                                            <span class="menu-text"> Item 2 </span>
+                                            <span class="menu-arrow"></span>
+                                        </a>
+                                        <div class="collapse" id="sidebarFourthLevel">
+                                            <ul class="sub-menu">
+                                                <li class="side-nav-item">
+                                                    <a href="javascript: void(0);" class="side-nav-link">
+                                                        <span class="menu-text">Item 3.1</span>
+                                                    </a>
+                                                </li>
+                                                <li class="side-nav-item">
+                                                    <a href="javascript: void(0);" class="side-nav-link">
+                                                        <span class="menu-text">Item 3.2</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li class="side-nav-item">
+                            <a href="#!" class="side-nav-link disabled">
+                                <span class="menu-text">Disabled Item</span>
+                                <span class="badge text-bg-light opacity-50">soon</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <li class="side-nav-item">
+                <a href="#!" class="side-nav-link disabled">
+                    <span class="menu-icon"><i class="ti ti-ban"></i></span>
+                    <span class="menu-text"> Disabled Menu </span>
+                </a>
+            </li>
+
+            <li class="side-nav-item">
+                <a href="#!" class="side-nav-link special-menu">
+                    <span class="menu-icon"><i class="ti ti-star"></i></span>
+                    <span class="menu-text"> Special Menu </span>
+                </a>
+            </li> *@
+
+        </ul>
+    </div>
+</div>
+<!-- Sidenav Menu End -->

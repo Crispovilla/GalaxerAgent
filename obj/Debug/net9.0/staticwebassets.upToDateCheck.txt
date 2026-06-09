@@ -1,0 +1,1189 @@
+wwwroot\css\app.css
+wwwroot\css\app.min.css
+wwwroot\css\app.min.css.map
+wwwroot\css\custom-styles.css
+wwwroot\css\custom-styles.min.css
+wwwroot\css\custom-styles.min.css.map
+wwwroot\css\fonts\tabler-icons.ttf
+wwwroot\css\fonts\tabler-icons.woff
+wwwroot\css\fonts\tabler-icons.woff2
+wwwroot\css\site.css
+wwwroot\css\vendors.min.css
+wwwroot\favicon.ico
+wwwroot\images\auth.jpg
+wwwroot\images\bg-pattern.png
+wwwroot\images\blog\blog-1.jpg
+wwwroot\images\blog\blog-2.jpg
+wwwroot\images\blog\blog-3.jpg
+wwwroot\images\blog\blog-4.jpg
+wwwroot\images\blog\blog-5.jpg
+wwwroot\images\blog\blog-post.jpg
+wwwroot\images\cards\american-express.svg
+wwwroot\images\cards\bhim.svg
+wwwroot\images\cards\discover-card.svg
+wwwroot\images\cards\google-wallet.svg
+wwwroot\images\cards\mastercard.svg
+wwwroot\images\cards\payoneer.svg
+wwwroot\images\cards\paypal.svg
+wwwroot\images\cards\stripe.svg
+wwwroot\images\cards\unionpay.svg
+wwwroot\images\cards\visa.svg
+wwwroot\images\chat.png
+wwwroot\images\checkmark.png
+wwwroot\images\clients\01.svg
+wwwroot\images\clients\02.svg
+wwwroot\images\clients\03.svg
+wwwroot\images\clients\04.svg
+wwwroot\images\clients\05.svg
+wwwroot\images\clients\06.svg
+wwwroot\images\clients\07.svg
+wwwroot\images\dashboard-1.png
+wwwroot\images\delete.png
+wwwroot\images\demos\classic.png
+wwwroot\images\demos\flat.png
+wwwroot\images\demos\galaxy.png
+wwwroot\images\demos\material.png
+wwwroot\images\demos\minimal.png
+wwwroot\images\demos\modern.png
+wwwroot\images\demos\saas.png
+wwwroot\images\favicon.ico
+wwwroot\images\file-manager.png
+wwwroot\images\flags\ac.svg
+wwwroot\images\flags\ad.svg
+wwwroot\images\flags\ae.svg
+wwwroot\images\flags\af.svg
+wwwroot\images\flags\ag.svg
+wwwroot\images\flags\ai.svg
+wwwroot\images\flags\al.svg
+wwwroot\images\flags\am.svg
+wwwroot\images\flags\ao.svg
+wwwroot\images\flags\aq.svg
+wwwroot\images\flags\ar.svg
+wwwroot\images\flags\as.svg
+wwwroot\images\flags\at.svg
+wwwroot\images\flags\au.svg
+wwwroot\images\flags\aw.svg
+wwwroot\images\flags\ax.svg
+wwwroot\images\flags\az.svg
+wwwroot\images\flags\ba.svg
+wwwroot\images\flags\bb.svg
+wwwroot\images\flags\bd.svg
+wwwroot\images\flags\be.svg
+wwwroot\images\flags\bf.svg
+wwwroot\images\flags\bg.svg
+wwwroot\images\flags\bh.svg
+wwwroot\images\flags\bi.svg
+wwwroot\images\flags\bj.svg
+wwwroot\images\flags\bl.svg
+wwwroot\images\flags\bm.svg
+wwwroot\images\flags\bn.svg
+wwwroot\images\flags\bo.svg
+wwwroot\images\flags\bq.svg
+wwwroot\images\flags\br.svg
+wwwroot\images\flags\bs.svg
+wwwroot\images\flags\bt.svg
+wwwroot\images\flags\bv.svg
+wwwroot\images\flags\bw.svg
+wwwroot\images\flags\by.svg
+wwwroot\images\flags\bz.svg
+wwwroot\images\flags\ca.svg
+wwwroot\images\flags\cc.svg
+wwwroot\images\flags\cd.svg
+wwwroot\images\flags\cefta.svg
+wwwroot\images\flags\cf.svg
+wwwroot\images\flags\cg.svg
+wwwroot\images\flags\ch.svg
+wwwroot\images\flags\ci.svg
+wwwroot\images\flags\ck.svg
+wwwroot\images\flags\cl.svg
+wwwroot\images\flags\cm.svg
+wwwroot\images\flags\cn.svg
+wwwroot\images\flags\co.svg
+wwwroot\images\flags\cp.svg
+wwwroot\images\flags\cr.svg
+wwwroot\images\flags\cu.svg
+wwwroot\images\flags\cv.svg
+wwwroot\images\flags\cw.svg
+wwwroot\images\flags\cx.svg
+wwwroot\images\flags\cy.svg
+wwwroot\images\flags\cz.svg
+wwwroot\images\flags\de.svg
+wwwroot\images\flags\dg.svg
+wwwroot\images\flags\dj.svg
+wwwroot\images\flags\dk.svg
+wwwroot\images\flags\dm.svg
+wwwroot\images\flags\do.svg
+wwwroot\images\flags\dz.svg
+wwwroot\images\flags\ea.svg
+wwwroot\images\flags\ec.svg
+wwwroot\images\flags\ee.svg
+wwwroot\images\flags\eg.svg
+wwwroot\images\flags\eh.svg
+wwwroot\images\flags\er.svg
+wwwroot\images\flags\es-ct.svg
+wwwroot\images\flags\es-ga.svg
+wwwroot\images\flags\es.svg
+wwwroot\images\flags\et.svg
+wwwroot\images\flags\eu.svg
+wwwroot\images\flags\fi.svg
+wwwroot\images\flags\fj.svg
+wwwroot\images\flags\fk.svg
+wwwroot\images\flags\fm.svg
+wwwroot\images\flags\fo.svg
+wwwroot\images\flags\fr.svg
+wwwroot\images\flags\ga.svg
+wwwroot\images\flags\gb-eng.svg
+wwwroot\images\flags\gb-nir.svg
+wwwroot\images\flags\gb-sct.svg
+wwwroot\images\flags\gb-wls.svg
+wwwroot\images\flags\gb.svg
+wwwroot\images\flags\gd.svg
+wwwroot\images\flags\ge.svg
+wwwroot\images\flags\gf.svg
+wwwroot\images\flags\gg.svg
+wwwroot\images\flags\gh.svg
+wwwroot\images\flags\gi.svg
+wwwroot\images\flags\gl.svg
+wwwroot\images\flags\gm.svg
+wwwroot\images\flags\gn.svg
+wwwroot\images\flags\gp.svg
+wwwroot\images\flags\gq.svg
+wwwroot\images\flags\gr.svg
+wwwroot\images\flags\gs.svg
+wwwroot\images\flags\gt.svg
+wwwroot\images\flags\gu.svg
+wwwroot\images\flags\gw.svg
+wwwroot\images\flags\gy.svg
+wwwroot\images\flags\hk.svg
+wwwroot\images\flags\hm.svg
+wwwroot\images\flags\hn.svg
+wwwroot\images\flags\hr.svg
+wwwroot\images\flags\ht.svg
+wwwroot\images\flags\hu.svg
+wwwroot\images\flags\ic.svg
+wwwroot\images\flags\id.svg
+wwwroot\images\flags\ie.svg
+wwwroot\images\flags\il.svg
+wwwroot\images\flags\im.svg
+wwwroot\images\flags\in.svg
+wwwroot\images\flags\io.svg
+wwwroot\images\flags\iq.svg
+wwwroot\images\flags\ir.svg
+wwwroot\images\flags\is.svg
+wwwroot\images\flags\it.svg
+wwwroot\images\flags\italy.svg
+wwwroot\images\flags\je.svg
+wwwroot\images\flags\jm.svg
+wwwroot\images\flags\jo.svg
+wwwroot\images\flags\jp.svg
+wwwroot\images\flags\ke.svg
+wwwroot\images\flags\kg.svg
+wwwroot\images\flags\kh.svg
+wwwroot\images\flags\ki.svg
+wwwroot\images\flags\km.svg
+wwwroot\images\flags\kn.svg
+wwwroot\images\flags\kp.svg
+wwwroot\images\flags\kr.svg
+wwwroot\images\flags\kw.svg
+wwwroot\images\flags\ky.svg
+wwwroot\images\flags\kz.svg
+wwwroot\images\flags\la.svg
+wwwroot\images\flags\lb.svg
+wwwroot\images\flags\lc.svg
+wwwroot\images\flags\li.svg
+wwwroot\images\flags\lk.svg
+wwwroot\images\flags\lr.svg
+wwwroot\images\flags\ls.svg
+wwwroot\images\flags\lt.svg
+wwwroot\images\flags\lu.svg
+wwwroot\images\flags\lv.svg
+wwwroot\images\flags\ly.svg
+wwwroot\images\flags\ma.svg
+wwwroot\images\flags\mc.svg
+wwwroot\images\flags\md.svg
+wwwroot\images\flags\me.svg
+wwwroot\images\flags\mf.svg
+wwwroot\images\flags\mg.svg
+wwwroot\images\flags\mh.svg
+wwwroot\images\flags\mk.svg
+wwwroot\images\flags\ml.svg
+wwwroot\images\flags\mm.svg
+wwwroot\images\flags\mn.svg
+wwwroot\images\flags\mo.svg
+wwwroot\images\flags\mp.svg
+wwwroot\images\flags\mq.svg
+wwwroot\images\flags\mr.svg
+wwwroot\images\flags\ms.svg
+wwwroot\images\flags\mt.svg
+wwwroot\images\flags\mu.svg
+wwwroot\images\flags\mv.svg
+wwwroot\images\flags\mw.svg
+wwwroot\images\flags\mx.svg
+wwwroot\images\flags\my.svg
+wwwroot\images\flags\mz.svg
+wwwroot\images\flags\na.svg
+wwwroot\images\flags\nc.svg
+wwwroot\images\flags\ne.svg
+wwwroot\images\flags\nf.svg
+wwwroot\images\flags\ng.svg
+wwwroot\images\flags\ni.svg
+wwwroot\images\flags\nl.svg
+wwwroot\images\flags\no.svg
+wwwroot\images\flags\np.svg
+wwwroot\images\flags\nr.svg
+wwwroot\images\flags\nu.svg
+wwwroot\images\flags\nz.svg
+wwwroot\images\flags\om.svg
+wwwroot\images\flags\pa.svg
+wwwroot\images\flags\pe.svg
+wwwroot\images\flags\pf.svg
+wwwroot\images\flags\pg.svg
+wwwroot\images\flags\ph.svg
+wwwroot\images\flags\pk.svg
+wwwroot\images\flags\pl.svg
+wwwroot\images\flags\pm.svg
+wwwroot\images\flags\pn.svg
+wwwroot\images\flags\pr.svg
+wwwroot\images\flags\ps.svg
+wwwroot\images\flags\pt.svg
+wwwroot\images\flags\pw.svg
+wwwroot\images\flags\py.svg
+wwwroot\images\flags\qa.svg
+wwwroot\images\flags\re.svg
+wwwroot\images\flags\ro.svg
+wwwroot\images\flags\rs.svg
+wwwroot\images\flags\ru.svg
+wwwroot\images\flags\rw.svg
+wwwroot\images\flags\sa.svg
+wwwroot\images\flags\sb.svg
+wwwroot\images\flags\sc.svg
+wwwroot\images\flags\sd.svg
+wwwroot\images\flags\se.svg
+wwwroot\images\flags\sg.svg
+wwwroot\images\flags\sh.svg
+wwwroot\images\flags\si.svg
+wwwroot\images\flags\sj.svg
+wwwroot\images\flags\sk.svg
+wwwroot\images\flags\sl.svg
+wwwroot\images\flags\sm.svg
+wwwroot\images\flags\sn.svg
+wwwroot\images\flags\so.svg
+wwwroot\images\flags\sr.svg
+wwwroot\images\flags\ss.svg
+wwwroot\images\flags\st.svg
+wwwroot\images\flags\sv.svg
+wwwroot\images\flags\sx.svg
+wwwroot\images\flags\sy.svg
+wwwroot\images\flags\sz.svg
+wwwroot\images\flags\ta.svg
+wwwroot\images\flags\tc.svg
+wwwroot\images\flags\td.svg
+wwwroot\images\flags\tf.svg
+wwwroot\images\flags\tg.svg
+wwwroot\images\flags\th.svg
+wwwroot\images\flags\tj.svg
+wwwroot\images\flags\tk.svg
+wwwroot\images\flags\tl.svg
+wwwroot\images\flags\tm.svg
+wwwroot\images\flags\tn.svg
+wwwroot\images\flags\to.svg
+wwwroot\images\flags\tr.svg
+wwwroot\images\flags\tt.svg
+wwwroot\images\flags\tv.svg
+wwwroot\images\flags\tw.svg
+wwwroot\images\flags\tz.svg
+wwwroot\images\flags\ua.svg
+wwwroot\images\flags\ug.svg
+wwwroot\images\flags\um.svg
+wwwroot\images\flags\un.svg
+wwwroot\images\flags\us.svg
+wwwroot\images\flags\uy.svg
+wwwroot\images\flags\uz.svg
+wwwroot\images\flags\va.svg
+wwwroot\images\flags\vc.svg
+wwwroot\images\flags\ve.svg
+wwwroot\images\flags\vg.svg
+wwwroot\images\flags\vi.svg
+wwwroot\images\flags\vn.svg
+wwwroot\images\flags\vu.svg
+wwwroot\images\flags\wf.svg
+wwwroot\images\flags\ws.svg
+wwwroot\images\flags\xk.svg
+wwwroot\images\flags\xx.svg
+wwwroot\images\flags\ye.svg
+wwwroot\images\flags\yt.svg
+wwwroot\images\flags\za.svg
+wwwroot\images\flags\zm.svg
+wwwroot\images\flags\zw.svg
+wwwroot\images\gallery\1.jpg
+wwwroot\images\gallery\10.jpg
+wwwroot\images\gallery\11.jpg
+wwwroot\images\gallery\12.jpg
+wwwroot\images\gallery\13.jpg
+wwwroot\images\gallery\14.jpg
+wwwroot\images\gallery\2.jpg
+wwwroot\images\gallery\3.jpg
+wwwroot\images\gallery\4.jpg
+wwwroot\images\gallery\5.jpg
+wwwroot\images\gallery\6.jpg
+wwwroot\images\gallery\7.jpg
+wwwroot\images\gallery\8.jpg
+wwwroot\images\gallery\9.jpg
+wwwroot\images\kanban\img-1.png
+wwwroot\images\kanban\img-2.png
+wwwroot\images\kanban\img-3.png
+wwwroot\images\kanban\img-4.png
+wwwroot\images\landing-cta.jpg
+wwwroot\images\layouts\boxed.svg
+wwwroot\images\layouts\dark.svg
+wwwroot\images\layouts\fluid.svg
+wwwroot\images\layouts\light.svg
+wwwroot\images\layouts\side-dark.svg
+wwwroot\images\layouts\side-gradient.svg
+wwwroot\images\layouts\side-gray.svg
+wwwroot\images\layouts\side-image.svg
+wwwroot\images\layouts\side-light.svg
+wwwroot\images\layouts\sidebar-compact.svg
+wwwroot\images\layouts\sidebar-full.svg
+wwwroot\images\layouts\sidebar-hover.svg
+wwwroot\images\layouts\sidebar-sm.svg
+wwwroot\images\layouts\system.svg
+wwwroot\images\layouts\themes\theme-classic.png
+wwwroot\images\layouts\themes\theme-flat.png
+wwwroot\images\layouts\themes\theme-galaxy.png
+wwwroot\images\layouts\themes\theme-material.png
+wwwroot\images\layouts\themes\theme-minimal.png
+wwwroot\images\layouts\themes\theme-modern.png
+wwwroot\images\layouts\themes\theme-saas.png
+wwwroot\images\layouts\topbar-dark.svg
+wwwroot\images\layouts\topbar-gradient.svg
+wwwroot\images\layouts\topbar-gray.svg
+wwwroot\images\layouts\topbar-light.svg
+wwwroot\images\leaflet\layers.png
+wwwroot\images\leaflet\leaf-green.png
+wwwroot\images\leaflet\leaf-orange.png
+wwwroot\images\leaflet\leaf-red.png
+wwwroot\images\leaflet\leaf-shadow.png
+wwwroot\images\leaflet\marker-icon.png
+wwwroot\images\leaflet\marker-shadow.png
+wwwroot\images\location-pin.png
+wwwroot\images\logo-black.png
+wwwroot\images\logo-sm.png
+wwwroot\images\logo-sm2.png
+wwwroot\images\logo-uchile.png
+wwwroot\images\logo-white.png
+wwwroot\images\logo.png
+wwwroot\images\logo2.png
+wwwroot\images\logos\airbnb.svg
+wwwroot\images\logos\amazon.svg
+wwwroot\images\logos\apple.svg
+wwwroot\images\logos\google.svg
+wwwroot\images\logos\h&m.svg
+wwwroot\images\logos\meta.svg
+wwwroot\images\logos\microsoft.svg
+wwwroot\images\logos\shell.svg
+wwwroot\images\logos\spotify.svg
+wwwroot\images\logos\starbucks.svg
+wwwroot\images\logos\thenorthface.svg
+wwwroot\images\logos\walmart.svg
+wwwroot\images\message-mail.png
+wwwroot\images\products\1.png
+wwwroot\images\products\10.png
+wwwroot\images\products\2.png
+wwwroot\images\products\3.png
+wwwroot\images\products\4.png
+wwwroot\images\products\5.png
+wwwroot\images\products\6.png
+wwwroot\images\products\7.png
+wwwroot\images\products\8.png
+wwwroot\images\products\9.png
+wwwroot\images\products\single-1.png
+wwwroot\images\products\single-2.png
+wwwroot\images\products\single-3.png
+wwwroot\images\products\single-4.png
+wwwroot\images\profile-bg.jpg
+wwwroot\images\qr.png
+wwwroot\images\ratings.svg
+wwwroot\images\seller-profile.jpg
+wwwroot\images\sellers\1.png
+wwwroot\images\sellers\10.png
+wwwroot\images\sellers\2.png
+wwwroot\images\sellers\3.png
+wwwroot\images\sellers\4.png
+wwwroot\images\sellers\5.png
+wwwroot\images\sellers\6.png
+wwwroot\images\sellers\7.png
+wwwroot\images\sellers\8.png
+wwwroot\images\sellers\9.png
+wwwroot\images\sidenav-bg.jpg
+wwwroot\images\sign.png
+wwwroot\images\stock\small-1.jpg
+wwwroot\images\stock\small-10.jpg
+wwwroot\images\stock\small-2.jpg
+wwwroot\images\stock\small-3.jpg
+wwwroot\images\stock\small-4.jpg
+wwwroot\images\stock\small-5.jpg
+wwwroot\images\stock\small-6.jpg
+wwwroot\images\stock\small-7.jpg
+wwwroot\images\stock\small-8.jpg
+wwwroot\images\stock\small-9.jpg
+wwwroot\images\svg\404.svg
+wwwroot\images\svg\500.svg
+wwwroot\images\svg\iceland.svg
+wwwroot\images\svg\maintenance.svg
+wwwroot\images\team.png
+wwwroot\images\treeview.png
+wwwroot\images\user-bg-pattern.png
+wwwroot\images\user-bg-pattern.svg
+wwwroot\images\users\logo-sm.png
+wwwroot\images\users\user-1.jpg
+wwwroot\images\users\user-10.jpg
+wwwroot\images\users\user-2.jpg
+wwwroot\images\users\user-3.jpg
+wwwroot\images\users\user-4.jpg
+wwwroot\images\users\user-5.jpg
+wwwroot\images\users\user-6.jpg
+wwwroot\images\users\user-7.jpg
+wwwroot\images\users\user-8.jpg
+wwwroot\images\users\user-9.jpg
+wwwroot\js\app-datatable.js
+wwwroot\js\app-rut-validator.js
+wwwroot\js\app-sweetalertl2.js
+wwwroot\js\app.js
+wwwroot\js\config.js
+wwwroot\js\pages\auth-password.js
+wwwroot\js\pages\auth-two-factor.js
+wwwroot\js\pages\integrantes-grupo-familiar.js
+wwwroot\js\pages\landing.js
+wwwroot\js\site.js
+wwwroot\js\vendors.min.js
+wwwroot\js\wacom\wacomstu430.js
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap.css
+wwwroot\lib\bootstrap\dist\css\bootstrap.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css
+wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css.map
+wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js
+wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js.map
+wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js
+wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js.map
+wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js
+wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js.map
+wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js
+wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js.map
+wwwroot\lib\bootstrap\dist\js\bootstrap.js
+wwwroot\lib\bootstrap\dist\js\bootstrap.js.map
+wwwroot\lib\bootstrap\dist\js\bootstrap.min.js
+wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map
+wwwroot\lib\bootstrap\LICENSE
+wwwroot\lib\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.js
+wwwroot\lib\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.min.js
+wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
+wwwroot\lib\jquery-validation\dist\additional-methods.js
+wwwroot\lib\jquery-validation\dist\additional-methods.min.js
+wwwroot\lib\jquery-validation\dist\jquery.validate.js
+wwwroot\lib\jquery-validation\dist\jquery.validate.min.js
+wwwroot\lib\jquery-validation\LICENSE.md
+wwwroot\lib\jquery\dist\jquery.js
+wwwroot\lib\jquery\dist\jquery.min.js
+wwwroot\lib\jquery\dist\jquery.min.map
+wwwroot\lib\jquery\dist\jquery.slim.js
+wwwroot\lib\jquery\dist\jquery.slim.min.js
+wwwroot\lib\jquery\dist\jquery.slim.min.map
+wwwroot\lib\jquery\LICENSE.txt
+wwwroot\plugins\animate\animate.min.css
+wwwroot\plugins\apexcharts\apexcharts.min.js
+wwwroot\plugins\apexsankey\apexsankey.min.js
+wwwroot\plugins\apextree\apextree.min.js
+wwwroot\plugins\bootstrap\bootstrap.bundle.min.js
+wwwroot\plugins\bootstrap\bootstrap.min.css
+wwwroot\plugins\choices\choices.min.css
+wwwroot\plugins\choices\choices.min.js
+wwwroot\plugins\clipboard\clipboard.min.js
+wwwroot\plugins\datatables\buttons.bootstrap5.min.css
+wwwroot\plugins\datatables\buttons.bootstrap5.min.js
+wwwroot\plugins\datatables\buttons.html5.min.js
+wwwroot\plugins\datatables\buttons.print.min.js
+wwwroot\plugins\datatables\dataTables.bootstrap5.min.js
+wwwroot\plugins\datatables\dataTables.buttons.min.js
+wwwroot\plugins\datatables\dataTables.fixedHeader.min.js
+wwwroot\plugins\datatables\dataTables.min.js
+wwwroot\plugins\datatables\dataTables.responsive.min.js
+wwwroot\plugins\datatables\dataTables.select.min.js
+wwwroot\plugins\datatables\fixedHeader.bootstrap5.min.css
+wwwroot\plugins\datatables\fixedHeader.bootstrap5.min.js
+wwwroot\plugins\datatables\jszip.min.js
+wwwroot\plugins\datatables\pdfmake.min.js
+wwwroot\plugins\datatables\responsive.bootstrap5.min.css
+wwwroot\plugins\datatables\responsive.bootstrap5.min.js
+wwwroot\plugins\datatables\select.bootstrap5.min.css
+wwwroot\plugins\datatables\select.bootstrap5.min.js
+wwwroot\plugins\datatables\vfs_fonts.js
+wwwroot\plugins\daterangepicker\daterangepicker.css
+wwwroot\plugins\daterangepicker\daterangepicker.js
+wwwroot\plugins\diff\diff.min.js
+wwwroot\plugins\dragsort\dragsort.js
+wwwroot\plugins\dropzone\dropzone-min.js
+wwwroot\plugins\dropzone\dropzone.css
+wwwroot\plugins\echarts\echarts.min.js
+wwwroot\plugins\filepond\filepond-plugin-file-encode.min.js
+wwwroot\plugins\filepond\filepond-plugin-file-validate-size.min.js
+wwwroot\plugins\filepond\filepond-plugin-image-exif-orientation.min.js
+wwwroot\plugins\filepond\filepond-plugin-image-preview.min.css
+wwwroot\plugins\filepond\filepond-plugin-image-preview.min.js
+wwwroot\plugins\filepond\filepond.min.css
+wwwroot\plugins\filepond\filepond.min.js
+wwwroot\plugins\fullcalendar\index.global.min.js
+wwwroot\plugins\glightbox\glightbox.min.css
+wwwroot\plugins\glightbox\glightbox.min.js
+wwwroot\plugins\handlebars\handlebars.min.js
+wwwroot\plugins\inputmask\inputmask.min.js
+wwwroot\plugins\jquery\jquery.min.js
+wwwroot\plugins\jstree\jstree.min.js
+wwwroot\plugins\jstree\style.min.css
+wwwroot\plugins\jstree\throbber.gif
+wwwroot\plugins\jsvectormap\jsvectormap.min.css
+wwwroot\plugins\jsvectormap\jsvectormap.min.js
+wwwroot\plugins\jsvectormap\world-merc.js
+wwwroot\plugins\jsvectormap\world.js
+wwwroot\plugins\ladda\ladda.jquery.min.js
+wwwroot\plugins\ladda\ladda.min.css
+wwwroot\plugins\ladda\ladda.min.js
+wwwroot\plugins\ladda\spin.min.js
+wwwroot\plugins\leaflet\leaflet.css
+wwwroot\plugins\leaflet\leaflet.js
+wwwroot\plugins\lucide\lucide.min.js
+wwwroot\plugins\masonry\masonry.pkgd.min.js
+wwwroot\plugins\moment\moment.min.js
+wwwroot\plugins\muuri\muuri.min.js
+wwwroot\plugins\nouislider\nouislider.min.css
+wwwroot\plugins\nouislider\nouislider.min.js
+wwwroot\plugins\pdfjs\pdf.min.js
+wwwroot\plugins\pdfjs\pdf.worker.min.js
+wwwroot\plugins\pickr\classic.min.css
+wwwroot\plugins\pickr\monolith.min.css
+wwwroot\plugins\pickr\nano.min.css
+wwwroot\plugins\pickr\pickr.min.js
+wwwroot\plugins\quill\quill.bubble.css
+wwwroot\plugins\quill\quill.core.css
+wwwroot\plugins\quill\quill.js
+wwwroot\plugins\quill\quill.snow.css
+wwwroot\plugins\select2\select2.min.css
+wwwroot\plugins\select2\select2.min.js
+wwwroot\plugins\simplebar\simplebar.min.css
+wwwroot\plugins\simplebar\simplebar.min.js
+wwwroot\plugins\sortablejs\Sortable.min.js
+wwwroot\plugins\spinkit\spinkit.min.css
+wwwroot\plugins\summernote\font\summernote.ttf
+wwwroot\plugins\summernote\font\summernote.woff
+wwwroot\plugins\summernote\font\summernote.woff2
+wwwroot\plugins\summernote\summernote-bs5.min.css
+wwwroot\plugins\summernote\summernote-bs5.min.js
+wwwroot\plugins\svgdotjs\svg.min.js
+wwwroot\plugins\sweetalert2\sweetalert2.min.css
+wwwroot\plugins\sweetalert2\sweetalert2.min.js
+wwwroot\plugins\tagify\tagify.css
+wwwroot\plugins\tagify\tagify.js
+wwwroot\plugins\tinycon\tinycon.min.js
+wwwroot\plugins\tourguidejs\tour.js
+wwwroot\plugins\tourguidejs\tour.min.css
+wwwroot\plugins\typeahead\typeahead.bundle.min.js
+wwwroot\plugins\web-animations\web-animations.min.js
+wwwroot\plugins\wnumb\wNumb.min.js
+wwwroot\scss\app.scss
+wwwroot\scss\components\_accordions.scss
+wwwroot\scss\components\_alert.scss
+wwwroot\scss\components\_avatar.scss
+wwwroot\scss\components\_background.scss
+wwwroot\scss\components\_badge.scss
+wwwroot\scss\components\_breadcrumb.scss
+wwwroot\scss\components\_buttons.scss
+wwwroot\scss\components\_card.scss
+wwwroot\scss\components\_dropdown.scss
+wwwroot\scss\components\_forms.scss
+wwwroot\scss\components\_list-group.scss
+wwwroot\scss\components\_modal.scss
+wwwroot\scss\components\_nav.scss
+wwwroot\scss\components\_pagination.scss
+wwwroot\scss\components\_popover.scss
+wwwroot\scss\components\_preloader.scss
+wwwroot\scss\components\_print.scss
+wwwroot\scss\components\_progress.scss
+wwwroot\scss\components\_reboot.scss
+wwwroot\scss\components\_tables.scss
+wwwroot\scss\components\_tooltip.scss
+wwwroot\scss\components\_widgets.scss
+wwwroot\scss\config\_root.scss
+wwwroot\scss\config\_theme-classic.scss
+wwwroot\scss\config\_theme-flat.scss
+wwwroot\scss\config\_theme-galaxy.scss
+wwwroot\scss\config\_theme-material.scss
+wwwroot\scss\config\_theme-minimal.scss
+wwwroot\scss\config\_theme-modern.scss
+wwwroot\scss\config\_theme-saas.scss
+wwwroot\scss\pages\_authentication.scss
+wwwroot\scss\pages\_chat.scss
+wwwroot\scss\pages\_email.scss
+wwwroot\scss\pages\_error.scss
+wwwroot\scss\pages\_kanban-board.scss
+wwwroot\scss\pages\_landing.scss
+wwwroot\scss\pages\_outlook.scss
+wwwroot\scss\pages\_pin-board.scss
+wwwroot\scss\pages\_timeline.scss
+wwwroot\scss\plugins\_apexcharts.scss
+wwwroot\scss\plugins\_calendar.scss
+wwwroot\scss\plugins\_choice.scss
+wwwroot\scss\plugins\_colorpicker.scss
+wwwroot\scss\plugins\_datatables.scss
+wwwroot\scss\plugins\_daterangepicker.scss
+wwwroot\scss\plugins\_diff.scss
+wwwroot\scss\plugins\_dropzone.scss
+wwwroot\scss\plugins\_filepond.scss
+wwwroot\scss\plugins\_flatpickr.scss
+wwwroot\scss\plugins\_jvectormap.scss
+wwwroot\scss\plugins\_ladda.scss
+wwwroot\scss\plugins\_noui-rangeslider.scss
+wwwroot\scss\plugins\_pass-bar.scss
+wwwroot\scss\plugins\_prismjs.scss
+wwwroot\scss\plugins\_quill-editor.scss
+wwwroot\scss\plugins\_select2.scss
+wwwroot\scss\plugins\_simplebar.scss
+wwwroot\scss\plugins\_sortablejs.scss
+wwwroot\scss\plugins\_summernote.scss
+wwwroot\scss\plugins\_sweetalert2.scss
+wwwroot\scss\plugins\_tagify.scss
+wwwroot\scss\plugins\_touchpin.scss
+wwwroot\scss\plugins\_tour.scss
+wwwroot\scss\plugins\_treeview.scss
+wwwroot\scss\plugins\_typehead.scss
+wwwroot\scss\plugins\_wizard.scss
+wwwroot\scss\structure\_footer.scss
+wwwroot\scss\structure\_horizontal.scss
+wwwroot\scss\structure\_layout.scss
+wwwroot\scss\structure\_sidenav.scss
+wwwroot\scss\structure\_topbar.scss
+wwwroot\scss\_variables-dark.scss
+wwwroot\scss\_variables.scss
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\wnumb\wNumb.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\web-animations\web-animations.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\typeahead\typeahead.bundle.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\tourguidejs\tour.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\tourguidejs\tour.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\tinycon\tinycon.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\tagify\tagify.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\tagify\tagify.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\sweetalert2\sweetalert2.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\sweetalert2\sweetalert2.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\svgdotjs\svg.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\summernote\summernote-bs5.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\summernote\summernote-bs5.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\spinkit\spinkit.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\sortablejs\Sortable.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\simplebar\simplebar.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\simplebar\simplebar.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\select2\select2.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\select2\select2.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\quill\quill.snow.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\quill\quill.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\quill\quill.core.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\quill\quill.bubble.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\pickr\pickr.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\pickr\nano.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\pickr\monolith.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\pickr\classic.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\pdfjs\pdf.worker.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\pdfjs\pdf.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\nouislider\nouislider.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\nouislider\nouislider.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\muuri\muuri.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\moment\moment.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\masonry\masonry.pkgd.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\lucide\lucide.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\leaflet\leaflet.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\leaflet\leaflet.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\ladda\spin.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\ladda\ladda.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\ladda\ladda.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\ladda\ladda.jquery.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\jsvectormap\world.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\jsvectormap\world-merc.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\jsvectormap\jsvectormap.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\jsvectormap\jsvectormap.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\jstree\style.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\jstree\jstree.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\jquery\jquery.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\inputmask\inputmask.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\handlebars\handlebars.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\glightbox\glightbox.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\glightbox\glightbox.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\fullcalendar\index.global.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\filepond\filepond.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\filepond\filepond.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\filepond\filepond-plugin-image-preview.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\filepond\filepond-plugin-image-preview.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\filepond\filepond-plugin-image-exif-orientation.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\filepond\filepond-plugin-file-validate-size.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\filepond\filepond-plugin-file-encode.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\echarts\echarts.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\dropzone\dropzone.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\dropzone\dropzone-min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\dragsort\dragsort.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\diff\diff.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\daterangepicker\daterangepicker.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\daterangepicker\daterangepicker.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\datatables\vfs_fonts.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\datatables\select.bootstrap5.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\datatables\select.bootstrap5.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\datatables\responsive.bootstrap5.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\datatables\responsive.bootstrap5.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\datatables\pdfmake.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\datatables\jszip.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\datatables\fixedHeader.bootstrap5.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\datatables\fixedHeader.bootstrap5.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\datatables\dataTables.select.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\datatables\dataTables.responsive.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\datatables\dataTables.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\datatables\dataTables.fixedHeader.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\datatables\dataTables.buttons.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\datatables\dataTables.bootstrap5.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\datatables\buttons.print.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\datatables\buttons.html5.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\datatables\buttons.bootstrap5.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\datatables\buttons.bootstrap5.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\clipboard\clipboard.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\choices\choices.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\choices\choices.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\bootstrap\bootstrap.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\bootstrap\bootstrap.bundle.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\apextree\apextree.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\apexsankey\apexsankey.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\apexcharts\apexcharts.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\plugins\animate\animate.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\jquery\LICENSE.txt
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\jquery\dist\jquery.slim.min.map
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\jquery\dist\jquery.slim.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\jquery\dist\jquery.slim.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\jquery\dist\jquery.min.map
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\jquery\dist\jquery.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\jquery\dist\jquery.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\jquery-validation\LICENSE.md
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\jquery-validation\dist\jquery.validate.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\jquery-validation\dist\jquery.validate.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\jquery-validation\dist\additional-methods.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\jquery-validation\dist\additional-methods.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\js\bootstrap.js.map
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\js\bootstrap.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js.map
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js.map
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js.map
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js.map
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css.map
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css.map
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap.css.map
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css.map
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css.map
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css.map
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css.map
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css.map
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css.map
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css.map
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css.map
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css.map
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css.map
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\js\wacom\wacomstu430.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\js\vendors.min.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\js\site.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\js\pages\landing.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\js\pages\integrantes-grupo-familiar.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\js\pages\auth-two-factor.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\js\pages\auth-password.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\js\config.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\js\app.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\js\app-sweetalertl2.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\js\app-rut-validator.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\js\app-datatable.js
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\user-bg-pattern.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\svg\maintenance.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\svg\iceland.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\svg\500.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\svg\404.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\ratings.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\logos\walmart.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\logos\thenorthface.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\logos\starbucks.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\logos\spotify.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\logos\shell.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\logos\microsoft.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\logos\meta.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\logos\h&m.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\logos\google.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\logos\apple.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\logos\amazon.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\logos\airbnb.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\layouts\topbar-light.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\layouts\topbar-gray.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\layouts\topbar-gradient.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\layouts\topbar-dark.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\layouts\system.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\layouts\sidebar-sm.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\layouts\sidebar-hover.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\layouts\sidebar-full.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\layouts\sidebar-compact.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\layouts\side-light.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\layouts\side-image.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\layouts\side-gray.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\layouts\side-gradient.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\layouts\side-dark.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\layouts\light.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\layouts\fluid.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\layouts\dark.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\layouts\boxed.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\zw.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\zm.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\za.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\yt.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ye.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\xx.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\xk.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ws.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\wf.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\vu.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\vn.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\vi.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\vg.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ve.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\vc.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\va.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\uz.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\uy.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\us.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\un.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\um.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ug.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ua.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\tz.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\tw.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\tv.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\tt.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\tr.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\to.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\tn.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\tm.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\tl.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\tk.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\tj.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\th.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\tg.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\tf.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\td.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\tc.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ta.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\sz.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\sy.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\sx.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\sv.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\st.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ss.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\sr.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\so.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\sn.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\sm.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\sl.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\sk.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\sj.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\si.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\sh.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\sg.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\se.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\sd.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\sc.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\sb.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\sa.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\rw.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ru.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\rs.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ro.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\re.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\qa.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\py.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\pw.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\pt.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ps.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\pr.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\pn.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\pm.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\pl.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\pk.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ph.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\pg.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\pf.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\pe.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\pa.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\om.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\nz.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\nu.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\nr.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\np.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\no.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\nl.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ni.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ng.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\nf.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ne.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\nc.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\na.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\mz.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\my.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\mx.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\mw.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\mv.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\mu.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\mt.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ms.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\mr.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\mq.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\mp.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\mo.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\mn.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\mm.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ml.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\mk.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\mh.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\mg.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\mf.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\me.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\md.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\mc.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ma.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ly.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\lv.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\lu.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\lt.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ls.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\lr.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\lk.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\li.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\lc.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\lb.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\la.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\kz.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ky.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\kw.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\kr.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\kp.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\kn.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\km.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ki.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\kh.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\kg.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ke.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\jp.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\jo.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\jm.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\je.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\italy.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\it.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\is.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ir.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\iq.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\io.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\in.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\im.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\il.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ie.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\id.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ic.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\hu.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ht.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\hr.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\hn.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\hm.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\hk.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\gy.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\gw.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\gu.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\gt.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\gs.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\gr.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\gq.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\gp.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\gn.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\gm.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\gl.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\gi.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\gh.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\gg.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\gf.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ge.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\gd.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\gb.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\gb-wls.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\gb-sct.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\gb-nir.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\gb-eng.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ga.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\fr.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\fo.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\fm.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\fk.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\fj.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\fi.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\eu.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\et.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\es.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\es-ga.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\es-ct.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\er.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\eh.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\eg.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ee.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ec.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ea.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\dz.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\do.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\dm.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\dk.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\dj.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\dg.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\de.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\cz.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\cy.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\cx.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\cw.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\cv.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\cu.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\cr.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\cp.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\co.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\cn.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\cm.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\cl.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ck.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ci.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ch.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\cg.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\cf.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\cefta.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\cd.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\cc.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ca.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\bz.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\by.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\bw.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\bv.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\bt.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\bs.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\br.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\bq.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\bo.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\bn.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\bm.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\bl.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\bj.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\bi.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\bh.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\bg.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\bf.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\be.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\bd.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\bb.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ba.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\az.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ax.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\aw.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\au.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\at.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\as.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ar.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\aq.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ao.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\am.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\al.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ai.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ag.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\af.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ae.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ad.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\flags\ac.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\favicon.ico
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\clients\07.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\clients\06.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\clients\05.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\clients\04.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\clients\03.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\clients\02.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\clients\01.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\cards\visa.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\cards\unionpay.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\cards\stripe.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\cards\paypal.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\cards\payoneer.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\cards\mastercard.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\cards\google-wallet.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\cards\discover-card.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\cards\bhim.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\images\cards\american-express.svg
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\favicon.ico
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\css\vendors.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\css\site.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\css\custom-styles.min.css.map
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\css\custom-styles.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\css\custom-styles.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\css\app.min.css.map
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\css\app.min.css
+C:\Users\squinteros\source\Workspaces\Base CORE MVC Inspinia\Base-MVC-Core9\wwwroot\css\app.css

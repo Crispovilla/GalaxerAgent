@@ -1,0 +1,77 @@
+//
+// _reboot.scss
+//
+
+html {
+    position: relative;
+    min-height: 100%;
+    // direction: ltr;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+button,
+a {
+    outline: none !important;
+}
+
+// Forms
+b,
+strong {
+    font-weight: $font-weight-semibold;
+}
+
+// Border styles
+.border-dashed {
+    --#{$prefix}border-style: dashed;
+}
+
+.border-transparent {
+    --#{$prefix}border-color: transparent;
+}
+
+// Custom Link
+.link-reset {
+    color: inherit;
+    transition: $transition-base;
+
+    &:hover {
+        color: var(--#{$prefix}primary);
+    }
+}
+
+// Lucide SVG Icons
+svg.lucide {
+    width: 1em;
+    height: 1em;
+}
+
+// SpinKit Spinner (Plugin)
+:root {
+    --sk-size: 30px;
+    --sk-color: var(--#{$prefix}primary);
+}
+
+.sk-wave {
+    inline-size: 40px;
+    white-space: nowrap
+}
+
+// Custom Inner Shadow
+.shadow-inner {
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+// Custom hrline
+hr.border-dashed {
+    border-top-style: dashed;
+}
+
+// Overwrite for Dark Mode
+html[data-bs-theme="dark"] {
+    .text-bg-light {
+        color: var(--#{$prefix}body-color) !important;
+    }
+}

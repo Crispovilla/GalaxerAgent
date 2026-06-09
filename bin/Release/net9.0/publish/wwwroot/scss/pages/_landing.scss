@@ -1,0 +1,71 @@
+//
+// _landing.scss
+//
+
+// Section Size
+.section-custom {
+    padding: 3rem 1rem;
+}
+
+@include media-breakpoint-up(lg) {
+    .section-custom {
+        padding: 6.5rem 0;
+    }
+}
+
+// Topbar Alert
+.top-alert {
+    background-color: #1e1f27;
+    color: $white;
+}
+
+// Navbar
+#landing-navbar {
+    position: relative;
+    width: 100%;
+    transition: transform 0.3s ease;
+    background-color: var(--#{$prefix}secondary-bg);
+
+    &.top-fixed {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+    }
+    &.top-fixed.top-hide {
+        transform: translateY(-100%);
+    }
+    &.top-fixed.top-scroll-up {
+        transform: translateY(0);
+        box-shadow: $box-shadow-sm;
+    }
+}
+
+// CTA Section
+.section-cta {
+    min-height: 350px;
+}
+
+// Footer
+.section-footer {
+    background-color: #1e1f27;
+    color: #858f9b;
+
+    .nav-link {
+        color: inherit;
+        font-size: 14px;
+        font-weight: $font-weight-medium;
+
+        &:hover {
+            color: $primary;
+        }
+    }
+}
+
+// Dark Mode
+html[data-bs-theme="dark"] {
+    .top-alert {
+        background-color: var(--#{$prefix}primary);
+    }
+}

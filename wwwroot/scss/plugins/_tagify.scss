@@ -1,0 +1,93 @@
+//
+//  _tagify.scss
+//
+
+:root {
+    --tagify-dd-color-primary: var(--#{$prefix}primary);
+}
+
+.tagify {
+    display: flex;
+    gap: 5px;
+
+    --placeholder-color: var(--#{$prefix}secondary-color);
+    --placeholder-color-focus: var(--#{$prefix}secondary-color);
+}
+
+.tagify__tag {
+    margin: 0;
+    background-color: var(--#{$prefix}light);
+
+    >div {
+        padding: 1px 5px;
+        color: var(--#{$prefix}body-color);
+        line-height: 17px;
+
+        &::before,
+        &:hover+div::before {
+            box-shadow: none !important;
+            background-image: none !important;
+        }
+    }
+
+    &[readonly]>div::before {
+        animation: none !important;
+    }
+}
+
+.tagify__input {
+    margin: 0;
+    padding: 0;
+
+    &::before {
+        color: $input-placeholder-color;
+    }
+}
+
+.tagify__tag__removeBtn {
+    color: var(--#{$prefix}body-color);
+
+    &:hover {
+        background: var(--#{$prefix}danger);
+
+        &:hover+div::before {
+            box-shadow: none !important;
+            color: var(--#{$prefix}danger);
+        }
+    }
+
+    &::after {
+        content: none;
+    }
+
+    &::before {
+        content: "\eb55";
+        font-family: tabler-icons !important;
+        font-size: 12px;
+    }
+}
+
+.tagify__dropdown__wrapper {
+    border: 1px solid var(--#{$prefix}border-color) !important;
+    box-shadow: var(--#{$prefix}box-shadow);
+    background: $card-bg !important;
+    border-radius: $dropdown-border-radius;
+    color: var(--#{$prefix}body-color);
+}
+
+.tagify__dropdown {
+    position: absolute;
+    z-index: 1;
+    box-shadow: var(--#{$prefix}box-shadow);
+    border-top: 0;
+    overflow: hidden;
+}
+
+.tagify-user-tag-name {
+    line-height: 24px;
+}
+
+.tagify[disabled]:not(.tagify--mix):not(.tagify--select):not(.tagify--empty) .tagify__tag>div,
+.tagify[readonly]:not(.tagify--mix):not(.tagify--select):not(.tagify--empty) .tagify__tag>div {
+    padding: 1px 5px;
+}

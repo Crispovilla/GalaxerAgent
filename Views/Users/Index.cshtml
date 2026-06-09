@@ -1,0 +1,157 @@
+﻿@using Base_MVC_Core9.Constants
+@using Base_MVC_Core9.Models.UserRoles
+@model IEnumerable<UserRolesViewModel>
+
+@{
+    ViewData["Title"] = "Gestión de Usuarios";
+}
+
+<div class="container-fluid">
+    <div class="row py-3">
+        <div class="col-12">
+            <div class="page-title-box d-flex align-items-center justify-content-between">
+                <div>
+                    <h4 class="mb-0">@ViewData["Title"]</h4>
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Usuarios</a></li>
+                        <li class="breadcrumb-item active">Listado General</li>
+                    </ol>
+                </div>
+                <a asp-action="Create" class="btn btn-primary shadow-sm">
+                    <i data-lucide="user-plus" class="me-1"></i> Nuevo Usuario
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header d-flex align-items-center justify-content-between bg-transparent">
+                    <div>
+                        <h4 class="card-title text-primary">Usuarios Registrados</h4>
+                        <p class="text-muted mb-0">Administre los roles y el estado de acceso de los colaboradores.</p>
+                    </div>
+                    <i data-lucide="shield-user" class="text-primary fs-2"></i>
+                </div>
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle default-datatable w-100">
+                            <thead class="bg-light-subtle text-uppercase fs-xxs">
+                                <tr>
+                                    <th style="width: 5%">ID</th>
+                                    <th>Usuario</th>
+                                    <th>Email</th>
+                                    <th>Roles</th>
+                                    <th class="text-center">Estado</th>
+                                    <th class="text-center">Asignar Rol</th>
+                                    <th class="text-end">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var user in Model)
+                                {
+                                    <tr>
+                                        <td><span class="text-muted fw-medium">@user.PersonaId</span></td>
+                                        <td>
+                                            <span class="fw-bold">@user.FullName</span>
+                                        </td>
+                                        <td>
+                                            <span class="fw-semibold">@user.Email</span>
+                                        </td>
+                                        <td>
+                                            @foreach (var role in user.Roles)
+                                            {
+                                                <span class="badge @(role == Roles.Admin ? "badge-soft-secondary" : "badge-soft-primary") fs-6 px-2 py-1">@role</span>
+                                            }
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge fs-6 px-2 py-1 @(user.Vigente ? "badge-soft-success" : "badge-soft-warning")">
+                                                @(user.Vigente ? "Activo" : "Inactivo")
+                                            </span>
+                                        </td>
+                                        <td class="text-center">
+                                            <form asp-action="AssignRole" method="post" class="d-flex justify-content-center gap-1">
+                                                <input type="hidden" name="userId" value="@user.UserId" />
+                                                <select name="roleName" class="form-select form-select-sm" style="width: auto;" data-choices
+                                                        data-choices-search-false
+                                                        data-choices-removeItem
+                                                        required>
+                                                    <option value="">Seleccione Rol</option>
+                                                    @if (ViewBag.ListaRoles != null)
+                                                    {
+                                                        @foreach (var nombreRol in ViewBag.ListaRoles as List<string>)
+                                                        {
+                                                            <option value="@nombreRol">@nombreRol</option>                                                            
+                                                        }
+                                                    }
+                                                </select>
+                                                <div class="btn-group btn-group-sm shadow-sm">
+                                                    <button 
+                                                        type="submit" 
+                                                        class="btn btn-soft-primary swal-confirm" 
+                                                        data-bs-toggle="popover" 
+                                                        data-bs-trigger="hover" 
+                                                        data-bs-placement="top" 
+                                                        data-bs-custom-class="popover-primary" 
+                                                        data-bs-content="Asignar Rol">
+                                                        <i data-lucide="plus" class="size-14"></i>
+                                                    </button>
+                                                    <button 
+                                                        type="submit" 
+                                                        asp-action="RemoveRole" 
+                                                        class="btn btn-soft-danger swal-delete" 
+                                                        data-bs-toggle="popover" 
+                                                        data-bs-trigger="hover" 
+                                                        data-bs-placement="top" 
+                                                        data-bs-custom-class="popover-danger" 
+                                                        data-bs-content="Quitar Rol">
+                                                        <i data-lucide="trash-2"></i>
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </td>
+                                        <td class="text-end">
+                                            <div class="d-flex justify-content-end gap-2">
+                                                <a asp-action="Edit" asp-route-id="@user.PersonaId" class="btn btn-soft-warning rounded-circle btn-icon" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="top" data-bs-custom-class="popover-warning" data-bs-content="Editar usuario">
+                                                    <i data-lucide="edit-3"></i>
+                                                </a>
+
+                                                <form asp-action="@(user.Vigente ? "DesactivaPersona" : "ActivaPersona")" asp-route-id="@user.PersonaId" method="post">
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="submit"
+                                                            class="btn @(user.Vigente ? "btn-soft-danger rounded-circle btn-icon" : "btn btn-soft-success rounded-circle btn-icon") @(user.Vigente ? "swal-critical" : "swal-confirm")"
+                                                            data-bs-toggle="popover"
+                                                            data-bs-trigger="hover"
+                                                            data-bs-placement="top"
+                                                            data-bs-custom-class="@(user.Vigente ? "popover-danger" : "popover-success")"
+                                                            data-bs-content="@(user.Vigente ? "Desactivar usuario" : "Activar usuario")">
+
+                                                        <i data-lucide="@(user.Vigente ? "user-x" : "user-check")"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-transparent border-top-0">
+                    <small class="text-muted"><i data-lucide="info" class="size-14 me-1"></i> La tabla se actualiza en tiempo real tras cada acción confirmada.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    </script>
+}

@@ -1,0 +1,84 @@
+// 
+// timeline.scss
+//
+
+.timeline-item {
+    position: relative;
+    align-items: flex-start;
+
+    &:not(:last-of-type) {
+        .timeline-content {
+            &::before {
+                content: "";
+                position: absolute;
+                top: 5px;
+                bottom: 0;
+                left: -7px;
+                width: 1px;
+                border-left: 1px dashed var(--#{$prefix}border-color);
+            }
+        }
+    }
+}
+
+.timeline-dot {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+}
+
+.timeline-time {
+    width: 120px;
+    text-align: right;
+}
+
+.timeline-content {
+    flex: 1;
+    position: relative;
+}
+
+.timeline-icon-based,
+.timeline-icon-bordered,
+.timeline-users {
+    .timeline-dot {
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .timeline-item {
+        &:not(:last-of-type) {
+            .timeline-content {
+                &::before {
+                    left: -16px;
+                    border-left: 2px dashed var(--#{$prefix}border-color);
+                }
+            }
+        }
+    }
+}
+
+.timeline-icon-bordered {
+    .timeline-dot {
+        width: 31px;
+        height: 31px;
+        background-color: $card-bg;
+        border: 1px dashed var(--#{$prefix}border-color);
+    }
+
+    .timeline-item {
+        &:not(:last-of-type) {
+            .timeline-content {
+                &::before {
+                    left: -16px;
+                    border-left: 1px dashed var(--#{$prefix}border-color);
+                }
+            }
+        }
+    }
+}

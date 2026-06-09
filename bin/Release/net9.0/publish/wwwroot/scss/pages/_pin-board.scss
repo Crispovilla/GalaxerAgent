@@ -1,0 +1,35 @@
+//
+// _pin-board.scss
+//
+
+.pin-board {
+    gap: 40px;
+    padding: 30px;
+
+    .pin-board-item {
+        display: block;
+        height: 210px;
+        width: 210px;
+        padding: 1em;
+        box-shadow: 4px 3px 7px rgba($dark,.25);
+        transition: transform .15s linear;
+        transform: rotate(-6deg);
+
+        &:nth-of-type(even) {
+            transform: rotate(4deg);
+        }
+
+        &:hover {
+            transform: scale(1.1);
+            position: relative;
+            z-index: 5
+        }
+    }
+
+    a.pin-board-delete {
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+        color: inherit
+    }
+}

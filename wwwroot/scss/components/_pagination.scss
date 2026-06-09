@@ -1,0 +1,69 @@
+//
+// _pagination.scss
+//
+
+
+// Pagination Page Link SVG
+.pagination {
+    .page-link {
+        svg {
+            height: 14px;
+        }
+    }
+}
+
+// Pagination Boxed (Custom) (Also used in Datatables)
+.pagination-boxed,
+.dt-paging .pagination {
+    .page-link {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 0.35rem !important;
+        border-radius: var(--#{$prefix}border-radius) !important;
+        height: calc(#{$pagination-padding-y * 2} + #{$btn-line-height}em + #{$border-width * 2});
+        min-width: calc(#{$pagination-padding-y * 2} + #{$btn-line-height}em + #{$border-width * 2});
+        padding: 0.1rem;
+    }
+
+    &.pagination-sm {
+        .page-link {
+            height: calc(#{$pagination-padding-y-sm * 2} + #{$btn-line-height}em + #{$border-width * 2});
+            min-width: calc(#{$pagination-padding-y-sm * 2} + #{$btn-line-height}em + #{$border-width * 2});
+        }
+    }
+
+    &.pagination-lg {
+        .page-link {
+            height: calc(#{$pagination-padding-y-lg * 2} + #{$btn-line-height}em + #{$border-width * 2});
+            min-width: calc(#{$pagination-padding-y-lg * 2} + #{$btn-line-height}em + #{$border-width * 2});
+        }
+    }
+}
+
+// Pagination rounded (Custom)
+.pagination-rounded {
+    .page-link {
+        border-radius: 50% !important;
+    }
+}
+
+// Pagination Colors
+@each $color,
+$value in $theme-colors {
+    .pagination-#{$color} {
+        --#{$prefix}pagination-hover-color: var(--#{$prefix}#{$color});
+        --#{$prefix}pagination-active-bg: var(--#{$prefix}#{$color});
+        --#{$prefix}pagination-active-border-color: var(--#{$prefix}#{$color});
+    }
+}
+
+// Pagination Soft Colors
+@each $state in map-keys($theme-colors) {
+    .pagination-soft-#{$state} {
+        --#{$prefix}pagination-hover-color: var(--#{$prefix}#{$state});
+        --#{$prefix}pagination-active-color: var(--#{$prefix}#{$state});
+        --#{$prefix}pagination-active-bg: var(--#{$prefix}#{$state}-bg-subtle);
+        --#{$prefix}pagination-active-border-color: #{transparent};
+    }
+}

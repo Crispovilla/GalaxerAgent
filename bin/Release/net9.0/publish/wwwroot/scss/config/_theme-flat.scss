@@ -1,0 +1,208 @@
+// 
+// Flat Theme Mode
+//
+
+$theme-flat-colors: (
+    "primary":   #1ab394,
+    "secondary": #1c84c6,
+    "success":   #0acf97,
+    "info":      #23c6c8,
+    "warning":   #f8ac59,
+    "danger":    #ed5565,
+    "purple":    #7b70ef,
+);
+
+@if $theme-flat ==true {
+
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+    html[data-skin="flat"] {
+
+        --#{$prefix}font-sans-serif:        "Nunito", sans-serif;
+
+        --#{$prefix}body-font-size:               0.875rem;
+        --#{$prefix}body-bg:               #ffffff;
+        --#{$prefix}secondary-bg:          #fbfbfd;
+
+        --#{$prefix}theme-card-border-width:                 1px;
+        --#{$prefix}border-color:               #edf2f9;
+
+        --#{$prefix}font-weight-medium:      500;
+        --#{$prefix}font-weight-semibold:    700;
+        --#{$prefix}font-weight-bold:        700;
+
+        --#{$prefix}font-size-xxs:          12px;
+        --#{$prefix}font-size-xs:           13px;
+        --#{$prefix}font-size-base:         0.875rem;
+        --#{$prefix}font-size-md:           15px;
+        --#{$prefix}font-size-lg:           16px;
+        --#{$prefix}font-size-xl:           18px;
+        --#{$prefix}font-size-xxl:          20px;
+        
+        // Menu items
+        --#{$prefix}sidenav-item-icon-size:                  1.125rem;
+        --#{$prefix}sidenav-item-gap:                        12px;
+        --#{$prefix}sidenav-item-padding-x:                  10px;
+        --#{$prefix}sidenav-item-padding-y:                  10px;
+        --#{$prefix}sidenav-item-font-size:                  0.875rem;
+        --#{$prefix}sidenav-item-font-weight:                500;
+
+        // Sub Menu Items
+        --#{$prefix}sidenav-sub-item-font-size:              0.875rem;
+        --#{$prefix}sidenav-sub-item-font-weight:            500;
+        --#{$prefix}sidenav-sub-item-gap:                    4px;
+        --#{$prefix}sidenav-sub-item-padding-x:              10px;
+        --#{$prefix}sidenav-sub-item-padding-y:              7px;
+
+        // Background Light left-sidebar
+        &[data-menu-color="light"] {
+            --#{$prefix}sidenav-bg:                       #{$white};
+            --#{$prefix}sidenav-border-color:             #edf2f9;
+            --#{$prefix}sidenav-item-color:               #{$gray-700};
+            --#{$prefix}sidenav-item-hover-color:         #1ab394;
+            --#{$prefix}sidenav-item-hover-bg:          #f7f7fb;
+            --#{$prefix}sidenav-item-active-color:        #1ab394;
+            --#{$prefix}sidenav-item-active-bg:         #f7f7fb;
+        }
+
+        // Background Gray left-sidebar
+        &[data-menu-color="gray"] {
+            --#{$prefix}sidenav-bg:                       #f1f2f7;
+            --#{$prefix}sidenav-border-color:             #e7e9eb;
+            --#{$prefix}sidenav-item-color:               #{$gray-700};
+            --#{$prefix}sidenav-item-hover-color:         #1ab394;
+            --#{$prefix}sidenav-item-hover-bg:          #f4f0ff;
+            --#{$prefix}sidenav-item-active-color:        #212b29;
+            --#{$prefix}sidenav-item-active-bg:         #e8e8ed;
+        }
+
+        // Dark Left Sidebar
+        &[data-menu-color="dark"] {
+            --#{$prefix}sidenav-bg:                     #1b2e4a;
+            --#{$prefix}sidenav-border-color:           #1b2e4a;
+            --#{$prefix}sidenav-item-color:             #8495ab;
+            --#{$prefix}sidenav-item-hover-color:       #bccee4;
+            --#{$prefix}sidenav-item-hover-bg:          #2f3742;
+            --#{$prefix}sidenav-item-active-color:      #ced6df;
+            --#{$prefix}sidenav-item-active-bg:         #243754;
+        }
+
+        // Gradient Menu
+        &[data-menu-color="gradient"] {
+            --#{$prefix}sidenav-bg:                       #{linear-gradient(135deg, #1a455f, #262549)};
+            --#{$prefix}sidenav-border-color:             null;
+            --#{$prefix}sidenav-item-color:             #799cb7;
+            --#{$prefix}sidenav-item-hover-color:       #bccee4;
+            --#{$prefix}sidenav-item-hover-bg:          #2f3742;
+            --#{$prefix}sidenav-item-active-color:      #cfdff1;
+            --#{$prefix}sidenav-item-active-bg:         #294461;
+        }
+
+        // Image Menu
+        &[data-menu-color="image"] {
+            --#{$prefix}sidenav-bg:                       #{linear-gradient(to bottom right, rgba(16,16,30,0.85), #183c52), url('../images/sidenav-bg.jpg') center/cover no-repeat};
+            --#{$prefix}sidenav-border-color:             null;
+            --#{$prefix}sidenav-item-color:             #799cb7;
+            --#{$prefix}sidenav-item-hover-color:       #bccee4;
+            --#{$prefix}sidenav-item-hover-bg:          #2f3742;
+            --#{$prefix}sidenav-item-active-color:      #cfdff1;
+            --#{$prefix}sidenav-item-active-bg:         #1e3447;
+        }
+
+        // Dark Mode
+        &[data-bs-theme="dark"][data-menu-color="dark"],
+        &[data-bs-theme="dark"][data-menu-color="light"],
+        &[data-bs-theme="dark"][data-menu-color="light"] {
+            --#{$prefix}sidenav-bg:                     #1e1f27;
+            --#{$prefix}sidenav-border-color:           #2c2d38;
+            --#{$prefix}sidenav-item-color:             #8495ab;
+            --#{$prefix}sidenav-item-hover-color:       #bccee4;
+            --#{$prefix}sidenav-item-hover-bg:          #2f3742;
+            --#{$prefix}sidenav-item-active-color:      #ced6df;
+            --#{$prefix}sidenav-item-active-bg:         #22232c;
+        }
+
+        // Light Topbar
+        &[data-topbar-color="light"] {
+            --#{$prefix}topbar-bg:                      #ffffff;
+            --#{$prefix}topbar-item-color:                #{$gray-700};
+            --#{$prefix}topbar-item-hover-color:          #1ab394;
+            --#{$prefix}topbar-search-bg:                 transparent;
+            --#{$prefix}topbar-search-border:           #e7e9eb;
+        }
+
+        // Gray Topbar
+        &[data-topbar-color="gray"] {
+            --#{$prefix}topbar-bg:                      #f1f2f7;
+            --#{$prefix}topbar-item-color:                #{$gray-700};
+            --#{$prefix}topbar-item-hover-color:          #1ab394;
+            --#{$prefix}topbar-search-bg:               #e8e9ef;
+            --#{$prefix}topbar-search-border:           #e8e9ef;
+        }
+
+        // Dark Topbar
+        &[data-topbar-color="dark"] {
+            --#{$prefix}topbar-bg:                      #1b2e4a;
+            --#{$prefix}topbar-item-color:              #adb5bf;
+            --#{$prefix}topbar-item-hover-color:        #e0eeff;
+            --#{$prefix}topbar-search-bg:               #32435c;
+            --#{$prefix}topbar-search-border:           #32435c;
+        }
+
+        // Gradient Topbar
+        &[data-topbar-color="gradient"] {
+            --#{$prefix}topbar-bg:                        #{linear-gradient(to bottom, #1a455f, #262549)};
+            --#{$prefix}topbar-item-color:              rgba(255, 255, 255, 0.7);
+            --#{$prefix}topbar-item-hover-color:        #ffffff;
+            --#{$prefix}topbar-search-bg:               rgba(255, 255, 255, 0.1);
+            --#{$prefix}topbar-search-border:           rgba(255, 255, 255, 0.1);
+        }
+
+        // Topbar (Dark Mode)
+        &[data-bs-theme="dark"][data-topbar-color="dark"],
+        &[data-bs-theme="dark"][data-topbar-color="light"],
+        &[data-bs-theme="dark"][data-topbar-color="gray"] {
+            --#{$prefix}topbar-bg:                      #252630;
+            --#{$prefix}topbar-item-color:              #adb5bf;
+            --#{$prefix}topbar-item-hover-color:        #e0eeff;
+            --#{$prefix}topbar-search-bg:               #2d2e3c;
+            --#{$prefix}topbar-search-border:           #2d2e3c;
+        }
+
+        @each $name, $value in $theme-flat-colors {
+            --#{$prefix}#{$name}: #{$value};
+        }
+
+        @each $name, $value in $theme-flat-colors {
+            --#{$prefix}#{$name}-rgb: #{to-rgb($value)};
+        }
+
+        @each $name, $value in $theme-flat-colors {
+            --#{$prefix}#{$name}-bg-subtle: #{rgba($value, 0.15)};
+        }
+
+        @each $name, $value in $theme-flat-colors {
+            --#{$prefix}#{$name}-border-subtle: #{rgba($value, 0.3)};
+        }
+
+        @each $name, $value in $theme-flat-colors {
+            --#{$prefix}#{$name}-text-emphasis: #{shade-color($value, 25%)};
+        }
+    }
+
+    @if $enable-dark-mode {
+        @include color-mode(dark, true) {
+            &[data-skin="flat"] {
+                --#{$prefix}body-bg:                     #{#17181e};
+                --#{$prefix}body-bg-rgb:                 #{to-rgb(#17181e)};
+
+                --#{$prefix}secondary-bg:                #{#1b1c22};
+                --#{$prefix}secondary-bg-rgb:            #{to-rgb(#1b1c22)};
+
+                --#{$prefix}box-shadow:                  #{0px 0px 30px rgba(0, 0, 0, 0.3)};
+
+                --#{$prefix}border-color:                 #293036;
+            }
+        }
+    }
+}

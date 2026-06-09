@@ -1,0 +1,153 @@
+﻿@model Base_MVC_Core9.Models.Persona.PersonaCreateViewModel
+
+@{
+    ViewBag.Title = "Registro de Persona";
+}
+
+<div class="container">
+    <div class="row py-3">
+        <div class="col-12">
+            <div class="page-title-box">
+                <h4 class="mb-0">@ViewBag.Title</h4>
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a asp-action="Index">Usuarios</a></li>
+                    <li class="breadcrumb-item active">Nuevo Usuario</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-10">
+            <form asp-action="Create" class="show-loader" method="post">
+                @Html.AntiForgeryToken()
+
+                <div class="card">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <div>
+                            <h4 class="card-title">Información del Usuario</h4>
+                            <p class="mb-0">Complete los datos de identidad y contacto para el nuevo registro.</p>
+                        </div>
+                        <i data-lucide="user-plus" class="text-success fs-2"></i>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <label class="col-lg-2 col-form-label fw-semibold">Nombres</label>
+                            <div class="col-lg-5">
+                                <input asp-for="Nombre1" class="form-control" placeholder="Primer Nombre" />
+                                <span asp-validation-for="Nombre1" class="text-danger small"></span>
+                            </div>
+                            <div class="col-lg-5">
+                                <input asp-for="Nombre2" name="Nombre2" class="form-control" placeholder="Segundo Nombre" />
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-lg-2 col-form-label fw-semibold">Apellidos</label>
+                            <div class="col-lg-5">
+                                <input asp-for="Apellido1" class="form-control" placeholder="Apellido Paterno" />
+                                <span asp-validation-for="Apellido1" class="text-danger small"></span>
+                            </div>
+                            <div class="col-lg-5">
+                                <input asp-for="Apellido2" name="Apellido2" class="form-control" placeholder="Apellido Materno" />
+                            </div>
+                        </div>
+
+                        <div class="border-top border-dashed my-3"></div>
+
+                        <div class="row mb-3">
+                            <label asp-for="Uname" class="col-lg-2 col-form-label fw-semibold">Nombre de Usuario</label>
+                            <div class="col-lg-4">
+                                <div class="app-search">
+                                    <input asp-for="Uname" class="form-control" placeholder="Ej: Uname" />
+                                    <i data-lucide="user" class="app-search-icon"></i>
+                                </div>
+                                <span asp-validation-for="Uname" class="text-danger small"></span>
+                            </div>
+
+                            <label asp-for="Correo" class="col-lg-2 col-form-label fw-semibold text-center">Correo</label>
+                            <div class="col-lg-4">
+                                <div class="app-search">
+                                    <input asp-for="Correo" class="form-control" type="email" placeholder="uname@derecho.uchile.cl" />
+                                    <i data-lucide="mail" class="app-search-icon"></i>
+                                </div>
+                                <span asp-validation-for="Correo" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="border-top border-dashed my-3"></div>
+
+                        <div class="row mb-3 align-items-center">
+                            <label class="col-lg-2 col-form-label fw-semibold">RUT</label>
+                            <div class="col-lg-4">
+                                <div class="input-group">
+                                    <input asp-for="Rut" class="form-control" id="txtRut" placeholder="12345678" maxlength="8" autocomplete="off" />
+
+                                    <span class="input-group-text">-</span>
+
+                                    <input asp-for="Dv" class="form-control text-center fw-bold" id="txtDv" style="max-width: 60px;" placeholder="K" maxlength="1" />
+
+                                    <span class="input-group-text bg-light" id="lblStatus" style="min-width: 45px;">
+                                        <i id="statusIcon" data-lucide="help-circle" style="width: 16px;"></i>
+                                    </span>
+                                </div>
+                                <span asp-validation-for="Rut" class="text-danger small"></span>
+                                <span asp-validation-for="Dv" class="text-danger small mx-3"></span>
+                            </div>
+
+                            <label asp-for="Genero" class="col-lg-2 col-form-label fw-semibold text-center">Género</label>
+
+                            <div class="col-lg-4">
+                                <select asp-for="Genero" class="form-select">
+                                    <option value="">Seleccione...</option>
+                                    <option value="Masculino">Masculino</option>
+                                    <option value="Femenino">Femenino</option>
+                                    <option value="Otro">Otro</option>
+                                </select>
+                                <span asp-validation-for="Genero" class="text-danger small"></span>
+                            </div>
+                                
+                        </div>
+
+                        <div class="border-top border-dashed my-3"></div>                                               
+
+                        <div class="row mb-3 py-2 alert alert-danger alert-dismissible border border-dashed  border-danger">
+                            <label asp-for="Password" class="col-lg-3 col-form-label text-muted fw-semibold">Contraseña Inicial</label>
+                            <div class="col-lg-3">
+                                <div class="input-group">
+                                    <input 
+                                        asp-for="Password" 
+                                        type="password" 
+                                        value="Udt123456!"
+                                        data-bs-toggle="tooltip" 
+                                        data-bs-placement="top" 
+                                        data-bs-custom-class="tooltip-warning" 
+                                        data-bs-title="Contraseña por defecto."
+                                        class="form-control" 
+                                        readonly />
+                                    @* <button class="btn btn-outline-secondary" type="button"><i data-lucide="eye"></i></button> *@
+                                </div>
+                                <span asp-validation-for="Password" class="text-danger small"></span>
+                                <div class="form-text mt-2">Valor sugerido: <code class="text-primary">Udt123456!</code></div>
+                            </div>
+                        </div>
+
+                    </div> <div class="card-footer bg-light-subtle d-flex justify-content-end gap-2">
+                        <a asp-action="Index" class="btn btn-outline-danger">Cancelar</a>
+                        <button type="submit" class="btn btn-primary px-4">
+                            <i data-lucide="save" class="me-1"></i> Crear Usuario
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="~/js/app-rut-validator.js"></script>
+}

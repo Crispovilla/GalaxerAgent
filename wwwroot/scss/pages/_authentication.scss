@@ -1,0 +1,62 @@
+//
+// _authentication.scss
+//
+
+// Authentication
+.auth-box {
+    @extend .position-relative;
+    @extend .min-vh-100;
+    padding: 50px;
+
+    .card-body {
+        padding: 50px;
+    }
+}
+
+// Auth Brand Logo (Light & Dark Mode)
+.auth-brand {
+    margin-bottom: 2rem;
+
+    .logo-dark {
+        display: block;
+    }
+
+    .logo-light {
+        display: none;
+    }
+}
+
+// Auth Page Side Image
+.card-side-img {
+    background-image: url("../images/auth.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.auth-overlay {
+    background: linear-gradient(to top, #313a46, rgba(49,58,70, 0.8), rgba(49,58,70, 0.5));
+}
+
+// Dark mode
+html[data-bs-theme="dark"] {
+    .auth-brand {
+        .logo-light {
+            display: block;
+        }
+
+        .logo-dark {
+            display: none;
+        }
+    }
+}
+
+// Responsive
+@include media-breakpoint-up(md) {
+    .auth-box-form {
+        max-width: 405px;
+    }
+    .auth-sub-text {
+        max-width: 300px;
+    }
+}

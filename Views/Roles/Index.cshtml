@@ -1,0 +1,130 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model IEnumerable<IdentityRole>
+
+@{
+    ViewData["Title"] = "Creación de Roles";
+}
+
+<div class="container-fluid">
+    @* --- HEADER & BREADCRUMB --- *@
+    <div class="row py-3">
+        <div class="col-12">
+            <div class="page-title-box d-flex align-items-center justify-content-between">
+                <div>
+                    <h4 class="mb-0">@ViewData["Title"]</h4>
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Roles</a></li>
+                        <li class="breadcrumb-item active">Roles del Sistema</li>
+                    </ol>
+                </div>
+                <i data-lucide="shield-check" class="text-primary fs-2"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        @* --- FORMULARIO DE CREACIÓN --- *@
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-transparent border-bottom">
+                    <h5 class="card-title text-primary mb-0">Crear Nuevo Rol</h5>
+                    <p class="text-muted small mb-0">Defina perfiles de acceso para los usuarios.</p>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post" class="show-loader">
+                        @Html.AntiForgeryToken()
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Nombre del Rol</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-dashed">
+                                    <i data-lucide="key" class="size-16 text-muted"></i>
+                                </span>
+                                <input type="text" name="roleName" class="form-control border-dashed"
+                                       placeholder="Ej: Admin, Colaborador..." required>
+                            </div>
+                            <div class="form-text small">Use nombres descriptivos y únicos.</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 shadow-sm">
+                            <i data-lucide="plus-circle" class="me-1 size-18"></i> Guardar Rol
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            @* Mensaje informativo *@
+            <div class="alert alert-info border-dashed bg-info-subtle mt-3 p-3">
+                <div class="d-flex align-items-start">
+                    <i data-lucide="info" class="me-2 size-20 text-info"></i>
+                    <p class="mb-0 small text-info-emphasis">
+                        Los roles creados aquí podrán ser asignados individualmente en el listado de usuarios.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        @* --- LISTADO DE ROLES --- *@
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-transparent d-flex align-items-center justify-content-between">
+                    <h5 class="card-title mb-0">Roles Registrados</h5>
+                    <span class="badge badge-soft-secondary py-2 px-3">Total: @Model.Count()</span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-light-subtle text-uppercase fs-xxs fw-bold text-muted">
+                                <tr>
+                                    <th class="ps-4 py-3" style="width: 40%">Nombre</th>
+                                    <th class="py-3">ID Interno (GUID)</th>
+                                    @* <th class="text-end pe-4 py-3">Acciones</th> *@
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var role in Model)
+                                {
+                                    <tr>
+                                        <td class="ps-4">
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar-xs me-3 bg-primary-subtle rounded-circle d-flex align-items-center justify-content-center">
+                                                    <i data-lucide="shield" class="text-primary size-14"></i>
+                                                </div>
+                                                <span class="fw-bold">@role.Name</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <code class="text-success small px-2 py-1 bg-light rounded border border-dashed">@role.Id</code>
+                                        </td>
+                                        @* <td class="text-end pe-4">
+                                            <div class="btn-group btn-group-sm">
+                                                <button class="btn btn-outline-light text-muted border-dashed" title="Detalles">
+                                                    <i data-lucide="eye" class="size-14"></i>
+                                                </button>
+                                                @if (role.Name != "Admin") 
+                                                {
+                                                    <button class="btn btn-outline-danger border-dashed swal-delete" title="Eliminar">
+                                                        <i data-lucide="trash-2" class="size-14"></i>
+                                                    </button>
+                                                }
+                                            </div>
+                                        </td> *@
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    <script>
+
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    </script>
+}

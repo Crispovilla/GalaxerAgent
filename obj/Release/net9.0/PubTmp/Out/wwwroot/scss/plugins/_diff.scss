@@ -1,0 +1,15 @@
+//
+// _diff.scss
+//
+
+.diff-output {
+    ins {
+        background-color: rgba(var(--#{$prefix}success-rgb), 0.1);
+        text-decoration: none;
+        color: var(--#{$prefix}success);
+    }
+    del {
+        background-color: rgba(var(--#{$prefix}danger-rgb), 0.1);
+        color: var(--#{$prefix}danger);
+    }
+}

@@ -1,0 +1,186 @@
+//
+// apexcharts.scss
+//
+
+.apex-charts {
+    min-height: 10px !important;
+
+    .apexcharts-canvas {
+        margin: 0 auto;
+    }
+}
+
+.apexcharts-tooltip-title,
+.apex-charts text,
+.apexcharts-tooltip *,
+.apexcharts-tooltip-text,
+.apexcharts-xaxistooltip-text,
+.apexcharts-datalabels text,
+.apexcharts-legend-text,
+.apexcharts-title-text,
+.apexcharts-subtitle-text,
+.apexcharts-yaxis text,
+.apexcharts-xaxis text {
+    font-family: $font-family-base  !important;
+}
+
+.apexcharts-tooltip {
+    border: 1px solid var(--#{$prefix}border-color) !important;
+    background-color: var(--#{$prefix}secondary-bg)  !important;
+    box-shadow: var(--#{$prefix}box-shadow)  !important;
+
+    .apexcharts-tooltip-title {
+        background-color: rgba(var(--#{$prefix}light-rgb), 0.75) !important;
+        border-bottom: 1px solid var(--#{$prefix}border-color) !important;
+    }
+}
+
+.apexcharts-legend-series,
+.apexcharts-legend-text{
+    font-weight: $font-weight-semibold;
+}
+
+.apexcharts-gridline {
+    pointer-events: none;
+    stroke-dasharray: 3;
+}
+
+.apexcharts-xaxis-tick, 
+.apexcharts-gridline,
+.apexcharts-grid-borders .apexcharts-gridline + line,
+.apexcharts-radar-series polygon,
+.apexcharts-radar-series line,
+.apexcharts-pie circle, .apexcharts-pie line {
+    stroke: var(--#{$prefix}border-color);
+}
+
+.apexcharts-legend-text {
+    color: var(--#{$prefix}tertiary-color) !important;
+    font-size: 13px !important;
+    vertical-align: middle;
+}
+
+.apexcharts-legend-marker {
+    vertical-align: middle;
+    margin-right: 5px !important;
+    top: 1px !important;
+}
+
+.apexcharts-pie-label {
+    fill: $white !important;
+}
+
+.apexcharts-title-text,
+.apexcharts-subtitle-text,
+.apexcharts-xaxis text,
+.apexcharts-yaxis text {
+    fill: var(--#{$prefix}secondary-color);
+}
+
+.apexcharts-yaxis-title {
+    font-weight: $font-weight-medium;
+}
+
+.apexcharts-annotation-rect {
+    fill: var(--#{$prefix}tertiary-bg) !important;
+}
+
+.apexcharts-xaxis-annotations,
+.apexcharts-yaxis-annotations {
+    rect {
+        stroke: none;
+    }
+}
+
+.apex-toolbar {
+    .btn-light.active {
+        background-color: var(--#{$prefix}primary);
+        border-color: var(--#{$prefix}primary);
+        color: $white;
+    }
+}
+
+.apexcharts-xaxistooltip,
+.apexcharts-yaxistooltip {
+    background-color: $dropdown-bg  !important;
+    border: $dropdown-border-width solid $dropdown-border-color  !important;
+    box-shadow: var(--#{$prefix}box-shadow)  !important;
+    color: $dropdown-link-color  !important;
+}
+
+.apexcharts-xaxistooltip-bottom {
+    &::before {
+        border-bottom-color: $dropdown-border-color  !important;
+    }
+
+    &::after {
+        border-bottom-color: $dropdown-bg !important;
+    }
+}
+
+.apexcharts-xaxistooltip-top {
+    &::before {
+        border-top-color: $dropdown-border-color  !important;
+    }
+
+    &::after {
+        border-top-color: $dropdown-bg !important;
+    }
+}
+
+.apexcharts-yaxistooltip-left {
+    &::before {
+        border-left-color: $dropdown-border-color !important;
+    }
+
+    &::after {
+        border-left-color: $dropdown-bg  !important;
+    }
+}
+
+.apexcharts-datalabel-value,
+.apexcharts-datalabel-label {
+    fill: $dropdown-link-color  !important;
+}
+
+.apexcharts-menu {
+    background: $dropdown-bg  !important;
+    padding: $dropdown-padding-y $dropdown-padding-x  !important;
+    box-shadow: var(--#{$prefix}box-shadow)  !important;
+    border: $dropdown-border-width solid $dropdown-border-color  !important;
+    text-align: center !important;
+
+    .apexcharts-menu-item {
+        &:hover {
+            color: $dropdown-link-hover-color  !important;
+            background-color: $dropdown-link-hover-bg  !important;
+        }
+    }
+}
+
+.apexcharts-track {
+    path {
+        stroke: var(--#{$prefix}tertiary-bg);
+    }
+}
+
+.apexcharts-marker {
+    stroke: var(--#{$prefix}body-bg);
+}
+
+.apexcharts-grid {
+    rect {
+        fill: none;
+    }
+}
+
+.apex-charts .apexcharts-heatmap-series rect, 
+.apex-charts .apexcharts-treemap rect,
+.apex-charts .apexcharts-bar-series path, 
+.apex-charts .apexcharts-pie-series path {
+    stroke: var(--#{$prefix}secondary-bg);
+}
+
+.apexcharts-data-labels {
+    padding-left: 10px !important;
+}

@@ -1,0 +1,12 @@
+//
+// _background.scss
+//
+
+
+// Fill color 
+@each $color,
+$value in $theme-colors {
+    .fill-#{$color} {
+        fill: rgba(var(--#{$prefix}#{$color}-rgb), 0.15);
+    }
+}

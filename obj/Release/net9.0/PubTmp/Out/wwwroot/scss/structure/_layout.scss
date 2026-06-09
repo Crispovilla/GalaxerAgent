@@ -1,0 +1,220 @@
+//
+// _layout.scss
+//
+
+// Wrapper
+.wrapper {
+    height: 100%;
+    width: 100%;
+}
+
+// Content Page
+.content-page {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin-left: $sidenav-width;
+    min-height: calc(100vh - #{calc($topbar-height + 1px)});
+    transition: $transition-base;
+    padding: 0 calc($grid-gutter-width * 0.5);
+}
+
+// Page Head
+.page-title-head {
+    min-height: 40px;
+    background-color: var(--#{$prefix}light-bg-subtle);
+    margin: 0 calc($spacer * -1) $spacer;
+    padding: 0 $spacer;
+    border-bottom: 1px solid var(--#{$prefix}border-color);
+}
+
+// Logo Height
+.logo-lg {
+    img {
+        height: $logo-lg-height;
+    }
+}
+
+.logo-sm {
+    img {
+        height: $logo-sm-height;
+    }
+}
+
+// Sidebar Logo
+.logo {
+    display: block;
+    top: 0;
+    position: sticky;
+    line-height: $topbar-height;
+    padding: 0 12px;
+
+    span.logo-lg {
+        display: block;
+    }
+
+    span.logo-sm {
+        display: none;
+    }
+
+    &.logo-light {
+        display: none;
+    }
+
+    &.logo-dark {
+        display: block;
+    }
+}
+
+html[data-menu-color="gradient"],
+html[data-menu-color="dark"],
+html[data-menu-color="image"],
+html[data-bs-theme="dark"],
+html[data-menu-color="light"][data-topbar-color="dark"],
+html[data-menu-color="light"][data-topbar-color="gradient"] {
+
+    .logo {
+        &.logo-light {
+            display: block;
+        }
+
+        &.logo-dark {
+            display: none;
+        }
+    }
+}
+
+//
+// NO ICONS SIDEBAR
+//
+
+html.sidebar-no-icons {
+    .sidenav-menu {
+        .menu-icon {
+            display: none;
+        }
+    }
+}
+
+//
+//SIDEBAR WITH LINES
+//
+
+html.sidebar-with-line {
+    .sub-menu {
+        position: relative;
+
+        &::before {
+            content: "";
+            // width: calc($sidenav-item-icon-size + $sidenav-item-padding-x + $sidenav-item-gap);
+            width: 1px;
+            top: 5px;
+            bottom: calc($sidenav-item-padding-x + 4px);
+            position: absolute;
+            left: calc($sidenav-item-icon-size - 1px);
+            border-left: 1px dashed $sidenav-item-color;
+            opacity: 0.5;
+        }
+
+        .sub-menu {
+            &::before {
+                left: calc($sidenav-item-icon-size - 1px + 14px);
+            }
+        }
+
+        .side-nav-link {
+            &::before {
+                content: "";
+                // width: calc($sidenav-item-icon-size + $sidenav-item-padding-x + $sidenav-item-gap);
+                width: $sidenav-item-padding-x;
+                height: 1px;
+                position: absolute;
+                left: calc($sidenav-item-icon-size);
+                border-top: 1px dashed $sidenav-item-color;
+                opacity: 0.5;
+            }
+
+            &::after {
+                content: "";
+                height: 4px;
+                width: 4px;
+                background-color: $sidenav-item-color;
+                position: absolute;
+                left: calc($sidenav-item-icon-size + $sidenav-item-padding-x);
+                border-radius: 50%;
+                opacity: 0.5;
+            }
+        }
+    }
+}
+
+//
+// Right Asidebar
+//
+.asidebar {
+    position: fixed;
+    top: $topbar-height;
+    bottom: 0;
+    right: 0;
+    width: 250px !important;
+    overflow: hidden;
+    background-color: $card-bg !important;
+}
+
+.asidebar-button {
+    position: fixed;
+    top: 20%;
+    right: 0;
+}
+
+@include media-breakpoint-up(xl) {
+    .wrapper:has(.asidebar) .content-page {
+        margin-right: 250px;
+    }
+}
+
+//
+// BOXED LAYOUT
+//
+@include media-breakpoint-up(xxl) {
+    html[data-layout-width="boxed"] {
+        body {
+            background-color: var(--#{$prefix}tertiary-bg);
+        }
+
+        .wrapper {
+            margin: 0 auto;
+            box-shadow: var(--#{$prefix}box-shadow);
+            max-width: 1340px;
+            background-color: var(--#{$prefix}body-bg);
+        }
+
+        .app-topbar {
+            z-index: 100;
+            margin-right: -1px;
+        }
+    }
+}
+
+
+//
+// SCROLLABLE LAYOUT
+//
+
+@include media-breakpoint-up(lg) {
+    html[data-layout-position="scrollable"] {
+        .content-page {
+            position: relative;
+            min-height: max-content;
+        }
+
+        .sidenav-menu {
+            position: absolute;
+        }
+
+        .logo,
+        .app-topbar {
+            position: static;
+        }
+    }
+}

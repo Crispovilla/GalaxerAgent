@@ -1,0 +1,59 @@
+//
+// _pass-bar.scss
+//
+
+.password-bar {
+    display: flex;
+    gap: 12px;
+
+    .strong-bar {
+        flex: 1;
+        height: 6px;
+        border-radius: 10px;
+        background: var(--#{$prefix}light);
+        transition: background 0.3s;
+
+        &.bar-active-1 {
+            background-color: $danger;
+        }
+
+        &.bar-active-2 {
+            background-color: $warning;
+        }
+
+        &.bar-active-3 {
+            background-color: $primary;
+        }
+
+        &.bar-active-4 {
+            background-color: $success;
+        }
+    }
+}
+
+// Password Box
+.password-box {
+    p {
+        padding-left: 12px;
+
+        &.valid {
+            color: $success;
+
+            &::before {
+                position: relative;
+                left: -8px;
+                content: "✔️";
+            }
+        }
+
+        &.invalid {
+            color: $danger;
+
+            &::before {
+                position: relative;
+                left: -8px;
+                content: "✖";
+            }
+        }
+    }
+}

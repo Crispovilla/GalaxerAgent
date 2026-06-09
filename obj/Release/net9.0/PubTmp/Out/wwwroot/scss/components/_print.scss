@@ -1,0 +1,26 @@
+//
+// _print.scss
+//
+
+// Used invoice page
+@media print {
+    .sidenav-menu,
+    .page-title-head,
+    .app-topbar,
+    .footer {
+        display: none !important;
+    }
+    
+    .card-body,
+    .content-page,
+    body {
+        padding: 0 !important;
+        margin: 0;
+    }
+
+    .card {
+        box-shadow: none;
+        border: none;
+        padding: 0;
+    }
+}

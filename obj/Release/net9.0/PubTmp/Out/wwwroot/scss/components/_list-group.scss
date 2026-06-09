@@ -1,0 +1,25 @@
+//
+// _list-group.scss
+//
+
+// Custom List Group
+.list-custom {
+    .list-group-item {
+        border: 0;
+        border-radius: $border-radius;
+        font-weight: $font-weight-medium;
+        padding: calc(var(--#{$prefix}list-group-item-padding-y) * 0.75) calc(var(--#{$prefix}list-group-item-padding-x) * 0.75);
+    }
+}
+
+// Border Styles
+.list-group {
+    &.border-0 {
+        --ins-list-group-border-width: 0;
+    }
+    &.border-dashed {
+        .list-group-item {
+            border-style: dashed;
+        }
+    }
+}
