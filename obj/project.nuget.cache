@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "WuxROdpDEHI=",
+  "dgSpecHash": "b+QQIRXCof0=",
   "success": true,
-  "projectFilePath": "C:\\Users\\squinteros\\source\\Workspaces\\Base CORE MVC Inspinia\\Base-MVC-Core9\\Base-MVC-Core9.csproj",
+  "projectFilePath": "C:\\Users\\squinteros\\source\\Workspaces\\GIT\\Base-MVC-Core9\\Base-MVC-Core9.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\squinteros\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\squinteros\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
