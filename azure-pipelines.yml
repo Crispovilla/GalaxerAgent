@@ -1,0 +1,48 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+# 1. Instalar el SDK de .NET 9 en el servidor virtual
+- task: UseDotNet@2
+  displayName: 'Instalar .NET Core SDK 9.x'
+  inputs:
+    packageType: 'sdk'
+    version: '9.x'
+
+# 2. Restaurar los paquetes NuGet del proyecto
+- task: DotNetCoreCLI@2
+  displayName: 'Restaurar Paquetes (Dotnet Restore)'
+  inputs:
+    command: 'restore'
+    projects: '**/*.csproj'
+
+# 3. Compilar el proyecto en modo Release
+- task: DotNetCoreCLI@2
+  displayName: 'Compilar Proyecto (Dotnet Build)'
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+
+# 4. Publicar los archivos listos en una carpeta temporal
+- task: DotNetCoreCLI@2
+  displayName: 'Publicar Sitio Web (Dotnet Publish)'
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '--configuration $(buildConfiguration) --output $(build.artifactStagingDirectory)'
+    zipAfterPublish: true
+
+# 5. Entregar el artefacto con el nombre exacto que pide tu Release Pipeline
+- task: PublishBuildArtifacts@1
+  displayName: 'Publicar Artefacto Base-MVC-Core9'
+  inputs:
+    PathtoPublish: '$(build.artifactStagingDirectory)'
+    ArtifactName: 'Base-MVC-Core9'
+    publishLocation: 'Container'
