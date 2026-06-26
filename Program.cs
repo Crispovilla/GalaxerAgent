@@ -16,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Contexto para Identity
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("LoginConnection"));
     options.ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning));
 });
 
@@ -24,7 +24,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDbContext<PersonaDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("PersonaConnection")
-        ?? builder.Configuration.GetConnectionString("DefaultConnection")); // Fallback al default si no existe
+        ?? builder.Configuration.GetConnectionString("LoginConnection")); // Fallback al default si no existe
     options.ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning));
 });
 

@@ -1,48 +1,131 @@
 trigger:
 - main
 
-pool:
-  vmImage: 'windows-latest'
-
 variables:
   buildConfiguration: 'Release'
 
-steps:
-# 1. Instalar el SDK de .NET 9 en el servidor virtual
-- task: UseDotNet@2
-  displayName: 'Instalar .NET Core SDK 9.x'
-  inputs:
-    packageType: 'sdk'
-    version: '9.x'
+stages:
+# ==========================================
+# STAGE 1: COMPILACIÓN (Se ejecuta en la nube)
+# ==========================================
+- stage: Build
+  displayName: 'Compilar Aplicación'
+  jobs:
+  - job: BuildJob
+    pool:
+      vmImage: 'windows-latest' # Máquina virtual de Microsoft
+    steps:
+    - task: UseDotNet@2
+      displayName: 'Instalar .NET Core SDK 9.x'
+      inputs:
+        packageType: 'sdk'
+        version: '9.x'
 
-# 2. Restaurar los paquetes NuGet del proyecto
-- task: DotNetCoreCLI@2
-  displayName: 'Restaurar Paquetes (Dotnet Restore)'
-  inputs:
-    command: 'restore'
-    projects: '**/*.csproj'
+    - task: DotNetCoreCLI@2
+      displayName: 'Restaurar Paquetes (Dotnet Restore)'
+      inputs:
+        command: 'restore'
+        projects: '**/*.csproj'
 
-# 3. Compilar el proyecto en modo Release
-- task: DotNetCoreCLI@2
-  displayName: 'Compilar Proyecto (Dotnet Build)'
-  inputs:
-    command: 'build'
-    projects: '**/*.csproj'
-    arguments: '--configuration $(buildConfiguration)'
+    - task: DotNetCoreCLI@2
+      displayName: 'Compilar Proyecto (Dotnet Build)'
+      inputs:
+        command: 'build'
+        projects: '**/*.csproj'
+        arguments: '--configuration $(buildConfiguration)'
 
-# 4. Publicar los archivos listos en una carpeta temporal
-- task: DotNetCoreCLI@2
-  displayName: 'Publicar Sitio Web (Dotnet Publish)'
-  inputs:
-    command: 'publish'
-    publishWebProjects: true
-    arguments: '--configuration $(buildConfiguration) --output $(build.artifactStagingDirectory)'
-    zipAfterPublish: true
+    - task: DotNetCoreCLI@2
+      displayName: 'Publicar Sitio Web (Dotnet Publish)'
+      inputs:
+        command: 'publish'
+        publishWebProjects: true
+        arguments: '--configuration $(buildConfiguration) --output $(build.artifactStagingDirectory)'
+        zipAfterPublish: false # 👈 Cambiado a false para copiar carpetas directas en el IIS
 
-# 5. Entregar el artefacto con el nombre exacto que pide tu Release Pipeline
-- task: PublishBuildArtifacts@1
-  displayName: 'Publicar Artefacto Base-MVC-Core9'
-  inputs:
-    PathtoPublish: '$(build.artifactStagingDirectory)'
-    ArtifactName: 'Base-MVC-Core9'
-    publishLocation: 'Container'
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publicar Artefacto Base-MVC-Core9'
+      inputs:
+        PathtoPublish: '$(build.artifactStagingDirectory)'
+        ArtifactName: 'Base-MVC-Core9'
+        publishLocation: 'Container'
+
+# ==========================================
+# STAGE 2: DESPLIEGUE EN QA (Automático al terminar Build)
+# ==========================================
+- stage: DeployQA
+  displayName: 'Desplegar en Entorno QA'
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - deployment: DeployJobQA
+    displayName: 'Desplegar en IIS de QA'
+    pool:
+      name: 'Servidor-Oficina' # 👈 El nombre del agente en tu servidor local
+      demands: Agent.Name -equals AGENTE-DE-QA # 👈 Reemplaza por el nombre real de tu agente de QA
+    environment: 'Entorno-QA'  # 👈 Vinculado a tu entorno de Azure DevOps
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadBuildArtifacts@0
+            displayName: 'Descargar Artefacto Base-MVC-Core9'
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: 'Base-MVC-Core9'
+              downloadPath: '$(System.ArtifactsDirectory)'
+
+          - task: PowerShell@2
+            displayName: 'Actualizar IIS Local en QA'
+            inputs:
+              targetType: 'inline'
+              script: |
+                Import-Module WebAdministration
+                $siteName = "Base.NET-CORE-QA" # 👈 Cambia por el nombre de tu sitio en el IIS de QA
+                $targetPath = "C:\inetpub\wwwroot\Base.NET-CORE-QA" # 👈 Ruta física de QA
+                
+                Stop-WebAppPool -Name $siteName
+                Remove-Item -Path "$targetPath\*" -Recurse -Force
+                # Nota: Azure añade el subdirectorio de publicación de .NET dentro del artefacto
+                Copy-Item -Path "$(System.ArtifactsDirectory)\Base-MVC-Core9\*" -Destination $targetPath -Recurse -Force
+                Start-WebAppPool -Name $siteName
+
+# ==========================================
+# STAGE 3: DESPLIEGUE EN PRODUCCIÓN (Espera tu Aprobación Manual)
+# ==========================================
+- stage: DeployProd
+  displayName: 'Desplegar en Entorno Producción'
+  dependsOn: DeployQA
+  condition: succeeded()
+  jobs:
+  - deployment: DeployJobProd
+    displayName: 'Desplegar en IIS de Producción'
+    pool:
+      name: 'Servidor-Oficina'
+      demands: Agent.Name -equals AGENTE-DE-PROD # 👈 Reemplaza por el nombre real de tu agente de Prod
+    environment: 'Entorno-Produccion' # 👈 Aquí configuras el "Approval Check" en la web
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadBuildArtifacts@0
+            displayName: 'Descargar Artefacto Base-MVC-Core9'
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: 'Base-MVC-Core9'
+              downloadPath: '$(System.ArtifactsDirectory)'
+
+          - task: PowerShell@2
+            displayName: 'Actualizar IIS Local en Producción'
+            inputs:
+              targetType: 'inline'
+              script: |
+                Import-Module WebAdministration
+                $siteName = "Base.NET-CORE-PROD" # 👈 Nombre de tu sitio en el IIS Productivo
+                $targetPath = "C:\inetpub\wwwroot\Base.NET-CORE-PROD" # 👈 Ruta física de Producción
+                
+                Stop-WebAppPool -Name $siteName
+                Remove-Item -Path "$targetPath\*" -Recurse -Force
+                Copy-Item -Path "$(System.ArtifactsDirectory)\Base-MVC-Core9\*" -Destination $targetPath -Recurse -Force
+                Start-WebAppPool -Name $siteName
