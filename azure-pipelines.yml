@@ -87,7 +87,7 @@ stages:
                 Stop-WebAppPool -Name $siteName
                 Remove-Item -Path "$targetPath\*" -Recurse -Force
                 # Nota: Azure añade el subdirectorio de publicación de .NET dentro del artefacto
-                Copy-Item -Path "$(System.ArtifactsDirectory)\Base-MVC-Core9\*" -Destination $targetPath -Recurse -Force
+                Copy-Item -Path "$(System.ArtifactsDirectory)\Base-MVC-Core9\s\*" -Destination $targetPath -Recurse -Force
                 Start-WebAppPool -Name $siteName
 
 # ==========================================
@@ -127,5 +127,5 @@ stages:
                 
                 Stop-WebAppPool -Name $siteName
                 Remove-Item -Path "$targetPath\*" -Recurse -Force
-                Copy-Item -Path "$(System.ArtifactsDirectory)\Base-MVC-Core9\*" -Destination $targetPath -Recurse -Force
+                Copy-Item -Path "$(System.ArtifactsDirectory)\Base-MVC-Core9\s\*" -Destination $targetPath -Recurse -Force
                 Start-WebAppPool -Name $siteName
