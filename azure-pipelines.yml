@@ -61,7 +61,7 @@ stages:
     displayName: 'Desplegar en IIS de QA'
     pool:
       name: 'Servidor-Oficina' # 👈 El nombre del agente en tu servidor local
-      demands: Agent.Name -equals AGENTE-DE-QA # 👈 Reemplaza por el nombre real de tu agente de QA
+      demands: Agent.Name -equals AGENTE-QA # 👈 Reemplaza por el nombre real de tu agente de QA
     environment: 'Entorno-QA'  # 👈 Vinculado a tu entorno de Azure DevOps
     strategy:
       runOnce:
@@ -102,7 +102,7 @@ stages:
     displayName: 'Desplegar en IIS de Producción'
     pool:
       name: 'Servidor-Oficina'
-      demands: Agent.Name -equals AGENTE-DE-PROD # 👈 Reemplaza por el nombre real de tu agente de Prod
+      demands: Agent.Name -equals AGENTE-PROD # 👈 Reemplaza por el nombre real de tu agente de Prod
     environment: 'Entorno-Produccion' # 👈 Aquí configuras el "Approval Check" en la web
     strategy:
       runOnce:
