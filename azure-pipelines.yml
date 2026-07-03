@@ -84,7 +84,7 @@ stages:
                 $siteName = "Base.NET-CORE-QA" # 👈 Cambia por el nombre de tu sitio en el IIS de QA
                 $targetPath = "C:\inetpub\wwwroot\Base.NET-CORE-QA" # 👈 Ruta física de QA
                 
-                Stop-WebAppPool -Name $siteName
+                Stop-WebAppPool -Name $siteName -ErrorAction SilentlyContinue
                 Remove-Item -Path "$targetPath\*" -Recurse -Force
                 # Nota: Azure añade el subdirectorio de publicación de .NET dentro del artefacto
                 Copy-Item -Path "$(System.ArtifactsDirectory)\Base-MVC-Core9\s\*" -Destination $targetPath -Recurse -Force
@@ -125,7 +125,7 @@ stages:
                 $siteName = "Base.NET-CORE-PROD" # 👈 Nombre de tu sitio en el IIS Productivo
                 $targetPath = "C:\inetpub\wwwroot\Base.NET-CORE-PROD" # 👈 Ruta física de Producción
                 
-                Stop-WebAppPool -Name $siteName
+                Stop-WebAppPool -Name $siteName -ErrorAction SilentlyContinue
                 Remove-Item -Path "$targetPath\*" -Recurse -Force
                 Copy-Item -Path "$(System.ArtifactsDirectory)\Base-MVC-Core9\s\*" -Destination $targetPath -Recurse -Force
                 Start-WebAppPool -Name $siteName
