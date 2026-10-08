@@ -26,5 +26,14 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        builder.Entity<AgentEventLog>()
+        .HasOne(e => e.AgentSession)
+        .WithMany(s => s.Logs)
+        .HasForeignKey(e => e.AgentSessionId)
+        .OnDelete(DeleteBehavior.Cascade);
     }
+
+    public DbSet<AgentSession> AgentSessions => Set<AgentSession>();
+    public DbSet<AgentEventLog> AgentEventLogs => Set<AgentEventLog>();
 }

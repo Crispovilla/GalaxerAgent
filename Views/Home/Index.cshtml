@@ -1,8 +1,418 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Inicio";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    .landing-hero {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #23303c 0%, #1a5fb4 55%, #3584e4 100%);
+        border-radius: 1rem;
+        color: #fff;
+        box-shadow: 0 1rem 2rem rgba(26, 95, 180, .25);
+    }
+
+        .landing-hero::before,
+        .landing-hero::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .landing-hero::before {
+            width: 320px;
+            height: 320px;
+            top: -120px;
+            right: -80px;
+            background: rgba(255, 255, 255, .08);
+        }
+
+        .landing-hero::after {
+            width: 220px;
+            height: 220px;
+            bottom: -90px;
+            left: 12%;
+            background: rgba(255, 255, 255, .06);
+        }
+
+    .landing-hero .hero-content {
+        position: relative;
+        z-index: 1;
+        padding: 3.5rem 3rem;
+    }
+
+    .landing-hero .hero-badge {
+        background: rgba(255, 255, 255, .15);
+        border: 1px solid rgba(255, 255, 255, .25);
+        backdrop-filter: blur(4px);
+        letter-spacing: .04em;
+    }
+
+    .landing-hero h1 {
+        font-weight: 800;
+        letter-spacing: -.02em;
+        line-height: 1.15;
+    }
+
+    .landing-hero p.lead {
+        color: rgba(255, 255, 255, .85);
+        max-width: 34rem;
+    }
+
+    .btn-glass {
+        background: rgba(255, 255, 255, .15);
+        border: 1px solid rgba(255, 255, 255, .35);
+        color: #fff;
+        backdrop-filter: blur(4px);
+    }
+
+        .btn-glass:hover {
+            background: rgba(255, 255, 255, .28);
+            color: #fff;
+            border-color: rgba(255, 255, 255, .55);
+        }
+
+    .btn-hero-primary {
+        background: #fff;
+        border: 1px solid #fff;
+        color: #1a5fb4;
+        font-weight: 600;
+    }
+
+        .btn-hero-primary:hover {
+            background: #f0f6ff;
+            color: #164a91;
+        }
+
+    .quick-card {
+        border: 0;
+        border-radius: .9rem;
+        transition: transform .2s ease, box-shadow .2s ease;
+        text-decoration: none;
+        color: inherit;
+        height: 100%;
+    }
+
+        .quick-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 .75rem 1.5rem rgba(0, 0, 0, .12);
+            color: inherit;
+        }
+
+        .quick-card .quick-icon {
+            width: 3rem;
+            height: 3rem;
+            border-radius: .75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+    .feature-icon {
+        width: 3.25rem;
+        height: 3.25rem;
+        border-radius: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .section-eyebrow {
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        font-size: .72rem;
+        font-weight: 700;
+    }
+
+    .steps-connector {
+        position: relative;
+    }
+
+        .steps-connector::before {
+            content: "";
+            position: absolute;
+            top: 1.4rem;
+            left: 12%;
+            right: 12%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ced4da, transparent);
+            z-index: 0;
+        }
+
+        .steps-connector .step-dot {
+            position: relative;
+            z-index: 1;
+            width: 2.75rem;
+            height: 2.75rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin: 0 auto .75rem;
+            background: #e7f1ff;
+            color: #1a5fb4;
+            border: 2px solid #fff;
+            box-shadow: 0 0 0 4px rgba(26, 95, 180, .08);
+        }
+</style>
+
+<div class="container-fluid">
+    @* --- HERO --- *@
+    <div class="row py-3">
+        <div class="col-12">
+            <div class="landing-hero">
+                <div class="hero-content row align-items-center g-4">
+                    <div class="col-lg-7">
+                        <span class="badge hero-badge text-white fs-12 px-3 py-2 mb-3">
+                            <i data-lucide="sparkles" class="size-12 me-1"></i> Plataforma Core 9
+                        </span>
+                        <h1 class="display-5 mb-3">
+                            Bienvenido a<br />
+                            <span style="color:#9ecbff">tu panel de gestión</span>
+                        </h1>
+                        <p class="lead mb-4">
+                            Administra usuarios, roles y accesos desde un único lugar. Una experiencia
+                            moderna, segura y pensada para trabajar rápido.
+                        </p>
+                        <div class="d-flex flex-wrap gap-2">
+                            <a asp-controller="Users" asp-action="Index" class="btn btn-hero-primary btn-lg px-4 shadow-sm">
+                                <i data-lucide="users" class="me-2 size-18"></i> Ir a Usuarios
+                            </a>
+                            <a asp-controller="Roles" asp-action="Index" class="btn btn-glass btn-lg px-4">
+                                <i data-lucide="shield-check" class="me-2 size-18"></i> Gestionar Roles
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <div class="bg-white bg-opacity-10 border border-white border-opacity-25 rounded-4 p-3 h-100 text-center">
+                                    <i data-lucide="shield-user" class="size-28 mb-2" style="color:#9ecbff"></i>
+                                    <div class="fw-bold fs-4">Roles</div>
+                                    <small class="opacity-75">Control de acceso</small>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="bg-white bg-opacity-10 border border-white border-opacity-25 rounded-4 p-3 h-100 text-center">
+                                    <i data-lucide="lock-keyhole" class="size-28 mb-2" style="color:#9ecbff"></i>
+                                    <div class="fw-bold fs-4">Seguro</div>
+                                    <small class="opacity-75">Autenticación Identity</small>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="bg-white bg-opacity-10 border border-white border-opacity-25 rounded-4 p-3 h-100 text-center">
+                                    <i data-lucide="layout-dashboard" class="size-28 mb-2" style="color:#9ecbff"></i>
+                                    <div class="fw-bold fs-4">Modular</div>
+                                    <small class="opacity-75">Arquitectura por capas</small>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="bg-white bg-opacity-10 border border-white border-opacity-25 rounded-4 p-3 h-100 text-center">
+                                    <i data-lucide="zap" class="size-28 mb-2" style="color:#9ecbff"></i>
+                                    <div class="fw-bold fs-4">Rápido</div>
+                                    <small class="opacity-75">.NET 9 + EF Core</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* --- ACCESOS RÁPIDOS --- *@
+    <div class="row pb-3">
+        <div class="col-12">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <div>
+                    <span class="section-eyebrow text-primary d-block mb-1">Accesos directos</span>
+                    <h5 class="mb-0 fw-bold">¿Qué deseas hacer?</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-3">
+            <a asp-controller="Users" asp-action="Index" class="card quick-card shadow-sm border-0">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <div class="quick-icon bg-primary-subtle text-primary">
+                        <i data-lucide="users" class="fs-4"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-1 fw-bold">Usuarios</h6>
+                        <small class="text-muted">Listado y gestión de cuentas</small>
+                    </div>
+                    <i data-lucide="chevron-right" class="ms-auto text-muted size-16"></i>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-3">
+            <a asp-controller="Roles" asp-action="Index" class="card quick-card shadow-sm border-0">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <div class="quick-icon bg-success-subtle text-success">
+                        <i data-lucide="shield-check" class="fs-4"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-1 fw-bold">Roles</h6>
+                        <small class="text-muted">Permisos y autorizaciones</small>
+                    </div>
+                    <i data-lucide="chevron-right" class="ms-auto text-muted size-16"></i>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-3">
+            <a asp-controller="Ejemplo" asp-action="Index" class="card quick-card shadow-sm border-0">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <div class="quick-icon bg-warning-subtle text-warning">
+                        <i data-lucide="file-text" class="fs-4"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-1 fw-bold">Ejemplo</h6>
+                        <small class="text-muted">Plantilla de listado demo</small>
+                    </div>
+                    <i data-lucide="chevron-right" class="ms-auto text-muted size-16"></i>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-3">
+            <a asp-controller="Home" asp-action="Privacy" class="card quick-card shadow-sm border-0">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <div class="quick-icon bg-info-subtle text-info">
+                        <i data-lucide="file-lock" class="fs-4"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-1 fw-bold">Privacidad</h6>
+                        <small class="text-muted">Políticas del sistema</small>
+                    </div>
+                    <i data-lucide="chevron-right" class="ms-auto text-muted size-16"></i>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    @* --- CARACTERÍSTICAS --- *@
+    <div class="row pb-3">
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <span class="section-eyebrow text-primary d-block mb-2">Por qué este proyecto</span>
+                        <h4 class="fw-bold mb-1">Base sólida para tu aplicación</h4>
+                        <p class="text-muted mb-0">Todo lo esencial listo para empezar a construir.</p>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-lg-4">
+                            <div class="d-flex gap-3">
+                                <div class="feature-icon bg-primary-subtle text-primary">
+                                    <i data-lucide="layers" class="fs-4"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold mb-1">Arquitectura por capas</h6>
+                                    <p class="text-muted small mb-0">
+                                        Controllers, Services, Entities y Views claramente separados para un mantenimiento ordenado.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="d-flex gap-3">
+                                <div class="feature-icon bg-success-subtle text-success">
+                                    <i data-lucide="shield" class="fs-4"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold mb-1">Seguridad integrada</h6>
+                                    <p class="text-muted small mb-0">
+                                        ASP.NET Identity con autorización por roles y control de acceso en cada módulo.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="d-flex gap-3">
+                                <div class="feature-icon bg-warning-subtle text-warning">
+                                    <i data-lucide="gauge" class="fs-4"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold mb-1">Rendimiento moderno</h6>
+                                    <p class="text-muted small mb-0">
+                                        Construido sobre .NET 9 y Entity Framework Core para respuestas rápidas y estables.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* --- CÓMO EMPEZAR --- *@
+    <div class="row pb-3">
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <span class="section-eyebrow text-primary d-block mb-2">Primeros pasos</span>
+                        <h5 class="fw-bold mb-0">Empieza en 3 pasos</h5>
+                    </div>
+
+                    <div class="row steps-connector text-center">
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <div class="step-dot">1</div>
+                            <h6 class="fw-bold mb-1">Explora el panel</h6>
+                            <small class="text-muted">Revisa el menú lateral y los accesos rápidos.</small>
+                        </div>
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <div class="step-dot">2</div>
+                            <h6 class="fw-bold mb-1">Gestiona usuarios</h6>
+                            <small class="text-muted">Crea cuentas, asigna roles y controla estados.</small>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="step-dot">3</div>
+                            <h6 class="fw-bold mb-1">Extiende el sistema</h6>
+                            <small class="text-muted">Agrega módulos siguiendo la estructura por capas.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* --- CTA FINAL --- *@
+    <div class="row pb-3">
+        <div class="col-12">
+            <div class="card shadow-sm border-0 bg-primary-subtle">
+                <div class="card-body d-flex flex-wrap align-items-center justify-content-between gap-3 p-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="feature-icon bg-primary text-white">
+                            <i data-lucide="book-open" class="fs-4"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-1">¿Nuevo en el proyecto?</h6>
+                            <small class="text-muted">Consulta la documentación oficial de ASP.NET Core para profundizar.</small>
+                        </div>
+                    </div>
+                    <a href="https://learn.microsoft.com/aspnet/core" target="_blank" rel="noopener noreferrer" class="btn btn-primary shadow-sm px-4">
+                        <i data-lucide="external-link" class="me-2 size-16"></i> Ver documentación
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    </script>
+}

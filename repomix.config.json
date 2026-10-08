@@ -1,0 +1,27 @@
+{
+  "output": {
+    "filePath": "repomix-output.xml",
+    "style": "xml"
+  },
+  "ignore": {
+    "customPatterns": [
+      "bin/**",
+      "obj/**",
+      ".vs/**",
+      ".idea/**",
+      "wwwroot/lib/**",
+      "wwwroot/plugins/**",
+      "wwwroot/css/**",
+      "wwwroot/js/**",
+      "**.png",
+      "**.jpg",
+      "**.jpeg",
+      "**.svg",
+      "**.ico",
+      "**.pdf",
+      "*.log",
+      "*.sqlite",
+      "*.db"
+    ]
+  }
+}

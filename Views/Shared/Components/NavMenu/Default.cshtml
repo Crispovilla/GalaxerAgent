@@ -39,6 +39,12 @@
         <ul class="side-nav">
             <li class="side-nav-title">Menu</li>
 
+            <li class="side-nav-item">
+                <a href="@Url.Action("Index", "Ejemplo")" class="side-nav-link">
+                    <span class="menu-text">Ejemplo</span>
+                </a>
+            </li>
+
             @if (Model != null && Model.Any())
             {
                 foreach (var sistema in Model)

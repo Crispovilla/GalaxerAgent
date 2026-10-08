@@ -1,0 +1,9 @@
+﻿bin/
+obj/
+*.user
+*.suo
+.vs/
+.idea/
+node_modules/
+wwwroot/lib/
+*.log

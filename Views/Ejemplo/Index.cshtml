@@ -1,0 +1,346 @@
+@{
+    ViewData["Title"] = "Ejemplo";
+}
+
+<div class="container-fluid">
+    @* --- HEADER & BREADCRUMB --- *@
+    <div class="row py-3">
+        <div class="col-12">
+            <div class="page-title-box d-flex align-items-center justify-content-between">
+                <div>
+                    <h4 class="mb-0">@ViewData["Title"]</h4>
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item active">@ViewData["Title"]</li>
+                    </ol>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <button type="button" class="btn btn-soft-primary shadow-sm">
+                        <i data-lucide="refresh-cw" class="me-1 size-16"></i> Actualizar
+                    </button>
+                    <button type="button" class="btn btn-primary shadow-sm">
+                        <i data-lucide="plus" class="me-1 size-16"></i> Nuevo Registro
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* --- STAT CARDS --- *@
+    <div class="row">
+        <div class="col-xl-3 col-md-6">
+            <div class="card shadow-sm border-0 overflow-hidden">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted fs-13 fw-semibold d-block mb-1">Registros Hoy</span>
+                            <h3 class="mb-0 fw-bold">128</h3>
+                            <span class="badge badge-soft-success fs-12 mt-2">
+                                <i data-lucide="trending-up" class="size-12 me-1"></i> +12.5%
+                            </span>
+                        </div>
+                        <div class="avatar-lg bg-primary-subtle rounded-circle d-flex align-items-center justify-content-center">
+                            <i data-lucide="file-text" class="text-primary fs-2"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card shadow-sm border-0 overflow-hidden">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted fs-13 fw-semibold d-block mb-1">Activos</span>
+                            <h3 class="mb-0 fw-bold">96</h3>
+                            <span class="badge badge-soft-success fs-12 mt-2">
+                                <i data-lucide="trending-up" class="size-12 me-1"></i> +8.1%
+                            </span>
+                        </div>
+                        <div class="avatar-lg bg-success-subtle rounded-circle d-flex align-items-center justify-content-center">
+                            <i data-lucide="check-circle" class="text-success fs-2"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card shadow-sm border-0 overflow-hidden">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted fs-13 fw-semibold d-block mb-1">Inactivos</span>
+                            <h3 class="mb-0 fw-bold">14</h3>
+                            <span class="badge badge-soft-danger fs-12 mt-2">
+                                <i data-lucide="trending-down" class="size-12 me-1"></i> -3.2%
+                            </span>
+                        </div>
+                        <div class="avatar-lg bg-danger-subtle rounded-circle d-flex align-items-center justify-content-center">
+                            <i data-lucide="x-circle" class="text-danger fs-2"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card shadow-sm border-0 overflow-hidden">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted fs-13 fw-semibold d-block mb-1">Pendientes</span>
+                            <h3 class="mb-0 fw-bold">18</h3>
+                            <span class="badge badge-soft-info fs-12 mt-2">
+                                <i data-lucide="clock" class="size-12 me-1"></i> Estable
+                            </span>
+                        </div>
+                        <div class="avatar-lg bg-info-subtle rounded-circle d-flex align-items-center justify-content-center">
+                            <i data-lucide="hourglass" class="text-info fs-2"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        @* --- LISTADO DE REGISTROS --- *@
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-transparent d-flex align-items-center justify-content-between border-bottom">
+                    <div>
+                        <h5 class="card-title text-primary mb-0">Registros Recientes</h5>
+                        <p class="text-muted small mb-0">Últimos registros de actividad.</p>
+                    </div>
+                    <span class="badge badge-soft-secondary py-2 px-3">Total: 5</span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-light-subtle text-uppercase fs-xxs fw-bold text-muted">
+                                <tr>
+                                    <th class="ps-4 py-3">Nombre</th>
+                                    <th class="py-3">Tipo</th>
+                                    <th class="py-3">Estado</th>
+                                    <th class="py-3">Categoría</th>
+                                    <th class="py-3">Hora</th>
+                                    <th class="text-end pe-4 py-3">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="ps-4">
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-xs me-3 bg-primary-subtle rounded-circle d-flex align-items-center justify-content-center">
+                                                <i data-lucide="user" class="text-primary size-14"></i>
+                                            </div>
+                                            <div>
+                                                <span class="fw-bold d-block">Juan Pérez</span>
+                                                <small class="text-muted">Registro #001</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge badge-soft-info fs-12">Entrada</span></td>
+                                    <td><span class="badge badge-soft-success fs-12">Activo</span></td>
+                                    <td><span class="fw-semibold">A</span></td>
+                                    <td><span class="text-muted">10:32</span></td>
+                                    <td class="text-end pe-4">
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <button class="btn btn-soft-primary rounded-circle btn-icon" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="top" data-bs-custom-class="popover-primary" data-bs-content="Ver detalle">
+                                                <i data-lucide="eye" class="size-14"></i>
+                                            </button>
+                                            <button class="btn btn-soft-success rounded-circle btn-icon" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="top" data-bs-custom-class="popover-success" data-bs-content="Editar">
+                                                <i data-lucide="pencil" class="size-14"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="ps-4">
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-xs me-3 bg-success-subtle rounded-circle d-flex align-items-center justify-content-center">
+                                                <i data-lucide="user" class="text-success size-14"></i>
+                                            </div>
+                                            <div>
+                                                <span class="fw-bold d-block">María González</span>
+                                                <small class="text-muted">Registro #002</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge badge-soft-warning fs-12">Salida</span></td>
+                                    <td><span class="badge badge-soft-success fs-12">Activo</span></td>
+                                    <td><span class="fw-semibold">B</span></td>
+                                    <td><span class="text-muted">10:15</span></td>
+                                    <td class="text-end pe-4">
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <button class="btn btn-soft-primary rounded-circle btn-icon" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="top" data-bs-custom-class="popover-primary" data-bs-content="Ver detalle">
+                                                <i data-lucide="eye" class="size-14"></i>
+                                            </button>
+                                            <button class="btn btn-soft-success rounded-circle btn-icon" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="top" data-bs-custom-class="popover-success" data-bs-content="Editar">
+                                                <i data-lucide="pencil" class="size-14"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="ps-4">
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-xs me-3 bg-danger-subtle rounded-circle d-flex align-items-center justify-content-center">
+                                                <i data-lucide="user" class="text-danger size-14"></i>
+                                            </div>
+                                            <div>
+                                                <span class="fw-bold d-block">Carlos Ruiz</span>
+                                                <small class="text-muted">Registro #003</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge badge-soft-info fs-12">Entrada</span></td>
+                                    <td><span class="badge badge-soft-danger fs-12">Inactivo</span></td>
+                                    <td><span class="fw-semibold">A</span></td>
+                                    <td><span class="text-muted">09:58</span></td>
+                                    <td class="text-end pe-4">
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <button class="btn btn-soft-primary rounded-circle btn-icon" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="top" data-bs-custom-class="popover-primary" data-bs-content="Ver detalle">
+                                                <i data-lucide="eye" class="size-14"></i>
+                                            </button>
+                                            <button class="btn btn-soft-warning rounded-circle btn-icon swal-confirm" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="top" data-bs-custom-class="popover-warning" data-bs-content="Restaurar">
+                                                <i data-lucide="rotate-ccw" class="size-14"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="ps-4">
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-xs me-3 bg-info-subtle rounded-circle d-flex align-items-center justify-content-center">
+                                                <i data-lucide="user" class="text-info size-14"></i>
+                                            </div>
+                                            <div>
+                                                <span class="fw-bold d-block">Ana Torres</span>
+                                                <small class="text-muted">Registro #004</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge badge-soft-warning fs-12">Salida</span></td>
+                                    <td><span class="badge badge-soft-success fs-12">Activo</span></td>
+                                    <td><span class="fw-semibold">C</span></td>
+                                    <td><span class="text-muted">09:41</span></td>
+                                    <td class="text-end pe-4">
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <button class="btn btn-soft-primary rounded-circle btn-icon" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="top" data-bs-custom-class="popover-primary" data-bs-content="Ver detalle">
+                                                <i data-lucide="eye" class="size-14"></i>
+                                            </button>
+                                            <button class="btn btn-soft-success rounded-circle btn-icon" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="top" data-bs-custom-class="popover-success" data-bs-content="Editar">
+                                                <i data-lucide="pencil" class="size-14"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="ps-4">
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-xs me-3 bg-secondary-subtle rounded-circle d-flex align-items-center justify-content-center">
+                                                <i data-lucide="user" class="text-secondary size-14"></i>
+                                            </div>
+                                            <div>
+                                                <span class="fw-bold d-block">Pedro Morales</span>
+                                                <small class="text-muted">Registro #005</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge badge-soft-info fs-12">Entrada</span></td>
+                                    <td><span class="badge badge-soft-secondary fs-12">Pendiente</span></td>
+                                    <td><span class="fw-semibold">B</span></td>
+                                    <td><span class="text-muted">10:45</span></td>
+                                    <td class="text-end pe-4">
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <button class="btn btn-soft-primary rounded-circle btn-icon" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="top" data-bs-custom-class="popover-primary" data-bs-content="Ver detalle">
+                                                <i data-lucide="eye" class="size-14"></i>
+                                            </button>
+                                            <button class="btn btn-soft-success rounded-circle btn-icon swal-confirm" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="top" data-bs-custom-class="popover-success" data-bs-content="Procesar">
+                                                <i data-lucide="play" class="size-14"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-top-0">
+                    <small class="text-muted"><i data-lucide="info" class="size-14 me-1"></i> Los datos se actualizan en tiempo real.</small>
+                </div>
+            </div>
+        </div>
+
+        @* --- PANEL LATERAL: RESUMEN --- *@
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-transparent border-bottom">
+                    <h5 class="card-title text-primary mb-0">Resumen del Día</h5>
+                    <p class="text-muted small mb-0">Distribución de registros.</p>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="avatar-xs me-3 bg-success-subtle rounded-circle d-flex align-items-center justify-content-center">
+                                <i data-lucide="check-circle" class="text-success size-14"></i>
+                            </div>
+                            <span class="fw-semibold">Activos</span>
+                        </div>
+                        <span class="fw-bold">96</span>
+                    </div>
+                    <div class="progress mb-3" style="height: 8px;">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="avatar-xs me-3 bg-danger-subtle rounded-circle d-flex align-items-center justify-content-center">
+                                <i data-lucide="x-circle" class="text-danger size-14"></i>
+                            </div>
+                            <span class="fw-semibold">Inactivos</span>
+                        </div>
+                        <span class="fw-bold">14</span>
+                    </div>
+                    <div class="progress mb-3" style="height: 8px;">
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: 11%;" aria-valuenow="11" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="avatar-xs me-3 bg-warning-subtle rounded-circle d-flex align-items-center justify-content-center">
+                                <i data-lucide="clock" class="text-warning size-14"></i>
+                            </div>
+                            <span class="fw-semibold">Pendientes</span>
+                        </div>
+                        <span class="fw-bold">18</span>
+                    </div>
+                    <div class="progress mb-0" style="height: 8px;">
+                        <div class="progress-bar bg-warning" role="progressbar" style="width: 14%;" aria-valuenow="14" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </div>
+
+            @* --- ALERTA INFORMATIVA --- *@
+            <div class="alert alert-info border-dashed bg-info-subtle mt-3 p-3 mb-0">
+                <div class="d-flex align-items-start">
+                    <i data-lucide="info" class="me-2 size-20 text-info"></i>
+                    <p class="mb-0 small text-info-emphasis">
+                        Panel de ejemplo de <strong>Ejemplo</strong>. Personaliza estos datos conectándolos a tu servicio real.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    </script>
+}

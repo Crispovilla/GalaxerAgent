@@ -1,7 +1,10 @@
 using Base_MVC_Core9.Data;
 using Base_MVC_Core9.Entities;
+using Base_MVC_Core9.Hubs;
 using Base_MVC_Core9.Interfaces;
 using Base_MVC_Core9.Services;
+using Base_MVC_Core9.Services.AgentEngine;
+using Base_MVC_Core9.Services.CodeGraph;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
@@ -11,6 +14,11 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var agentConnectionString = builder.Configuration.GetConnectionString("AgentEngineConnection");
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(agentConnectionString));
 
 // ── 1. CONFIGURACIÓN DE BASES DE DATOS ──────────────────────
 // Contexto para Identity
@@ -69,6 +77,12 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.SlidingExpiration = true;
     options.Cookie.HttpOnly = true;
 });
+
+builder.Services.AddSignalR();
+builder.Services.AddScoped<ICodeGraphService, CodeGraphService>();
+builder.Services.AddScoped<IAgentOrchestrator, AgentOrchestrator>();
+builder.Services.AddScoped<IAiWorkflowSkill, AiWorkflowSkill>();
+
 
 builder.Services.AddDataProtection()
     .PersistKeysToFileSystem(new DirectoryInfo(@"C:\temp\Keys-BaseMVC"));
@@ -142,6 +156,7 @@ app.UseAuthorization();
 
 // ── 9. RUTAS ───────────────────────────────────────────────
 app.MapRazorPages();
+app.MapHub<ConstellationHub>("/constellationHub");
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
