@@ -47,15 +47,15 @@ function setMission(text, cls) {
 /* ───────────────────────── Utilidades ───────────────────────── */
 
 function createGlowTexture() {
-    const size = 128;
+    const size = 256;
     const canvas = document.createElement('canvas');
     canvas.width = size;
     canvas.height = size;
     const ctx = canvas.getContext('2d');
     const g = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
     g.addColorStop(0, 'rgba(255,255,255,1)');
-    g.addColorStop(0.2, 'rgba(255,255,255,0.55)');
-    g.addColorStop(0.5, 'rgba(255,255,255,0.14)');
+    g.addColorStop(0.18, 'rgba(255,255,255,0.6)');
+    g.addColorStop(0.45, 'rgba(255,255,255,0.16)');
     g.addColorStop(1, 'rgba(255,255,255,0)');
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, size, size);
@@ -109,18 +109,21 @@ function nodeColor(type) {
 
 function makeLabelSprite(text, color) {
     const canvas = document.createElement('canvas');
-    canvas.width = 256;
-    canvas.height = 64;
+    canvas.width = 512;
+    canvas.height = 128;
     const ctx = canvas.getContext('2d');
-    ctx.font = 'bold 26px monospace';
+    const raw = String(text == null ? '' : text);
+    const label = raw.length > 24 ? raw.slice(0, 23) + '…' : raw;
+    const fontPx = Math.max(14, Math.min(56, Math.floor(472 / Math.max(label.length, 1) / 0.62)));
+    ctx.font = `bold ${fontPx}px monospace`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.shadowColor = color;
-    ctx.shadowBlur = 10;
+    ctx.shadowBlur = 18;
     ctx.fillStyle = '#ffffff';
-    const label = text.length > 22 ? text.slice(0, 21) + '…' : text;
-    ctx.fillText(label, 128, 32);
+    ctx.fillText(label, 256, 64);
     const tex = new THREE.CanvasTexture(canvas);
+    try { tex.anisotropy = renderer.capabilities.getMaxAnisotropy(); } catch (e) { }
     const sprite = new THREE.Sprite(new THREE.SpriteMaterial({
         map: tex,
         transparent: true,
@@ -138,10 +141,20 @@ scene.fog = new THREE.FogExp2(0x02040c, 0.0016);
 const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 3000);
 camera.position.set(0, 42, 120);
 
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+let composer = null;
+
+function getRenderPixelRatio() {
+    const dpr = window.devicePixelRatio || 1;
+    return composer ? Math.min(dpr, 2) : Math.min(dpr, 3);
+}
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+renderer.setPixelRatio(getRenderPixelRatio());
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(0x02040c, 1);
+renderer.outputEncoding = THREE.sRGBEncoding;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.08;
 container.appendChild(renderer.domElement);
 
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -151,8 +164,49 @@ controls.minDistance = 24;
 controls.maxDistance = 300;
 controls.enablePan = false;
 
+/* Post-procesado: bloom + FXAA + corrección gamma (si examples/js cargó desde CDN) */
+let fxaaPass = null;
+if (typeof THREE.EffectComposer === 'function'
+    && typeof THREE.UnrealBloomPass === 'function'
+    && typeof THREE.ShaderPass === 'function') {
+    composer = new THREE.EffectComposer(renderer);
+    composer.setPixelRatio(getRenderPixelRatio());
+    composer.setSize(window.innerWidth, window.innerHeight);
+    composer.addPass(new THREE.RenderPass(scene, camera));
+    composer.addPass(new THREE.UnrealBloomPass(
+        new THREE.Vector2(window.innerWidth, window.innerHeight),
+        0.85,
+        0.55,
+        0.22
+    ));
+    if (typeof THREE.GammaCorrectionShader !== 'undefined') {
+        composer.addPass(new THREE.ShaderPass(THREE.GammaCorrectionShader));
+    }
+    if (typeof THREE.FXAAShader !== 'undefined') {
+        fxaaPass = new THREE.ShaderPass(THREE.FXAAShader);
+        composer.addPass(fxaaPass);
+    }
+    renderer.setPixelRatio(getRenderPixelRatio());
+}
+
+function updatePostSize() {
+    if (!composer) return;
+    const dpr = getRenderPixelRatio();
+    renderer.setPixelRatio(dpr);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    composer.setPixelRatio(dpr);
+    composer.setSize(window.innerWidth, window.innerHeight);
+    if (fxaaPass) {
+        fxaaPass.material.uniforms.resolution.value.set(
+            1 / (window.innerWidth * dpr),
+            1 / (window.innerHeight * dpr)
+        );
+    }
+}
+updatePostSize();
+
 function createStarfield() {
-    const count = 2600;
+    const count = 4200;
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
     const golden = Math.PI * (3 - Math.sqrt(5));
@@ -304,7 +358,7 @@ let sunCorona = null;
 
 function createSun() {
     sunMesh = new THREE.Mesh(
-        new THREE.SphereGeometry(5, 32, 32),
+        new THREE.SphereGeometry(5, 48, 48),
         new THREE.MeshBasicMaterial({ color: 0xffd27d })
     );
 
@@ -1092,7 +1146,7 @@ function buildSolarSystem(graph) {
 
         const size = 1.0 + (node.type === 2 ? 0.7 : node.type === 3 ? 0.35 : 0);
         const sphere = new THREE.Mesh(
-            new THREE.SphereGeometry(size, 16, 16),
+            new THREE.SphereGeometry(size, 28, 28),
             new THREE.MeshStandardMaterial({
                 color,
                 emissive: color,
@@ -1121,7 +1175,7 @@ function buildSolarSystem(graph) {
 
         if (i % 3 === 0) {
             const atmo = new THREE.Mesh(
-                new THREE.SphereGeometry(size * 1.18, 16, 16),
+                new THREE.SphereGeometry(size * 1.18, 28, 28),
                 new THREE.MeshBasicMaterial({
                     color,
                     transparent: true,
@@ -2102,7 +2156,8 @@ function animate() {
     updateCamera(dt);
 
     controls.update();
-    renderer.render(scene, camera);
+    if (composer) composer.render();
+    else renderer.render(scene, camera);
 }
 
 resetTrail();
@@ -2117,7 +2172,8 @@ animate();
 window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    if (composer) updatePostSize();
+    else renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
 window.addEventListener('error', (e) => {
