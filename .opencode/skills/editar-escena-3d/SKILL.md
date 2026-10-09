@@ -71,8 +71,10 @@ setViewMode('folders');
   ```
 
   Flags: `--view base|solar|folders` · `--setup deathstar|none` · `--cam/--tgt` con
-  `x,y,z` (obligatorios) · `--out` (default `%TEMP%\opencode\cam.png`) · `--wait=ms`
-  (default 2500) · `--lock=indiceBase:rotY` congela el giro.
+  `x,y,z` (obligatorios) · `--out` (rutas relativas van a `%TEMP%\opencode\`) ·
+  `--wait=ms` (default 2500) · `--lock=indiceBase:rotY` congela el giro ·
+  `--eval="js()"` ejecuta JS en la página tras el setup (p. ej.
+  `--eval="spawnFlybyAsteroid();"` para forzar un asteroide de paso).
   Maneja login automáticamente y loguea errores JS de la página (`[JS] ...`).
 - Ejemplo completo multi-toma: `.opencode/scripts/ejemplos/deathstar-laser.mjs`.
 - Captura simple sin cámara: skill `visualizar-pantalla`.

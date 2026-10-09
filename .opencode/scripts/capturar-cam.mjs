@@ -41,7 +41,8 @@ if (!argv.cam || !argv.tgt) {
 }
 const cam = String(argv.cam).split(',').map(Number);
 const tgt = String(argv.tgt).split(',').map(Number);
-const out = argv.out ? String(argv.out) : path.join(os.tmpdir(), 'opencode', 'cam.png');
+const outArg = argv.out ? String(argv.out) : 'cam.png';
+const out = path.isAbsolute(outArg) ? outArg : path.join(os.tmpdir(), 'opencode', outArg);
 const wait = Number(argv.wait ?? 2500);
 if (cam.length !== 3 || cam.some(Number.isNaN) || tgt.length !== 3 || tgt.some(Number.isNaN)) {
     log('[SCRIPT] --cam y --tgt deben ser x,y,z numéricos');
@@ -86,6 +87,9 @@ try {
         });
     } else if (argv.view) {
         await page.evaluate((v) => setViewMode(v), String(argv.view));
+    }
+    if (argv.eval) {
+        await page.evaluate('(() => {' + String(argv.eval) + '})()');
     }
     await page.waitForTimeout(wait);
 

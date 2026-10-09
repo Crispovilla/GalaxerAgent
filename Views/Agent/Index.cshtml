@@ -1,6 +1,8 @@
 @{
     ViewData["Title"] = "Halcón Milenario · Agente";
     ViewData["HideNav"] = true;
+    /* Evita que el navegador sirva HTML/JS de constelación en caché */
+    Context.Response.Headers["Cache-Control"] = "no-store, no-cache, must-revalidate";
 }
 
 @section styles {
@@ -1421,10 +1423,11 @@
 
                     if (data.error) msgEl.textContent = data.error;
 
-                    /* Desplegar la carpeta actual como bases espaciales en la escena */
+                    /* Desplegar la carpeta actual como bases espaciales en la escena
+                       (clave atada a la ventana que abrió el explorador) */
                     try {
                         if (typeof renderFolderBases === 'function') {
-                            renderFolderBases(current, (data.folders || []).map(f => f.path));
+                            renderFolderBases(current, (data.folders || []).map(f => f.path), window.__explorerPreviewKey || 'default');
                         }
                     } catch (e) { }
 

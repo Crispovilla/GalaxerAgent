@@ -193,19 +193,20 @@ function updatePostSize() {
 }
 updatePostSize();
 
-function createStarfield() {
-    const count = 4200;
+const starLayers = [];
+
+function createStarLayer(count, size, opacity, rMin, rMax, bandRatio, brightnessBias, twinkle, drift) {
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
     const golden = Math.PI * (3 - Math.sqrt(5));
 
     for (let i = 0; i < count; i++) {
-        const radius = 380 + Math.random() * 620;
+        const radius = rMin + Math.random() * (rMax - rMin);
         let x, y, z;
 
-        if (i % 3 === 0) {
+        if (Math.random() < bandRatio) {
             const band = (i / count) * golden * 18;
-            y = Math.sin(band * 0.35) * radius * 0.18 + (Math.random() - 0.5) * radius * 0.14;
+            y = Math.sin(band * 0.35) * radius * 0.2 + (Math.random() - 0.5) * radius * 0.16;
             const angle = Math.random() * Math.PI * 2;
             const r = Math.sqrt(Math.max(radius * radius - y * y, 1));
             x = r * Math.cos(angle);
@@ -223,11 +224,17 @@ function createStarfield() {
         positions[i * 3 + 1] = y;
         positions[i * 3 + 2] = z;
 
-        const brightness = 0.3 + Math.random() * 0.7;
-        const warm = Math.random();
-        colors[i * 3] = brightness * (warm < 0.1 ? 1.0 : warm < 0.2 ? 0.75 : 0.92);
-        colors[i * 3 + 1] = brightness * (warm < 0.1 ? 0.88 : warm < 0.2 ? 0.82 : 0.95);
-        colors[i * 3 + 2] = brightness;
+        const brightness = brightnessBias + Math.random() * (1 - brightnessBias);
+        const t = Math.random();
+        let rC, gC, bC;
+        if (t < 0.12) { rC = 0.70; gC = 0.79; bC = 1.00; }        /* azul */
+        else if (t < 0.30) { rC = 0.86; gC = 0.91; bC = 1.00; }    /* blanco-azul */
+        else if (t < 0.76) { rC = 1.00; gC = 0.99; bC = 0.95; }    /* blanco */
+        else if (t < 0.92) { rC = 1.00; gC = 0.90; bC = 0.74; }    /* amarillo */
+        else { rC = 1.00; gC = 0.72; bC = 0.52; }                  /* naranja */
+        colors[i * 3] = rC * brightness;
+        colors[i * 3 + 1] = gC * brightness;
+        colors[i * 3 + 2] = bC * brightness;
     }
 
     const geometry = new THREE.BufferGeometry();
@@ -235,18 +242,31 @@ function createStarfield() {
     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
     const material = new THREE.PointsMaterial({
-        size: 2.6,
+        size,
         map: glowTexture,
         vertexColors: true,
         transparent: true,
-        opacity: 0.9,
+        opacity,
         depthWrite: false,
         blending: THREE.AdditiveBlending,
         sizeAttenuation: true,
         fog: false
     });
 
-    scene.add(new THREE.Points(geometry, material));
+    const points = new THREE.Points(geometry, material);
+    points.userData = { baseOpacity: opacity, phase: Math.random() * 6.28, twinkle, drift };
+    scene.add(points);
+    starLayers.push(points);
+    return points;
+}
+
+function createStarfield() {
+    /* Capa lejana: malla densa y tenue (fondo) */
+    createStarLayer(7200, 2.3, 0.62, 520, 1150, 0.5, 0.20, 0.02, 0.0012);
+    /* Capa media: brillo intermedio */
+    createStarLayer(2600, 3.7, 0.8, 420, 950, 0.38, 0.34, 0.035, 0.0022);
+    /* Capa cercana: pocas grandes, con destellos de color y parpadeo suave */
+    createStarLayer(780, 7.0, 1.0, 360, 780, 0.25, 0.55, 0.09, 0.0034);
 }
 
 createStarfield();
@@ -2122,13 +2142,72 @@ scene.add(folderBasesGroup);
 const folderBasesList = [];
 let folderBaseCore = null;
 let folderBasePath = '';
+let folderFocusKey = null;   /* estructura enfocada en la vista Carpetas */
+
+/* Múltiples estructuras simultáneas: una por despliegue (agente o explorador) */
+const folderDeployments = new Map();   /* deployKey -> { group, zone, slot, path, core, bases } */
+const folderSlotsTaken = new Set();
+let folderPreviewSeq = 0;
+
+/* Clave de la vista previa del explorador para una ventana (lifetime atado a la ventana) */
+function folderPreviewKey(win) {
+    if (!win) return 'default';
+    if (!win.__folderPreviewKey) win.__folderPreviewKey = 'preview:' + (++folderPreviewSeq);
+    return win.__folderPreviewKey;
+}
+
+function zoneForSlot(slot) {
+    if (slot <= 0) return FOLDER_ZONE.clone();
+    const ring = Math.floor((slot - 1) / 6);
+    const k = (slot - 1) % 6;
+    const angle = (k / 6) * Math.PI * 2 + ring * 0.5;
+    const r = 130 * (ring + 1);
+    return new THREE.Vector3(Math.cos(angle) * r, FOLDER_ZONE.y, Math.sin(angle) * r);
+}
+
+function takeFolderSlot() {
+    for (let s = 0; s < 64; s++) {
+        if (!folderSlotsTaken.has(s)) {
+            folderSlotsTaken.add(s);
+            return s;
+        }
+    }
+    return 0;
+}
 
 function folderTail(path) {
     const parts = String(path || '').split(/[\\/]/).filter(Boolean);
     return parts.length ? parts[parts.length - 1] : '';
 }
 
+function disposeFolderDeployment(key) {
+    const dep = folderDeployments.get(key);
+    if (!dep) return false;
+    folderDeployments.delete(key);
+    folderSlotsTaken.delete(dep.slot);
+    if (dep.group) {
+        folderBasesGroup.remove(dep.group);
+        disposeObject(dep.group);
+    }
+    (dep.bases || []).forEach(entry => {
+        const i = folderBasesList.indexOf(entry);
+        if (i >= 0) folderBasesList.splice(i, 1);
+    });
+    if (folderDeployments.size > 0) {
+        const rest = [...folderDeployments.values()].pop();
+        folderBasePath = rest.path;
+        folderBaseCore = rest.core;
+    } else {
+        folderBasePath = '';
+        folderBaseCore = null;
+    }
+    if (folderFocusKey === key) folderFocusKey = null;
+    if (typeof refreshViewControl === 'function') refreshViewControl();
+    return true;
+}
+
 function disposeFolderBases() {
+    [...folderDeployments.keys()].forEach(k => disposeFolderDeployment(k));
     while (folderBasesGroup.children.length > 0) {
         const child = folderBasesGroup.children[0];
         folderBasesGroup.remove(child);
@@ -2136,6 +2215,7 @@ function disposeFolderBases() {
     }
     folderBasesList.length = 0;
     folderBaseCore = null;
+    folderBasePath = '';
 }
 
 function buildFolderBase(name, colorHex, scale, variant) {
@@ -2411,60 +2491,87 @@ function buildFolderBase(name, colorHex, scale, variant) {
     return group;
 }
 
-function renderFolderBases(path, folderPaths) {
-    disposeFolderBases();
-    folderBasePath = path || '';
-    if (typeof refreshViewControl === 'function') refreshViewControl();
+function renderFolderBases(path, folderPaths, deployKey, label) {
+    const key = deployKey || 'default';
+
+    /* Reemplaza solo esta estructura; las demás despliegues siguen en escena */
+    disposeFolderDeployment(key);
+
+    const dep = {
+        key,
+        slot: takeFolderSlot(),
+        path: path || '',
+        label: label || '',
+        group: null,
+        bases: [],
+        core: null
+    };
+    dep.zone = zoneForSlot(dep.slot);
+    folderDeployments.set(key, dep);
+
+    const group = new THREE.Group();
+    dep.group = group;
+    const before = folderBasesList.length;
 
     const list = (folderPaths || []).slice(0, 48);
     const count = list.length;
     const tail = folderTail(path) || 'RAÍZ';
 
     const central = buildFolderBase(tail, 0x00ffcc, 1.7, 'deathstar');
-    central.position.copy(FOLDER_ZONE);
-    folderBasesGroup.add(central);
-    folderBaseCore = central;
+    group.add(central);
+    dep.core = central;
 
-    const header = makeLabelSprite('ESTRUCTURA: ' + (path || 'Unidades'), '#6fe3ff');
-    header.position.set(FOLDER_ZONE.x, FOLDER_ZONE.y + 14, FOLDER_ZONE.z);
+    const header = makeLabelSprite(
+        label ? label + ' · ' + (path || 'Unidades') : 'ESTRUCTURA: ' + (path || 'Unidades'),
+        '#6fe3ff'
+    );
+    header.position.set(0, 14, 0);
     header.scale.set(34, 6, 1);
-    folderBasesGroup.add(header);
+    group.add(header);
 
     if (count === 0) {
         const empty = makeLabelSprite('(sin subcarpetas)', '#7f93a8');
-        empty.position.set(FOLDER_ZONE.x, FOLDER_ZONE.y - 7, FOLDER_ZONE.z);
+        empty.position.set(0, -7, 0);
         empty.scale.set(18, 4, 1);
-        folderBasesGroup.add(empty);
-        return;
+        group.add(empty);
+    } else {
+        const radius = Math.min(Math.max(12 + count * 1.2, 13), 34);
+        const linkMaterial = new THREE.LineBasicMaterial({
+            color: 0x00ffcc,
+            transparent: true,
+            opacity: 0.32
+        });
+
+        list.forEach((folder, i) => {
+            const name = folderTail(folder) || folder;
+            const angle = (i / count) * Math.PI * 2;
+            const ringRadius = radius * (i % 2 ? 1 : 0.74);
+            const pos = new THREE.Vector3(
+                Math.cos(angle) * ringRadius,
+                ((i % 3) - 1) * 3,
+                Math.sin(angle) * ringRadius
+            );
+
+            const base = buildFolderBase(name, i % 2 ? 0x6ec8ff : 0x9be7ff, 1, 'moon');
+            base.position.copy(pos);
+            group.add(base);
+
+            const link = new THREE.Line(
+                new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), pos]),
+                linkMaterial
+            );
+            group.add(link);
+        });
     }
 
-    const radius = Math.min(Math.max(12 + count * 1.2, 13), 34);
-    const linkMaterial = new THREE.LineBasicMaterial({
-        color: 0x00ffcc,
-        transparent: true,
-        opacity: 0.32
-    });
+    dep.bases = folderBasesList.slice(before);
+    group.position.copy(dep.zone);
+    folderBasesGroup.add(group);
 
-    list.forEach((folder, i) => {
-        const name = folderTail(folder) || folder;
-        const angle = (i / count) * Math.PI * 2;
-        const ringRadius = radius * (i % 2 ? 1 : 0.74);
-        const pos = new THREE.Vector3(
-            FOLDER_ZONE.x + Math.cos(angle) * ringRadius,
-            FOLDER_ZONE.y + ((i % 3) - 1) * 3,
-            FOLDER_ZONE.z + Math.sin(angle) * ringRadius
-        );
-
-        const base = buildFolderBase(name, i % 2 ? 0x6ec8ff : 0x9be7ff, 1, 'moon');
-        base.position.copy(pos);
-        folderBasesGroup.add(base);
-
-        const link = new THREE.Line(
-            new THREE.BufferGeometry().setFromPoints([FOLDER_ZONE.clone(), pos]),
-            linkMaterial
-        );
-        folderBasesGroup.add(link);
-    });
+    folderBaseCore = central;
+    folderBasePath = path || '';
+    folderFocusKey = key;
+    if (typeof refreshViewControl === 'function') refreshViewControl();
 }
 
 function focusFolderBase(path) {
@@ -2876,6 +2983,74 @@ function spawnMeteor() {
     });
 }
 
+/* ─────────────── Asteroides de paso (cruzan la escena) ─────────────── */
+
+let nextFlybyAt = 7 + Math.random() * 6;
+const flybyPool = [];
+
+function rockJitter(x, y, z) {
+    const h = Math.sin(x * 127.1 + y * 311.7 + z * 74.7) * 43758.5453;
+    return 0.72 + (h - Math.floor(h)) * 0.5;
+}
+
+function createFlybyPool() {
+    const geos = [];
+    for (let v = 0; v < 3; v++) {
+        const geo = new THREE.IcosahedronGeometry(1, 1);
+        const pos = geo.attributes.position;
+        for (let i = 0; i < pos.count; i++) {
+            const x = pos.getX(i), y = pos.getY(i), z = pos.getZ(i);
+            const f = rockJitter(x, y, z);
+            pos.setXYZ(i, x * f, y * f, z * f);
+        }
+        geo.computeVertexNormals();
+        geos.push(geo);
+    }
+    const mat = new THREE.MeshStandardMaterial({
+        color: 0x655d52, roughness: 1.0, metalness: 0.04, flatShading: true
+    });
+    for (let i = 0; i < 4; i++) {
+        const rock = new THREE.Mesh(geos[i % 3], mat);
+        rock.visible = false;
+        rock.userData = { active: false };
+        scene.add(rock);
+        flybyPool.push(rock);
+    }
+}
+createFlybyPool();
+
+function spawnFlybyAsteroid() {
+    const rock = flybyPool.find(r => !r.userData.active);
+    if (!rock) return;
+    const side = Math.random() < 0.5 ? -1 : 1;
+    const start = new THREE.Vector3(
+        side * (150 + Math.random() * 80),
+        12 + Math.random() * 100,
+        -120 + Math.random() * 240
+    );
+    const end = new THREE.Vector3(
+        -start.x * (0.85 + Math.random() * 0.4),
+        Math.max(4, Math.min(118, start.y + (Math.random() - 0.5) * 70)),
+        Math.max(-170, Math.min(170, start.z + (Math.random() - 0.5) * 240))
+    );
+    const dist = start.distanceTo(end);
+    const s = 1 + Math.random() * Math.random() * 4.5;
+    rock.scale.set(
+        s * (0.75 + Math.random() * 0.5),
+        s * (0.6 + Math.random() * 0.5),
+        s * (0.75 + Math.random() * 0.5)
+    );
+    rock.position.copy(start);
+    rock.visible = true;
+    rock.userData = {
+        active: true,
+        start, end, dist, t: 0,
+        speed: dist / (12 + Math.random() * 9),
+        spinX: (Math.random() - 0.5) * 2.4,
+        spinY: (Math.random() - 0.5) * 2.4
+    };
+}
+
 /* ───────────────────────── Radar (dashboard) ───────────────────────── */
 
 const RADAR_RANGE = 95;
@@ -3030,8 +3205,18 @@ const VIEW_PRESETS = {
     folders: { pos: new THREE.Vector3(0, 112, 92), target: new THREE.Vector3(0, 88, 0) }
 };
 
+function foldersViewPreset() {
+    let dep = folderFocusKey ? (folderDeployments.get(folderFocusKey) || null) : null;
+    if (!dep && folderDeployments.size === 1) dep = [...folderDeployments.values()][0];
+    if (dep) {
+        const z = dep.zone;
+        return { pos: new THREE.Vector3(z.x, z.y + 22, z.z + 92), target: new THREE.Vector3(z.x, z.y - 2, z.z) };
+    }
+    return { pos: new THREE.Vector3(0, 200, 280), target: new THREE.Vector3(0, 90, 0) };
+}
+
 function applyViewPreset(mode, animate) {
-    const p = VIEW_PRESETS[mode];
+    const p = mode === 'folders' ? foldersViewPreset() : VIEW_PRESETS[mode];
     if (!p) return;
     if (animate) {
         camTween = true;
@@ -3348,6 +3533,7 @@ function makeWindow(root, opts) {
 
     if (win.btnBrowse) {
         win.btnBrowse.addEventListener('click', () => {
+            window.__explorerPreviewKey = folderPreviewKey(win);
             if (typeof window.openPathExplorer === 'function') window.openPathExplorer(win.pathInput);
         });
     }
@@ -3539,9 +3725,12 @@ function closeWindow(win) {
 
     if (win.sessionId) {
         sessionWindows.delete(win.sessionId);
+        disposeFolderDeployment(win.sessionId);
         fetch('/api/agent/sessions/' + encodeURIComponent(win.sessionId) + '/close', { method: 'POST' })
             .catch(() => { });
     }
+    /* También la vista previa que esta ventana haya desplegado en el explorador */
+    if (win.__folderPreviewKey) disposeFolderDeployment(win.__folderPreviewKey);
 
     const rig = win.rig;
     if (rig) {
@@ -3677,9 +3866,21 @@ function refreshViewControl() {
     add('Base de control', viewMode === 'base', () => setViewMode('base'));
     add('Sistema solar', viewMode === 'solar', () => setViewMode('solar'));
 
-    if (folderBasePath) {
-        const tail = folderTail(folderBasePath) || folderBasePath;
-        add('Carpetas: ' + tail, viewMode === 'folders', () => setViewMode('folders'));
+    if (folderDeployments.size) {
+        const deps = [...folderDeployments.values()];
+        if (deps.length > 1) {
+            add('Carpetas: general', viewMode === 'folders' && !folderFocusKey, () => {
+                folderFocusKey = null;
+                setViewMode('folders');
+            });
+        }
+        deps.forEach(d => {
+            const tail = folderTail(d.path) || d.path || 'raíz';
+            add('Carpetas: ' + tail, viewMode === 'folders' && folderFocusKey === d.key, () => {
+                folderFocusKey = d.key;
+                setViewMode('folders');
+            });
+        });
     }
 
     const withSession = agentWindows;
@@ -3779,7 +3980,11 @@ async function launchAgent(win) {
             return;
         }
 
-        if (win.sessionId) sessionWindows.delete(win.sessionId);
+        if (win.sessionId) {
+            sessionWindows.delete(win.sessionId);
+            disposeFolderDeployment(win.sessionId);
+        }
+        disposeFolderDeployment(folderPreviewKey(win));
         win.sessionId = data.sessionId;
         sessionWindows.set(data.sessionId, win);
         connection.invoke('JoinSession', data.sessionId);
@@ -3788,14 +3993,22 @@ async function launchAgent(win) {
 
         win.addLog(`Sesión creada: ${data.sessionId}`);
 
-        /* Desplegar la estructura de la ruta objetivo como bases espaciales */
+        /* Desplegar la estructura de la ruta objetivo como bases espaciales.
+           La estructura queda atada a la sesión: cerrar/destruir el agente la dispone. */
         try {
             if (typeof renderFolderBases === 'function') {
-                const treeRes = await fetch('/api/agent/browse?path=' + encodeURIComponent(targetPath));
-                if (treeRes.ok) {
-                    const tree = await treeRes.json();
-                    renderFolderBases(tree.path || targetPath, (tree.folders || []).map(f => f.path));
-                }
+                let structurePath = targetPath;
+                let structureFolders = [];
+                try {
+                    const treeRes = await fetch('/api/agent/browse?path=' + encodeURIComponent(targetPath));
+                    if (treeRes.ok) {
+                        const tree = await treeRes.json();
+                        structurePath = tree.path || targetPath;
+                        structureFolders = (tree.folders || []).map(f => f.path);
+                    }
+                } catch (e) { }
+                disposeFolderDeployment('default');
+                renderFolderBases(structurePath, structureFolders, data.sessionId, win.name);
             }
         } catch (e) { }
     } catch (err) {
@@ -3892,10 +4105,34 @@ function animate() {
 
     if (asteroidBelt) asteroidBelt.rotation.y += dt * 0.014;
 
+    starLayers.forEach(layer => {
+        const u = layer.userData;
+        layer.rotation.y += dt * u.drift;
+        layer.material.opacity = u.baseOpacity + Math.sin(elapsed * 1.9 + u.phase) * u.twinkle;
+    });
+
     if (elapsed > nextMeteorAt) {
         nextMeteorAt = elapsed + 6 + Math.random() * 9;
         spawnMeteor();
     }
+
+    if (elapsed > nextFlybyAt) {
+        nextFlybyAt = elapsed + 11 + Math.random() * 17;
+        spawnFlybyAsteroid();
+    }
+    flybyPool.forEach(r => {
+        const u = r.userData;
+        if (!u.active) return;
+        u.t += (u.speed * dt) / u.dist;
+        if (u.t >= 1) {
+            u.active = false;
+            r.visible = false;
+            return;
+        }
+        r.position.lerpVectors(u.start, u.end, u.t);
+        r.rotation.x += u.spinX * dt;
+        r.rotation.y += u.spinY * dt;
+    });
 
     if (sunMesh) sunMesh.rotation.y += dt * 0.15;
     if (sunCorona) sunCorona.rotation.z += dt * 0.06;
