@@ -1219,74 +1219,322 @@ function makeAntenna(height, colorHex) {
     return mast;
 }
 
+function buildDestroyerHull() {
+    const sb = 14;      /* semiancho casco inferior (popa) */
+    const st = 12.4;    /* semiancho casco superior (popa) */
+    const yb = -1.8;    /* quilla */
+    const ys = 2.1;     /* cubierta superior en popa */
+    const ybow = 1.0;   /* proa (cubierta baja) */
+    const zStern = -18;
+    const zBow = 26;
+
+    const v = [
+        [-sb, yb, zStern], [sb, yb, zStern], [0, yb, zBow],
+        [-st, ys, zStern], [st, ys, zStern], [0, ybow, zBow]
+    ];
+    const idx = [
+        0, 1, 2,
+        3, 5, 4,
+        0, 4, 1, 0, 3, 4,
+        0, 2, 5, 0, 5, 3,
+        1, 5, 2, 1, 4, 5
+    ];
+    const pos = [];
+    idx.forEach(i => pos.push(v[i][0], v[i][1], v[i][2]));
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    g.computeVertexNormals();
+    return g;
+}
+
+function sdRand(seed) {
+    let s = seed >>> 0;
+    return () => {
+        s = (s + 0x6D2B79F5) >>> 0;
+        let t = Math.imul(s ^ (s >>> 15), 1 | s);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+}
+
 function createBase() {
     baseMarker = new THREE.Group();
     const colorHex = 0x00ffcc;
+    const rand = sdRand(20251009);
 
-    const tower = new THREE.Mesh(new THREE.CylinderGeometry(1.9, 2.4, 6.6, 24), stationHull());
-    tower.position.y = -1.6;
-    baseMarker.add(tower);
+    const topY = z => 2.1 - 1.1 * (z + 18) / 44;
+    const topW = z => 12.4 * Math.max(0, 26 - z) / 44;
+    const botW = z => 14 * Math.max(0, 26 - z) / 44;
+    const slope = Math.atan(1.1 / 44);
 
-    const collar = new THREE.Mesh(new THREE.TorusGeometry(2.15, 0.16, 8, 40), stationAccent(colorHex, 1.2));
-    collar.rotation.x = Math.PI / 2;
-    collar.position.y = 1.4;
-    baseMarker.add(collar);
+    const hullMat = new THREE.MeshStandardMaterial({
+        color: 0xb0b6bf, metalness: 0.55, roughness: 0.55, flatShading: true
+    });
+    const plateMats = [0xbdc2ca, 0xa8aeb8, 0x969ca8, 0xc6cbd2, 0x9ea4ae].map(c =>
+        new THREE.MeshStandardMaterial({ color: c, metalness: 0.5, roughness: 0.55, flatShading: true }));
+    const plateDarkMats = [0x8b909a, 0x7d838e, 0x868c96].map(c =>
+        new THREE.MeshStandardMaterial({ color: c, metalness: 0.5, roughness: 0.6, flatShading: true }));
+    const darkMat = stationDark();
+    const glowAmber = new THREE.MeshBasicMaterial({ color: 0xffa64d });
+    const glowWhite = new THREE.MeshBasicMaterial({ color: 0xbfe9ff });
+    const glowDot = new THREE.MeshBasicMaterial({ color: 0xcfe8ff });
 
-    const dome = new THREE.Mesh(new THREE.SphereGeometry(1.9, 24, 14, 0, Math.PI * 2, 0, Math.PI / 2), stationHull());
-    dome.position.y = 1.7;
-    baseMarker.add(dome);
+    const addBox = (w, h, d, mat, x, y, z, rx) => {
+        const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+        m.position.set(x, y, z);
+        if (rx) m.rotation.x = rx;
+        baseMarker.add(m);
+        return m;
+    };
 
-    const antenna = makeAntenna(2.6, colorHex);
-    antenna.position.set(2.7, 1.5, 0);
-    baseMarker.add(antenna);
+    /* ── Casco en cuña (proa hacia afuera, +z) ── */
+    baseMarker.add(new THREE.Mesh(buildDestroyerHull(), hullMat));
 
-    /* Anillo de atraque donde estaciona la nave */
-    const dockRing = new THREE.Mesh(new THREE.TorusGeometry(4.8, 0.26, 10, 64), stationAccent(colorHex, 1.0));
-    dockRing.rotation.x = Math.PI / 2;
-    dockRing.position.y = 2.3;
-    baseMarker.add(dockRing);
-
-    const beacons = [];
-    for (let i = 0; i < 4; i++) {
-        const arm = new THREE.Group();
-        arm.rotation.y = (i / 4) * Math.PI * 2;
-
-        const strut = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 4.6, 8), stationDark());
-        strut.rotation.z = Math.PI / 2;
-        strut.position.set(2.4, 2.3, 0);
-        arm.add(strut);
-
-        const beacon = makeBeacon(colorHex);
-        beacon.position.set(4.8, 2.3, 0);
-        arm.add(beacon);
-        beacons.push(beacon);
-
-        baseMarker.add(arm);
+    /* ── Placas de cubierta superior (greebling determinista) ── */
+    for (let z = -16.5; z < 24;) {
+        const len = 1.6 + rand() * 4.2;
+        const wMax = topW(z + len / 2) * 0.92;
+        let x = -wMax;
+        while (x < wMax - 0.4) {
+            const w = Math.min(1.0 + rand() * 3.2, wMax - x);
+            if (rand() > 0.22) {
+                const th = 0.05 + rand() * 0.1;
+                addBox(w, th, len, plateMats[Math.floor(rand() * plateMats.length)],
+                    x + w / 2, topY(z + len / 2) + th / 2 + 0.015, z + len / 2, slope);
+            }
+            x += w + 0.25 + rand() * 0.9;
+        }
+        z += len + 0.35 + rand() * 0.7;
     }
 
-    /* Hábitat giratorio */
-    const rotor = new THREE.Group();
-    const habitat = makeHabitatRing(6.2, 0.3, colorHex, 4);
-    habitat.rotation.x = -Math.PI / 2;
-    rotor.add(habitat);
-    rotor.position.y = -2.6;
-    baseMarker.add(rotor);
+    /* Placas del casco inferior (más grandes, tonos oscuros) */
+    for (let z = -14; z < 22;) {
+        const len = 2.5 + rand() * 4.5;
+        const wMax = botW(z + len / 2) * 0.85;
+        const w = Math.min(3 + rand() * 6, wMax * 2);
+        const th = 0.05 + rand() * 0.08;
+        addBox(w, th, len, plateDarkMats[Math.floor(rand() * plateDarkMats.length)],
+            (rand() - 0.5) * Math.max(0, wMax * 2 - w), -1.8 - th / 2 - 0.01, z + len / 2);
+        z += len + 0.5 + rand();
+    }
 
-    const wingL = makeSolarWing(colorHex, 5.6);
-    wingL.position.set(-5.6, -4.6, 0);
-    baseMarker.add(wingL);
+    /* Lomo dorsal elevado */
+    addBox(1.7, 0.32, 13, hullMat, 0, topY(-3) + 0.16, -3, slope);
+    addBox(0.9, 0.14, 12, darkMat, 0, topY(-3) + 0.34, -3, slope);
 
-    const wingR = makeSolarWing(colorHex, 5.6);
-    wingR.position.set(5.6, -4.6, 0);
-    baseMarker.add(wingR);
+    /* Borde de quina con luces de navegación (ambos flancos) */
+    [-1, 1].forEach(s => {
+        for (let z = -16; z < 22.5; z += 3) {
+            const zc = z + 1.5;
+            addBox(0.32, 0.16, 3.05, plateMats[3], s * (topW(zc) - 0.12), topY(zc) + 0.09, zc, slope);
+            if (Math.floor(z / 3) % 2 === 0) {
+                addBox(0.1, 0.1, 0.12, glowDot, s * (topW(zc) + 0.1), topY(zc) + 0.14, zc);
+            }
+        }
+    });
+
+    /* ── Baterías antiaéreas gemelas (turbolasers) en los flancos ── */
+    [-8.5, -3, 2.5, 8].forEach(z => {
+        [-1, 1].forEach(s => {
+            const grp = new THREE.Group();
+            grp.position.set(s * (topW(z) - 1.1), topY(z) + 0.22, z);
+            const base = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.38, 1.4), darkMat);
+            grp.add(base);
+            [-0.3, 0.3].forEach(dz => {
+                const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.09, 1.35, 8), darkMat);
+                barrel.rotation.z = s > 0 ? (-Math.PI / 2 + 0.35) : (Math.PI / 2 - 0.35);
+                barrel.position.set(s * 0.68, 0.26, dz);
+                grp.add(barrel);
+                const muzzle = new THREE.Mesh(new THREE.SphereGeometry(0.07, 8, 6), glowDot);
+                muzzle.position.set(s * 1.24, 0.48, dz);
+                grp.add(muzzle);
+            });
+            baseMarker.add(grp);
+        });
+    });
+
+    /* Proa escalonada + domo de sensores */
+    [20.5, 22.6, 24.3].forEach((z, i) => {
+        const w = topW(z) * (1.5 - i * 0.35);
+        addBox(w, 0.14, 1.7, plateMats[3], 0, topY(z) + 0.09, z, slope);
+    });
+    const sensorDome = new THREE.Mesh(new THREE.SphereGeometry(0.5, 14, 10), hullMat);
+    sensorDome.position.set(0, topY(17) + 0.42, 17);
+    baseMarker.add(sensorDome);
+
+    /* ── Superestructura multi-nivel ── */
+    addBox(9.2, 0.9, 10.5, hullMat, 0, 2.55, -11.5);
+    addBox(7.4, 0.8, 8.6, plateMats[0], 0, 3.35, -11.8);
+    addBox(5.6, 0.7, 6.8, plateMats[1], 0, 4.05, -12.2);
+
+    /* Cuerpo de la torre con pods de turbolift */
+    addBox(3.6, 2.5, 3.8, hullMat, 0, 5.55, -12.6);
+    [-2.15, 2.15].forEach(x => {
+        const pod = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.55, 2.9, 12), plateMats[1]);
+        pod.position.set(x, 5.5, -12.6);
+        baseMarker.add(pod);
+        addBox(0.2, 2.2, 0.2, darkMat, x, 5.5, -11.0);
+    });
+
+    /* Puente de mando con ala frontal y ventanas */
+    addBox(6.6, 1.15, 2.4, hullMat, 0, 7.35, -12.9);
+    addBox(4.2, 0.5, 1.3, plateMats[0], 0, 7.35, -11.4);
+    addBox(5.4, 0.3, 2.0, plateMats[3], 0, 8.05, -12.9);
+    addBox(5.6, 0.38, 0.12, glowWhite, 0, 7.4, -11.72);
+    [-1, 1].forEach(s => addBox(0.12, 0.3, 1.5, glowWhite, s * 3.32, 7.4, -12.9));
+
+    /* Torres de escudo sobre mástil */
+    [-1.75, 1.75].forEach(x => {
+        addBox(0.18, 0.55, 0.18, darkMat, x, 8.45, -12.9);
+        const dome = new THREE.Mesh(new THREE.SphereGeometry(0.85, 16, 12), plateMats[3]);
+        dome.position.set(x, 9.15, -12.9);
+        baseMarker.add(dome);
+        addBox(1.2, 0.12, 1.2, darkMat, x, 8.62, -12.9);
+    });
+
+    /* Antenas y radares tras el puente */
+    [-1.5, -0.5, 0.5, 1.5].forEach((x, i) => {
+        addBox(0.07, 1.1 + (i % 2) * 0.7, 0.07, darkMat, x, 8.6 + (i % 2) * 0.35, -14.1);
+        if (i % 2 === 0) addBox(0.12, 0.12, 0.12, glowDot, x, 9.2 + (i % 2) * 0.7, -14.1);
+    });
+    [-1.1, 1.1].forEach(x => {
+        const dish = new THREE.Mesh(
+            new THREE.SphereGeometry(0.6, 12, 8, 0, Math.PI * 2, 0, Math.PI / 2.4), plateMats[3]);
+        dish.rotation.x = -Math.PI / 3;
+        dish.position.set(x, 8.7, -14.6);
+        baseMarker.add(dish);
+    });
+
+    /* Ventanas laterales de la torre */
+    [-1, 1].forEach(s => {
+        for (let i = 0; i < 4; i++) {
+            addBox(0.08, 0.14, 0.55, glowWhite, s * 1.82, 5.1 + (i % 2) * 0.9, -13.6 + i * 0.62);
+        }
+    });
+
+    /* Hangares laterales en la cubierta de la superestructura */
+    [-1, 1].forEach(s => {
+        addBox(1.9, 0.9, 3.2, darkMat, s * 4.5, 2.5, -11.5);
+        addBox(0.12, 0.6, 2.6, glowAmber, s * 3.62, 2.5, -11.5);
+    });
+
+    /* ── Hangar ventral principal con estructura interna ── */
+    addBox(6.8, 0.35, 8.8, darkMat, 0, -1.78, -6.5);
+    addBox(5.2, 0.4, 7.2, glowAmber, 0, -1.83, -6.5);
+    [-8.2, -6.5, -4.8].forEach(z => addBox(5.2, 0.42, 0.35, darkMat, 0, -1.84, z));
+    [-2.0, 2.0].forEach(x => addBox(0.3, 0.42, 7.2, darkMat, x, -1.84, -6.5));
+
+    /* Hangares secundarios */
+    [[-3.6, 1.5], [3.6, 1.5], [-2.9, 7.5], [2.9, 7.5]].forEach(([x, z]) => {
+        addBox(1.5, 0.24, 2.4, darkMat, x, -1.76, z);
+        addBox(1.1, 0.26, 1.9, glowAmber, x, -1.78, z);
+    });
+
+    /* Cresta ventral con canal iluminado */
+    addBox(1.3, 0.5, 17, darkMat, 0, -1.95, 9);
+    addBox(0.45, 0.52, 16, new THREE.MeshBasicMaterial({ color: 0x1a4d86 }), 0, -1.97, 9);
+
+    /* ── Grupo de motores (3 grandes + 4 pequeños) con rima y aletas ── */
+    const engineFlames = [];
+    const engines = [
+        { x: -4.8, y: -0.4, r: 1.6 }, { x: 0, y: -0.4, r: 1.6 }, { x: 4.8, y: -0.4, r: 1.6 },
+        { x: -7.2, y: 1.3, r: 0.75 }, { x: -2.4, y: 1.5, r: 0.75 },
+        { x: 2.4, y: 1.5, r: 0.75 }, { x: 7.2, y: 1.3, r: 0.75 }
+    ];
+    engines.forEach(e => {
+        const housing = new THREE.Mesh(
+            new THREE.CylinderGeometry(e.r, e.r * 1.12, 1.5, 20), darkMat);
+        housing.rotation.x = Math.PI / 2;
+        housing.position.set(e.x, e.y, -18.55);
+        baseMarker.add(housing);
+
+        const rim = new THREE.Mesh(new THREE.TorusGeometry(e.r * 1.02, 0.13, 8, 24), plateMats[1]);
+        rim.position.set(e.x, e.y, -19.25);
+        baseMarker.add(rim);
+
+        const inner = new THREE.Mesh(
+            new THREE.CircleGeometry(e.r * 0.85, 20),
+            new THREE.MeshBasicMaterial({ color: 0xe8f6ff }));
+        inner.rotation.y = Math.PI;
+        inner.position.set(e.x, e.y, -19.3);
+        baseMarker.add(inner);
+
+        const disc = new THREE.Mesh(
+            new THREE.CircleGeometry(e.r * 0.62, 18),
+            new THREE.MeshBasicMaterial({ color: 0x66bfff }));
+        disc.rotation.y = Math.PI;
+        disc.position.set(e.x, e.y, -19.32);
+        baseMarker.add(disc);
+
+        if (e.r > 1) {
+            for (let k = 0; k < 8; k++) {
+                const a = (k / 8) * Math.PI * 2;
+                addBox(0.14, 0.5, 0.9, darkMat,
+                    e.x + Math.cos(a) * e.r * 1.25, e.y + Math.sin(a) * e.r * 1.25, -18.5);
+            }
+            const flameOut = new THREE.Mesh(
+                new THREE.ConeGeometry(e.r * 0.78, 3.4, 14, 1, true),
+                new THREE.MeshBasicMaterial({
+                    color: 0x3f8fd9, transparent: true, opacity: 0.4,
+                    blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide
+                }));
+            flameOut.rotation.x = -Math.PI / 2;
+            flameOut.position.set(e.x, e.y, -21.3);
+            baseMarker.add(flameOut);
+            engineFlames.push(flameOut);
+
+            const flameIn = new THREE.Mesh(
+                new THREE.ConeGeometry(e.r * 0.4, 2.3, 12, 1, true),
+                new THREE.MeshBasicMaterial({
+                    color: 0xcfeaff, transparent: true, opacity: 0.7,
+                    blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide
+                }));
+            flameIn.rotation.x = -Math.PI / 2;
+            flameIn.position.set(e.x, e.y, -20.7);
+            baseMarker.add(flameIn);
+            engineFlames.push(flameIn);
+        }
+    });
+
+    /* Divisores verticales del banco de motores + rejilla de popa */
+    [-8.4, -6.0, -3.6, -1.2, 1.2, 3.6, 6.0, 8.4].forEach(x => {
+        addBox(0.18, 3.3, 0.7, darkMat, x, 0.1, -18.45);
+    });
+    addBox(18.5, 0.25, 0.5, plateMats[1], 0, 1.95, -18.4);
+
+    const engineLight = new THREE.PointLight(0x77ccff, 1.5, 44);
+    engineLight.position.set(0, 0.2, -20.5);
+    baseMarker.add(engineLight);
+
+    /* ── Pasillo de aterrizaje dorsal (luces de guía) ── */
+    [-2.6, 2.6].forEach(x => {
+        const strip = new THREE.Mesh(
+            new THREE.BoxGeometry(0.5, 0.06, 16),
+            stationAccent(colorHex, 1.4)
+        );
+        strip.position.set(x, (topY(4) + topY(20)) / 2 + 0.22, 12);
+        strip.rotation.x = slope;
+        baseMarker.add(strip);
+    });
+
+    const beacons = [];
+    [
+        [-3.2, 5], [3.2, 5], [-2.0, 19], [2.0, 19],
+        [-12.5, -17], [12.5, -17], [0, 25]
+    ].forEach(([x, z]) => {
+        const beacon = makeBeacon(colorHex);
+        beacon.position.set(x, topY(z) + 0.5, z);
+        baseMarker.add(beacon);
+        beacons.push(beacon);
+    });
 
     const label = makeLabelSprite('BASE DE CONTROL', '#00ffcc');
-    label.position.y = 8;
+    label.position.y = 11.5;
     label.scale.set(18, 4.5, 1);
     baseMarker.add(label);
 
-    baseMarker.userData.rotor = rotor;
     baseMarker.userData.beacons = beacons;
+    baseMarker.userData.engineFlames = engineFlames;
 
     baseMarker.position.copy(BASE_POSITION);
     baseMarker.position.y -= 2.5;
@@ -1296,60 +1544,340 @@ function createBase() {
 function createPortal() {
     portal = new THREE.Group();
     const colorHex = 0xb44bff;
+    const rand = sdRand(761977);
 
-    /* Torre central con módulo de mando */
-    const tower = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.9, 8, 24), stationHull());
-    portal.add(tower);
+    const hullMat = new THREE.MeshStandardMaterial({
+        color: 0xb9bec6, metalness: 0.55, roughness: 0.55, flatShading: true
+    });
+    const plateMats = [0xc3c8d0, 0xa9aeb8, 0x9aa0aa, 0xb2b7c0].map(c =>
+        new THREE.MeshStandardMaterial({ color: c, metalness: 0.5, roughness: 0.55, flatShading: true }));
+    const darkMat = stationDark();
+    const glowWin = new THREE.MeshBasicMaterial({ color: 0xd9c2ff });
+    const glowDot = new THREE.MeshBasicMaterial({ color: 0xcfb8ff });
+    const glowAmber = new THREE.MeshBasicMaterial({ color: 0xffa64d });
+    const accentMat = stationAccent(colorHex, 1.2);
 
-    const command = new THREE.Mesh(new THREE.SphereGeometry(2.1, 24, 18), stationHull());
-    command.position.y = 4.6;
-    portal.add(command);
+    const addBox = (w, h, d, mat, x, y, z, rx) => {
+        const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+        m.position.set(x, y, z);
+        if (rx) m.rotation.x = rx;
+        portal.add(m);
+        return m;
+    };
+    const addTurret = (x, y, z) => {
+        const base = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.38, 0.24, 10), darkMat);
+        base.position.set(x, y, z);
+        portal.add(base);
+        addBox(0.5, 0.22, 0.42, plateMats[2], x, y + 0.2, z);
+        [-0.14, 0.14].forEach(dx => {
+            const b = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.055, 0.9, 6), darkMat);
+            b.rotation.x = Math.PI / 2 - 0.22;
+            b.position.set(x + dx, y + 0.34, z + 0.42);
+            portal.add(b);
+        });
+    };
+    const engineFlames = [];
+    const beacons = [];
 
-    const band = new THREE.Mesh(new THREE.TorusGeometry(2.15, 0.16, 8, 40), stationAccent(colorHex, 1.3));
-    band.rotation.x = Math.PI / 2;
-    band.position.y = 4.6;
-    portal.add(band);
+    /* ══ MÓDULO DE MANDO (proa, +z) ══ */
+    const bulb = new THREE.Mesh(new THREE.SphereGeometry(1.7, 10, 8), hullMat);
+    bulb.scale.set(1.15, 0.85, 1.5);
+    bulb.position.set(0, 0, 13.4);
+    portal.add(bulb);
 
-    const docking = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.7, 1.4, 20), stationAccent(colorHex, 1.0));
-    docking.position.y = -4.6;
-    portal.add(docking);
+    /* Bandas ecuatoriales del bulbo */
+    [12.6, 13.4, 14.2].forEach(z => {
+        const band = new THREE.Mesh(new THREE.TorusGeometry(1.92, 0.06, 6, 36), plateMats[2]);
+        band.position.set(0, 0, z);
+        portal.add(band);
+    });
 
-    /* Rueda vertical de habitación (gira sobre su eje) */
-    portalRingInner = new THREE.Group();
-    portalRingInner.add(makeHabitatRing(5.4, 0.35, colorHex, 6));
-    portal.add(portalRingInner);
+    /* Placas facetadas sobre el bulbo */
+    for (let i = 0; i < 14; i++) {
+        const a = rand() * Math.PI * 2;
+        const px = Math.cos(a) * 1.42;
+        const py = Math.sin(a) * 1.05;
+        const p = addBox(0.4 + rand() * 0.7, 0.08, 0.5 + rand() * 0.9,
+            plateMats[Math.floor(rand() * 4)], px, py, 12.2 + rand() * 2.4);
+        p.rotation.z = a - Math.PI / 2;
+    }
 
-    /* Anillos horizontales de sacrificio: la nave pasa por el hueco */
-    const ringTop = makeHabitatRing(8, 0.55, colorHex, 6);
-    ringTop.rotation.x = -Math.PI / 2;
-    ringTop.position.y = 3.5;
-    portal.add(ringTop);
+    /* Puente en martillo */
+    addBox(4.6, 0.85, 1.5, hullMat, 0, 0.15, 15.7);
+    addBox(4.2, 0.12, 1.2, plateMats[0], 0, 0.62, 15.7);
+    addBox(3.8, 0.1, 1.3, darkMat, 0, -0.32, 15.7);
+    [-2.3, 2.3].forEach(x => {
+        const cap = new THREE.Mesh(new THREE.SphereGeometry(0.46, 10, 8), plateMats[0]);
+        cap.position.set(x, 0.15, 15.7);
+        portal.add(cap);
+        const capDish = new THREE.Mesh(
+            new THREE.SphereGeometry(0.22, 8, 6, 0, Math.PI * 2, 0, Math.PI / 2.2), plateMats[2]);
+        capDish.rotation.x = -Math.PI / 2.2;
+        capDish.position.set(x, 0.15, 16.25);
+        portal.add(capDish);
+        const nav = makeBeacon(colorHex);
+        nav.position.set(x > 0 ? 2.58 : -2.58, 0.15, 15.7);
+        portal.add(nav);
+        beacons.push(nav);
+    });
+    addBox(3.9, 0.3, 0.1, glowWin, 0, 0.2, 16.48);
+    [-1, 1].forEach(s => addBox(0.1, 0.26, 1.05, glowWin, s * 2.32, 0.2, 15.7));
+    for (let i = 0; i < 5; i++) {
+        addBox(0.16, 0.1, 0.22, glowDot, -1.6 + i * 0.8, 0.72, 15.3 + (i % 2) * 0.5);
+    }
 
-    const ringBottom = makeHabitatRing(8, 0.55, colorHex, 6);
-    ringBottom.rotation.x = -Math.PI / 2;
-    ringBottom.position.y = -3.5;
-    portal.add(ringBottom);
+    /* Sensores, mástiles y torreta dorsal del bulbo */
+    const dish = new THREE.Mesh(
+        new THREE.SphereGeometry(0.55, 12, 8, 0, Math.PI * 2, 0, Math.PI / 2.4), plateMats[2]);
+    dish.rotation.x = -Math.PI / 3;
+    dish.position.set(0.7, 1.25, 13.8);
+    portal.add(dish);
+    addBox(0.07, 1.3, 0.07, darkMat, -0.6, 1.5, 13.2);
+    addBox(0.05, 0.9, 0.05, darkMat, -0.95, 1.3, 13.5);
+    const tipBeacon = makeBeacon(colorHex);
+    tipBeacon.position.set(-0.6, 2.2, 13.2);
+    portal.add(tipBeacon);
+    beacons.push(tipBeacon);
+    addTurret(0, 1.48, 12.3);
 
-    /* Paneles solares superior e inferior */
-    const wingTop = makeSolarWing(colorHex, 7);
-    wingTop.position.set(0, 7.0, 0);
-    portal.add(wingTop);
+    /* Sensores laterales y agarres ventrales */
+    [-1, 1].forEach(s => {
+        const pod = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.26, 0.8, 8), plateMats[1]);
+        pod.rotation.z = Math.PI / 2;
+        pod.position.set(s * 1.95, -0.35, 14.1);
+        portal.add(pod);
+        addBox(0.1, 0.12, 0.12, glowDot, s * 2.4, -0.35, 14.1);
+        addBox(0.5, 0.42, 1.3, plateMats[1], s * 1.95, -0.25, 13.0);
+    });
+    [-0.8, 0.8].forEach(x => {
+        const clamp = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.3, 0.6, 8), darkMat);
+        clamp.position.set(x, -1.35, 13.4);
+        portal.add(clamp);
+    });
+    const dockRing = new THREE.Mesh(new THREE.TorusGeometry(0.75, 0.08, 6, 24), accentMat);
+    dockRing.rotation.x = Math.PI / 2;
+    dockRing.position.set(0, -1.5, 13.4);
+    portal.add(dockRing);
 
-    const pylonTop = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, 3.2, 8), stationDark());
-    pylonTop.position.y = 5.4;
-    portal.add(pylonTop);
+    /* Cuello de unión bulbo-lomo */
+    addBox(1.35, 1.1, 1.6, hullMat, 0, 0.35, 11.4);
+    [10.9, 11.4, 11.9].forEach(z => addBox(1.55, 0.12, 0.18, darkMat, 0, 0.35, z));
 
-    const wingBottom = makeSolarWing(colorHex, 7);
-    wingBottom.position.set(0, -7.0, 0);
-    portal.add(wingBottom);
+    /* ══ LOMO DE CELOSÍA (espinazo dorsal) ══ */
+    addBox(1.15, 0.85, 13.5, hullMat, 0, 0.75, 5.2);
+    [-0.65, 0.65].forEach(x => addBox(0.1, 0.55, 13.5, plateMats[1], x, 0.75, 5.2));
+    for (let z = -0.5; z < 11.5; z += 1.5) {
+        addBox(1.5, 0.12, 0.22, darkMat, 0, 1.18, z);
+    }
+    addBox(0.55, 0.5, 13, darkMat, 0, -0.55, 5.4);
+    [1, 5, 9].forEach(z => {
+        [-0.45, 0.45].forEach(x => addBox(0.14, 1.0, 0.14, darkMat, x, 0.1, z));
+    });
+    [-0.74, 0.74].forEach(x => addBox(0.08, 0.14, 12.4, accentMat, x, 0.42, 5.5));
 
-    const pylonBottom = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, 2.4, 8), stationDark());
-    pylonBottom.position.y = -5.8;
-    portal.add(pylonBottom);
+    /* Celosía diagonal en los flancos del lomo */
+    let latK = 0;
+    for (let z = -0.4; z < 11.2; z += 1.6) {
+        [-1, 1].forEach(s => {
+            const diag = addBox(0.09, 0.09, 1.75, darkMat, s * 0.6, 0.42, z + 0.75);
+            diag.rotation.x = (latK % 2 ? 0.62 : -0.62);
+        });
+        latK++;
+    }
 
-    const mast = makeAntenna(3.2, colorHex);
-    mast.position.set(2.4, 5.4, 0);
-    portal.add(mast);
+    /* Tuberías de servicio bajo el lomo */
+    [-0.22, 0.22].forEach(x => {
+        const pipe = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 12.6, 8), darkMat);
+        pipe.rotation.x = Math.PI / 2;
+        pipe.position.set(x, -0.28, 5.4);
+        portal.add(pipe);
+    });
+
+    /* Luces de guía y greebles en el lomo */
+    for (let z = 0; z < 11.5; z += 1.7) {
+        [-0.7, 0.7].forEach(x => addBox(0.09, 0.09, 0.14, glowDot, x, 0.2, z));
+    }
+    for (let i = 0; i < 8; i++) {
+        addBox(0.28 + rand() * 0.5, 0.18, 0.5 + rand() * 1.0, darkMat,
+            (rand() - 0.5) * 0.7, 1.28, rand() * 11);
+    }
+    [2.5, 7.5].forEach(z => {
+        const vent = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.16, 0.5, 8), darkMat);
+        vent.position.set(0.3, 1.45, z);
+        portal.add(vent);
+    });
+    addTurret(0, 1.25, 1.8);
+    addTurret(0, 1.25, 8.6);
+
+    /* ══ BLOQUE DE INGENIERÍA (popa, -z) ══ */
+    addBox(5.2, 2.8, 8.5, hullMat, 0, 0, -9.5);
+    addBox(4.0, 1.2, 6.5, plateMats[0], 0, 1.9, -10);
+    addBox(3.2, 0.5, 5.0, plateMats[2], 0, 2.7, -10.2);
+
+    /* Placas del casco de ingeniería */
+    for (let i = 0; i < 20; i++) {
+        addBox(0.5 + rand() * 1.3, 0.06 + rand() * 0.09, 0.5 + rand() * 1.4,
+            plateMats[Math.floor(rand() * 4)],
+            (rand() - 0.5) * 2.8, 2.98, -8.0 - rand() * 4.4);
+    }
+    for (let i = 0; i < 12; i++) {
+        addBox(0.6 + rand() * 1.2, 0.08, 0.5 + rand() * 1.3, plateMats[Math.floor(rand() * 4)],
+            (rand() > 0.5 ? 1 : -1) * (1.9 + rand() * 0.6), 1.46, -6.2 - rand() * 6.6);
+    }
+    /* Placas laterales en las caras ±x del bloque principal */
+    [-1, 1].forEach(s => {
+        for (let i = 0; i < 8; i++) {
+            addBox(0.08, 0.4 + rand() * 0.8, 0.6 + rand() * 1.5,
+                plateMats[Math.floor(rand() * 4)], s * 2.63,
+                -1.0 + rand() * 1.8, -6.2 - rand() * 6.5);
+        }
+    });
+
+    /* Radiadores laterales */
+    [-1, 1].forEach(s => {
+        for (let i = 0; i < 4; i++) {
+            addBox(0.14, 0.16, 5.6, darkMat, s * 2.72, -0.95 + i * 0.52, -9.5);
+        }
+        addBox(0.07, 0.14, 6.0, accentMat, s * 2.7, 1.05, -9.5);
+    });
+
+    /* Aletas laterales con baterías gemelas */
+    [-1, 1].forEach(s => {
+        addBox(1.5, 1.0, 3.2, plateMats[1], s * 3.2, -0.3, -8.5);
+        addBox(1.2, 0.14, 2.6, plateMats[3], s * 3.2, 0.24, -8.5);
+        [-8.85, -8.15].forEach(dz => {
+            const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.1, 1.5, 8), darkMat);
+            barrel.rotation.z = s > 0 ? -Math.PI / 2 : Math.PI / 2;
+            barrel.position.set(s * 4.4, -0.1, dz);
+            portal.add(barrel);
+        });
+        addBox(0.3, 0.3, 0.7, darkMat, s * 3.75, -0.1, -8.5);
+        const sDome = new THREE.Mesh(new THREE.SphereGeometry(0.26, 10, 8), plateMats[2]);
+        sDome.position.set(s * 3.4, 0.55, -7.6);
+        portal.add(sDome);
+        addBox(0.1, 0.12, 0.14, glowWin, s * 5.0, -0.1, -8.5);
+    });
+
+    /* Aletón de comunicaciones + balizas */
+    addBox(0.45, 3.4, 2.2, hullMat, 0, 4.2, -11.3);
+    addBox(0.6, 3.0, 0.14, darkMat, 0.3, 4.2, -11.3);
+    addBox(0.9, 0.3, 1.6, plateMats[2], 0, 5.9, -11.3);
+    addBox(0.06, 1.1, 0.06, darkMat, 0, 6.5, -11.3);
+    addBox(0.05, 0.8, 0.05, darkMat, 0.22, 6.35, -11.5);
+    const finBeacon = makeBeacon(colorHex);
+    finBeacon.position.set(0, 7.1, -11.3);
+    portal.add(finBeacon);
+    beacons.push(finBeacon);
+
+    /* Bosque de antenas y radares en la cubierta superior */
+    [-1.5, -0.5, 0.6, 1.6].forEach((x, i) => {
+        addBox(0.06, 0.9 + (i % 2) * 0.6, 0.06, darkMat, x, 3.4 + (i % 2) * 0.3, -12.9);
+        if (i % 2 === 0) addBox(0.1, 0.1, 0.1, glowDot, x, 3.9 + (i % 2) * 0.6, -12.9);
+    });
+    [-1.2, 1.2].forEach(x => {
+        const d = new THREE.Mesh(
+            new THREE.SphereGeometry(0.45, 10, 8, 0, Math.PI * 2, 0, Math.PI / 2.4), plateMats[3]);
+        d.rotation.x = -Math.PI / 3;
+        d.position.set(x, 3.35, -9.0);
+        portal.add(d);
+        addBox(0.12, 0.45, 0.12, darkMat, x, 3.1, -9.0);
+    });
+    /* Rejillas de ventilación */
+    for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 4; j++) {
+            addBox(0.5, 0.08, 0.14, darkMat, -0.8 + j * 0.55, 3.0, -11.6 - i * 0.4);
+        }
+    }
+    addTurret(-1.4, 3.0, -7.6);
+    addTurret(1.4, 3.0, -7.6);
+
+    /* Hangar ventral con luces de aproximación */
+    addBox(2.3, 0.3, 3.1, darkMat, 0, -1.5, -8);
+    addBox(1.7, 0.32, 2.5, glowAmber, 0, -1.53, -8);
+    addBox(2.6, 0.14, 0.3, plateMats[2], 0, -1.48, -6.35);
+    for (let i = 0; i < 4; i++) {
+        addBox(0.12, 0.1, 0.12, glowAmber, -0.75 + i * 0.5, -1.5, -5.9);
+    }
+    addBox(4.4, 0.16, 0.3, accentMat, 0, -1.45, -5.6);
+
+    /* Muro de popa tras los motores */
+    addBox(5.1, 2.7, 0.25, plateMats[1], 0, 0, -13.7);
+
+    /* ══ GRUPO DE Motores (2 grandes + 2 pequeños) ══ */
+    const engines = [
+        { x: -1.55, y: -0.55, r: 1.35 }, { x: 1.55, y: -0.55, r: 1.35 },
+        { x: 0, y: -0.55, r: 0.7 }, { x: 0, y: 1.35, r: 0.6 }
+    ];
+    engines.forEach(e => {
+        const housing = new THREE.Mesh(
+            new THREE.CylinderGeometry(e.r, e.r * 1.12, 1.3, 18), darkMat);
+        housing.rotation.x = Math.PI / 2;
+        housing.position.set(e.x, e.y, -14.15);
+        portal.add(housing);
+
+        const rim = new THREE.Mesh(new THREE.TorusGeometry(e.r * 1.02, 0.12, 8, 22), plateMats[1]);
+        rim.position.set(e.x, e.y, -14.75);
+        portal.add(rim);
+
+        const rim2 = new THREE.Mesh(new THREE.TorusGeometry(e.r * 1.14, 0.07, 6, 20), plateMats[2]);
+        rim2.position.set(e.x, e.y, -13.75);
+        portal.add(rim2);
+
+        const inner = new THREE.Mesh(
+            new THREE.CircleGeometry(e.r * 0.85, 18),
+            new THREE.MeshBasicMaterial({ color: 0xe8ddff }));
+        inner.rotation.y = Math.PI;
+        inner.position.set(e.x, e.y, -14.8);
+        portal.add(inner);
+
+        const disc = new THREE.Mesh(
+            new THREE.CircleGeometry(e.r * 0.6, 16),
+            new THREE.MeshBasicMaterial({ color: 0x9b6bff }));
+        disc.rotation.y = Math.PI;
+        disc.position.set(e.x, e.y, -14.82);
+        portal.add(disc);
+
+        if (e.r > 1) {
+            for (let k = 0; k < 8; k++) {
+                const a = (k / 8) * Math.PI * 2;
+                addBox(0.12, 0.42, 0.8, darkMat,
+                    e.x + Math.cos(a) * e.r * 1.28, e.y + Math.sin(a) * e.r * 1.28, -14.1);
+            }
+            const flameOut = new THREE.Mesh(
+                new THREE.ConeGeometry(e.r * 0.78, 3.0, 14, 1, true),
+                new THREE.MeshBasicMaterial({
+                    color: 0x7a4fd9, transparent: true, opacity: 0.42,
+                    blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide
+                }));
+            flameOut.rotation.x = -Math.PI / 2;
+            flameOut.position.set(e.x, e.y, -16.7);
+            portal.add(flameOut);
+            engineFlames.push(flameOut);
+
+            const flameIn = new THREE.Mesh(
+                new THREE.ConeGeometry(e.r * 0.4, 2.0, 12, 1, true),
+                new THREE.MeshBasicMaterial({
+                    color: 0xeadcff, transparent: true, opacity: 0.7,
+                    blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide
+                }));
+            flameIn.rotation.x = -Math.PI / 2;
+            flameIn.position.set(e.x, e.y, -16.1);
+            portal.add(flameIn);
+            engineFlames.push(flameIn);
+        }
+    });
+
+    /* Divisores y bandas del banco de motores */
+    [-2.6, -0.7, 0.7, 2.6].forEach(x => {
+        addBox(0.16, 2.6, 0.55, darkMat, x, 0.1, -14.1);
+    });
+    addBox(5.0, 0.22, 0.45, plateMats[0], 0, 1.55, -14.05);
+    addBox(5.0, 0.2, 0.4, plateMats[2], 0, -1.85, -14.0);
+    [-2.2, 2.2].forEach(x => addBox(0.35, 0.35, 0.5, glowDot, x, 1.55, -14.3));
+
+    const engineLight = new THREE.PointLight(0x8866ff, 1.3, 40);
+    engineLight.position.set(0, 0, -16);
+    portal.add(engineLight);
 
     portalGlow = new THREE.Sprite(new THREE.SpriteMaterial({
         map: glowTexture,
@@ -1359,13 +1887,17 @@ function createPortal() {
         depthWrite: false,
         blending: THREE.AdditiveBlending
     }));
-    portalGlow.scale.setScalar(16);
+    portalGlow.scale.setScalar(14);
+    portalGlow.position.set(0, 0.5, -5);
     portal.add(portalGlow);
 
     const label = makeLabelSprite('DESTINO FINAL', '#b44bff');
-    label.position.y = 11;
+    label.position.y = 10;
     label.scale.set(16, 4, 1);
     portal.add(label);
+
+    portal.userData.engineFlames = engineFlames;
+    portal.userData.beacons = beacons;
 
     portal.position.copy(PORTAL_POSITION);
     scene.add(portal);
@@ -1606,65 +2138,274 @@ function disposeFolderBases() {
     folderBaseCore = null;
 }
 
-function buildFolderBase(name, colorHex, scale) {
+function buildFolderBase(name, colorHex, scale, variant) {
     const group = new THREE.Group();
-
     const core = new THREE.Group();
+    const isDeathStar = variant === 'deathstar';
+    const sRand = sdRand(isDeathStar ? 1977 : name.length * 977 + 13);
 
-    const body = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 1.1, 2.2, 18), stationHull());
-    core.add(body);
+    const hullGray = new THREE.MeshStandardMaterial({ color: 0x9aa0a8, metalness: 0.45, roughness: 0.62 });
+    const hullLight = new THREE.MeshStandardMaterial({ color: 0xb4bac2, metalness: 0.45, roughness: 0.6, flatShading: true });
+    const hullMid = new THREE.MeshStandardMaterial({ color: 0x878d96, metalness: 0.45, roughness: 0.65, flatShading: true });
+    const hullDark = new THREE.MeshStandardMaterial({ color: 0x3a4048, metalness: 0.5, roughness: 0.65 });
+    const glowDot = new THREE.MeshBasicMaterial({ color: 0x9fd8ff });
+    const glowWarm = new THREE.MeshBasicMaterial({ color: 0xffe6b0 });
+    let superlaser = null;
 
-    const dome = new THREE.Mesh(
-        new THREE.SphereGeometry(0.9, 16, 10, 0, Math.PI * 2, 0, Math.PI / 2),
-        stationHull()
-    );
-    dome.position.y = 1.1;
-    core.add(dome);
+    if (isDeathStar) {
+        const R = 5;
+        core.add(new THREE.Mesh(new THREE.SphereGeometry(R, 40, 30), hullGray));
 
-    const collar = new THREE.Mesh(new THREE.TorusGeometry(1.0, 0.1, 8, 28), stationAccent(colorHex, 1.2));
-    collar.rotation.x = Math.PI / 2;
-    collar.position.y = 0.7;
-    core.add(collar);
+        /* Zanja ecuatorial con labios, luces y estructuras internas */
+        core.add(new THREE.Mesh(
+            new THREE.CylinderGeometry(R + 0.04, R + 0.04, 0.55, 56, 1, true), hullDark));
+        [0.33, -0.33].forEach(y => {
+            const lip = new THREE.Mesh(new THREE.TorusGeometry(R + 0.02, 0.06, 6, 56), hullLight);
+            lip.rotation.x = Math.PI / 2;
+            lip.position.y = y;
+            core.add(lip);
+        });
+        for (let i = 0; i < 28; i++) {
+            const a = (i / 28) * Math.PI * 2;
+            const dot = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.1, 0.1), i % 3 ? glowDot : glowWarm);
+            dot.position.set(Math.cos(a) * (R + 0.09), i % 2 ? 0.14 : -0.14, Math.sin(a) * (R + 0.09));
+            core.add(dot);
+        }
+        /* Hangares y módulos dentro de la zanja */
+        for (let i = 0; i < 10; i++) {
+            const a = (i / 10) * Math.PI * 2 + 0.15;
+            const slot = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.16, 0.22), hullDark);
+            slot.position.set(Math.cos(a) * (R - 0.02), 0, Math.sin(a) * (R - 0.02));
+            slot.lookAt(0, 0, 0);
+            core.add(slot);
+            if (i % 2 === 0) {
+                const bay = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.08, 0.06),
+                    new THREE.MeshBasicMaterial({ color: 0xffc36e }));
+                bay.position.set(Math.cos(a) * (R + 0.05), 0, Math.sin(a) * (R + 0.05));
+                bay.lookAt(0, 0, 0);
+                core.add(bay);
+            }
+        }
+
+        /* Estaciones sobre la banda ecuatorial (con mástiles) */
+        for (let i = 0; i < 6; i++) {
+            const a = (i / 6) * Math.PI * 2 + 0.3;
+            const st = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.35, 0.7), hullLight);
+            st.position.set(Math.cos(a) * (R + 0.16), 0.45, Math.sin(a) * (R + 0.16));
+            st.lookAt(0, 0.45, 0);
+            core.add(st);
+            const ant = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.05, 0.5, 5), hullDark);
+            ant.position.set(Math.cos(a) * (R + 0.16), 0.85, Math.sin(a) * (R + 0.16));
+            core.add(ant);
+        }
+
+        /* Zanjas meridianas (3 en total) */
+        [0, Math.PI / 3, 2 * Math.PI / 3].forEach(rot => {
+            const meridian = new THREE.Mesh(new THREE.TorusGeometry(R + 0.03, 0.1, 6, 64), hullDark);
+            meridian.rotation.y = Math.PI / 2 + rot;
+            core.add(meridian);
+        });
+
+        /* Costuras de paneles (anillos de latitud) */
+        [-0.75, -0.42, 0.42, 0.78].forEach(lat => {
+            const seam = new THREE.Mesh(
+                new THREE.TorusGeometry(R * Math.cos(lat), 0.045, 5, 56), hullDark);
+            seam.rotation.x = Math.PI / 2;
+            seam.position.y = R * Math.sin(lat);
+            core.add(seam);
+        });
+
+        /* Placas de superficie: dispersas + bandas densas cerca del ecuador */
+        const plateMatsDS = [hullLight, hullMid, hullGray];
+        for (let i = 0; i < 58; i++) {
+            const u = new THREE.Vector3(sRand() * 2 - 1, sRand() * 2 - 1, sRand() * 2 - 1).normalize();
+            if (Math.abs(u.y) > 0.9) continue;
+            const plate = new THREE.Mesh(
+                new THREE.BoxGeometry(0.4 + sRand() * 1.2, 0.07, 0.4 + sRand() * 1.2),
+                plateMatsDS[Math.floor(sRand() * 3)]);
+            plate.position.copy(u).multiplyScalar(R + 0.04);
+            plate.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), u);
+            core.add(plate);
+        }
+        for (let i = 0; i < 26; i++) {
+            const a = sRand() * Math.PI * 2;
+            const lat = (sRand() - 0.5) * 0.5;
+            const u = new THREE.Vector3(Math.cos(a) * Math.cos(lat), Math.sin(lat), Math.sin(a) * Math.cos(lat));
+            const plate = new THREE.Mesh(
+                new THREE.BoxGeometry(0.35 + sRand() * 0.8, 0.09, 0.5 + sRand() * 1.0),
+                plateMatsDS[Math.floor(sRand() * 3)]);
+            plate.position.copy(u).multiplyScalar(R + 0.05);
+            plate.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), u);
+            core.add(plate);
+        }
+        /* Paneles oscuros (recesos) */
+        for (let i = 0; i < 12; i++) {
+            const u = new THREE.Vector3(sRand() * 2 - 1, sRand() * 2 - 1, sRand() * 2 - 1).normalize();
+            if (Math.abs(u.y) > 0.85) continue;
+            const rec = new THREE.Mesh(
+                new THREE.BoxGeometry(0.7 + sRand() * 1.0, 0.05, 0.7 + sRand() * 1.0), hullDark);
+            rec.position.copy(u).multiplyScalar(R + 0.03);
+            rec.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), u);
+            core.add(rec);
+        }
+
+        /* Torres defensivas (bultos radiales) */
+        for (let i = 0; i < 14; i++) {
+            const u = new THREE.Vector3(sRand() * 2 - 1, (sRand() - 0.5) * 1.4, sRand() * 2 - 1).normalize();
+            const turret = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.12, 0.3, 6), hullDark);
+            turret.position.copy(u).multiplyScalar(R + 0.12);
+            turret.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), u);
+            core.add(turret);
+        }
+
+        /* Luces de superficie: dispersas + clústeres urbanos */
+        for (let i = 0; i < 40; i++) {
+            const u = new THREE.Vector3(sRand() * 2 - 1, sRand() * 2 - 1, sRand() * 2 - 1).normalize();
+            if (Math.abs(u.y) > 0.94) continue;
+            const dot = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.09, 0.09), i % 4 ? glowDot : glowWarm);
+            dot.position.copy(u).multiplyScalar(R + 0.08);
+            core.add(dot);
+        }
+        for (let c = 0; c < 7; c++) {
+            const cu = new THREE.Vector3(sRand() * 2 - 1, (sRand() - 0.5) * 1.6, sRand() * 2 - 1).normalize();
+            for (let j = 0; j < 6; j++) {
+                const off = new THREE.Vector3(sRand() - 0.5, sRand() - 0.5, sRand() - 0.5).multiplyScalar(0.22);
+                const dot = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.07, 0.07),
+                    j % 3 ? glowWarm : glowDot);
+                dot.position.copy(cu).add(off).normalize().multiplyScalar(R + 0.08);
+                core.add(dot);
+            }
+        }
+
+        /* Complejos polares */
+        const platN = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.7, 0.18, 12), hullLight);
+        platN.position.set(0, R + 0.08, 0);
+        core.add(platN);
+        [-0.28, 0.28].forEach(x => {
+            const dome = new THREE.Mesh(new THREE.SphereGeometry(0.18, 10, 8), hullMid);
+            dome.position.set(x, R + 0.25, 0.15);
+            core.add(dome);
+        });
+        const antN = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.07, 0.8, 6), hullDark);
+        antN.position.set(0.1, R + 0.55, -0.2);
+        core.add(antN);
+        const antS = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.09, 0.6, 6), hullDark);
+        antS.position.set(0, -R - 0.25, 0);
+        core.add(antS);
+
+        /* Plato superláser (cráter elevado, hemisferio norte) */
+        const dir = new THREE.Vector3(0.55, 0.72, 0.42).normalize();
+        const dishGroup = new THREE.Group();
+        dishGroup.position.copy(dir).multiplyScalar(R + 1.55);
+        dishGroup.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.clone().negate());
+        const bowl = new THREE.Mesh(
+            new THREE.SphereGeometry(1.7, 20, 10, 0, Math.PI * 2, 0, Math.PI / 3.1),
+            new THREE.MeshStandardMaterial({ color: 0x6a7078, metalness: 0.4, roughness: 0.7, side: THREE.BackSide }));
+        dishGroup.add(bowl);
+        const rim = new THREE.Mesh(new THREE.TorusGeometry(1.45, 0.1, 8, 36), hullLight);
+        rim.rotation.x = Math.PI / 2;
+        rim.position.y = 0.86;
+        dishGroup.add(rim);
+        const collar = new THREE.Mesh(new THREE.CylinderGeometry(1.58, 1.72, 0.5, 24, 1, true), hullMid);
+        collar.position.y = 1.05;
+        dishGroup.add(collar);
+        [0.55, 0.9].forEach((yy, idx) => {
+            const ring = new THREE.Mesh(new THREE.TorusGeometry(idx ? 0.9 : 0.55, 0.05, 6, 28), hullDark);
+            ring.rotation.x = Math.PI / 2;
+            ring.position.y = yy;
+            dishGroup.add(ring);
+        });
+        superlaser = new THREE.Mesh(
+            new THREE.CircleGeometry(0.38, 20),
+            new THREE.MeshBasicMaterial({ color: 0x3aff7a, transparent: true, opacity: 0.7 }));
+        superlaser.rotation.x = Math.PI / 2;
+        superlaser.position.y = 0.36;
+        dishGroup.add(superlaser);
+        const laserGlow = new THREE.Sprite(new THREE.SpriteMaterial({
+            map: glowTexture, color: 0x3aff7a, transparent: true, opacity: 0.55,
+            depthWrite: false, blending: THREE.AdditiveBlending
+        }));
+        laserGlow.scale.setScalar(1.6);
+        laserGlow.position.y = 0.5;
+        dishGroup.add(laserGlow);
+        for (let k = 0; k < 8; k++) {
+            const a = (k / 8) * Math.PI * 2;
+            const strut = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.6, 0.06), hullDark);
+            strut.position.set(Math.cos(a) * 0.98, 0.5, Math.sin(a) * 0.98);
+            strut.rotation.z = Math.cos(a) * 0.55;
+            strut.rotation.x = -Math.sin(a) * 0.55;
+            dishGroup.add(strut);
+            const node = new THREE.Mesh(new THREE.SphereGeometry(0.06, 6, 5),
+                new THREE.MeshBasicMaterial({ color: 0x3aff7a }));
+            node.position.set(Math.cos(a) * 1.38, 0.78, Math.sin(a) * 1.38);
+            dishGroup.add(node);
+        }
+        core.add(dishGroup);
+
+        /* Baliza polar */
+        const mast = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.09, 0.7, 6), hullDark);
+        mast.position.set(0.3, R + 0.3, 0.2);
+        core.add(mast);
+        const poleBeacon = makeBeacon(0x3aff7a);
+        poleBeacon.position.set(0.3, R + 0.7, 0.2);
+        core.add(poleBeacon);
+    } else {
+        /* Mini-luna para subcarpetas */
+        const R = 1.25;
+        core.add(new THREE.Mesh(new THREE.SphereGeometry(R, 18, 14), hullGray));
+        core.add(new THREE.Mesh(
+            new THREE.CylinderGeometry(R + 0.03, R + 0.03, 0.22, 24, 1, true), hullDark));
+        for (let i = 0; i < 6; i++) {
+            const u = new THREE.Vector3(sRand() * 2 - 1, sRand() * 2 - 1, sRand() * 2 - 1).normalize();
+            if (Math.abs(u.y) > 0.88) continue;
+            const plate = new THREE.Mesh(
+                new THREE.BoxGeometry(0.25 + sRand() * 0.4, 0.05, 0.25 + sRand() * 0.4),
+                sRand() > 0.5 ? hullLight : hullMid);
+            plate.position.copy(u).multiplyScalar(R + 0.03);
+            plate.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), u);
+            core.add(plate);
+        }
+        for (let i = 0; i < 5; i++) {
+            const u = new THREE.Vector3(sRand() * 2 - 1, sRand() * 2 - 1, sRand() * 2 - 1).normalize();
+            const dot = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.07, 0.07), glowDot);
+            dot.position.copy(u).multiplyScalar(R + 0.06);
+            core.add(dot);
+        }
+        const miniDish = new THREE.Mesh(new THREE.CircleGeometry(0.3, 12),
+            new THREE.MeshBasicMaterial({ color: 0x3aff7a, transparent: true, opacity: 0.55 }));
+        const dDir = new THREE.Vector3(0.4, 0.8, 0.3).normalize();
+        miniDish.position.copy(dDir).multiplyScalar(R + 0.02);
+        miniDish.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), dDir);
+        core.add(miniDish);
+    }
 
     group.add(core);
-
-    const ring = new THREE.Group();
-    ring.rotation.x = -Math.PI / 2.6;
-    ring.add(makeHabitatRing(2.4, 0.16, colorHex, 3));
-    group.add(ring);
-
-    const wingL = makeSolarWing(colorHex, 2.4);
-    wingL.position.set(-2.2, 1.2, 0);
-    group.add(wingL);
-
-    const wingR = makeSolarWing(colorHex, 2.4);
-    wingR.position.set(2.2, 1.2, 0);
-    group.add(wingR);
 
     const glow = new THREE.Sprite(new THREE.SpriteMaterial({
         map: glowTexture,
         color: colorHex,
         transparent: true,
-        opacity: 0.4,
+        opacity: isDeathStar ? 0.3 : 0.4,
         depthWrite: false,
         blending: THREE.AdditiveBlending
     }));
-    glow.scale.setScalar(3.5);
+    glow.scale.setScalar(isDeathStar ? 9 : 3.5);
     group.add(glow);
 
     const label = makeLabelSprite(name, '#' + colorHex.toString(16).padStart(6, '0'));
-    label.position.y = 3.4;
-    label.scale.set(14, 3.5, 1);
+    label.position.y = isDeathStar ? 7.4 : 3.4;
+    label.scale.set(isDeathStar ? 20 : 14, isDeathStar ? 5 : 3.5, 1);
     group.add(label);
 
     group.scale.setScalar(scale || 1);
 
     folderBasesList.push({
         core,
-        ring,
+        ring: null,
         glow,
-        phase: Math.random() * Math.PI * 2,
-        baseGlow: 4 * (scale || 1)
+        superlaser,
+        phase: sRand() * Math.PI * 2,
+        baseGlow: isDeathStar ? 9 : 4 * (scale || 1)
     });
 
     return group;
@@ -1679,13 +2420,13 @@ function renderFolderBases(path, folderPaths) {
     const count = list.length;
     const tail = folderTail(path) || 'RAÍZ';
 
-    const central = buildFolderBase(tail, 0x00ffcc, 1.7);
+    const central = buildFolderBase(tail, 0x00ffcc, 1.7, 'deathstar');
     central.position.copy(FOLDER_ZONE);
     folderBasesGroup.add(central);
     folderBaseCore = central;
 
     const header = makeLabelSprite('ESTRUCTURA: ' + (path || 'Unidades'), '#6fe3ff');
-    header.position.set(FOLDER_ZONE.x, FOLDER_ZONE.y + 9, FOLDER_ZONE.z);
+    header.position.set(FOLDER_ZONE.x, FOLDER_ZONE.y + 14, FOLDER_ZONE.z);
     header.scale.set(34, 6, 1);
     folderBasesGroup.add(header);
 
@@ -1714,7 +2455,7 @@ function renderFolderBases(path, folderPaths) {
             FOLDER_ZONE.z + Math.sin(angle) * ringRadius
         );
 
-        const base = buildFolderBase(name, i % 2 ? 0x6ec8ff : 0x9be7ff, 1);
+        const base = buildFolderBase(name, i % 2 ? 0x6ec8ff : 0x9be7ff, 1, 'moon');
         base.position.copy(pos);
         folderBasesGroup.add(base);
 
@@ -3169,8 +3910,21 @@ function animate() {
     }
 
     if (portal) {
-        portal.rotation.y += dt * 0.4;
+        portal.rotation.y += dt * 0.05;
         if (portalRingInner) portalRingInner.rotation.z -= dt * 0.9;
+        const flames = portal.userData.engineFlames;
+        if (flames) {
+            flames.forEach((f, i) => {
+                const k = 0.85 + Math.sin(elapsed * 8 + i * 1.9) * 0.15;
+                f.scale.set(k, 1, k);
+                f.material.opacity = 0.4 + Math.abs(Math.sin(elapsed * 5.5 + i)) * 0.3;
+            });
+        }
+        const pBeacons = portal.userData.beacons;
+        if (pBeacons) {
+            const pulse = 0.3 + Math.abs(Math.sin(elapsed * 2.2)) * 0.7;
+            pBeacons.forEach(b => { b.material.emissiveIntensity = pulse; });
+        }
     }
 
     if (baseMarker) {
@@ -3179,6 +3933,14 @@ function animate() {
         if (beacons) {
             const pulse = 0.28 + Math.abs(Math.sin(elapsed * 2.6)) * 0.7;
             beacons.forEach(b => { b.material.emissiveIntensity = pulse; });
+        }
+        const flames = baseMarker.userData.engineFlames;
+        if (flames) {
+            flames.forEach((f, i) => {
+                const k = 0.85 + Math.sin(elapsed * 9 + i * 1.7) * 0.15;
+                f.scale.set(k, 1, k);
+                f.material.opacity = 0.45 + Math.abs(Math.sin(elapsed * 6 + i)) * 0.3;
+            });
         }
     }
 
@@ -3201,6 +3963,7 @@ function animate() {
         if (f.core) f.core.rotation.y += dt * 0.7;
         if (f.ring) f.ring.rotation.z += dt * 0.5;
         if (f.glow) f.glow.scale.setScalar(f.baseGlow * (1 + Math.sin(elapsed * 2.2 + f.phase) * 0.16));
+        if (f.superlaser) f.superlaser.material.opacity = 0.4 + Math.abs(Math.sin(elapsed * 1.8 + f.phase)) * 0.55;
     });
 
     liveRigs.forEach(r => updateRig(r, dt, elapsed));
