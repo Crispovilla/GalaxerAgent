@@ -433,3 +433,5 @@ FodyWeavers.xsd
 # Artefactos de build (Debug/Release)
 bin/
 obj/
+# Salida de repomix (regenerar con: npx --no-install repomix)
+repomix-output.xml

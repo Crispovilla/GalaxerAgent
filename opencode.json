@@ -1,0 +1,33 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": ["AGENTS.md"],
+  "permission": {
+    "bash": {
+      "*": "ask",
+      "dotnet build*": "allow",
+      "dotnet restore*": "allow",
+      "node --check*": "allow",
+      "node .opencode/skills/visualizar-pantalla/scripts/capturar.mjs*": "allow",
+      "node .opencode/scripts/*": "allow",
+      "node .opencode\\scripts\\*": "allow",
+      "npx --no-install repomix*": "allow",
+      "taskkill /F /IM Base-MVC-Core9.exe*": "allow",
+      "Get-NetTCPConnection*": "allow",
+      "git status*": "allow",
+      "git diff*": "allow",
+      "git log*": "allow",
+      "git ls-files*": "allow",
+      "git add*": "ask",
+      "git commit*": "ask",
+      "git push*": "ask"
+    }
+  },
+  "mcp": {
+    "playwright": {
+      "type": "local",
+      "command": ["npx", "-y", "@playwright/mcp", "--browser", "msedge", "--headless"],
+      "enabled": true,
+      "environment": {}
+    }
+  }
+}

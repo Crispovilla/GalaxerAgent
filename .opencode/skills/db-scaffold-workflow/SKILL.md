@@ -1,4 +1,9 @@
-﻿# Skill: Flujo de Trabajo para Scaffolding de Base de Datos (DB-First)
+---
+name: db-scaffold-workflow
+description: Use when scaffolding or updating the database with Entity Framework Core DB-First ("scaffold", "dotnet ef dbcontext scaffold", "actualizar entidades desde la BD", "trabajar con la tabla X"). Never edit generated entities; extend them with partial classes and layer Dtos/Services/Controllers on top.
+---
+
+# Skill: Flujo de Trabajo para Scaffolding de Base de Datos (DB-First)
 
 Cuando se realice o actualice un scaffolding de la Base de Datos con Entity Framework Core, sigue estas reglas:
 
@@ -12,6 +17,7 @@ Cuando el usuario pida trabajar con una tabla existente en la BD (ej. "Prepara l
 2. **Crear DTO (`Dtos/`):** Crear `[Tabla]Dto.cs` asignando únicamente las propiedades necesarias para la interfaz gráfica.
 3. **Crear Servicio (`Interfaces/` y `Services/`):** Crear la interfaz y la implementación inyectando el `DbContext` existente para consultar la base de datos mediante LINQ.
 4. **Crear Controlador (`Controllers/`):** Conectar las acciones HTTP al servicio.
+5. **Registrar en DI** el servicio en `Program.cs`.
 
 ## 3. Verificación
-- Confirmar siempre la compilación con `dotnet build`.
+- Confirmar siempre la compilación con `dotnet build` (previo `taskkill /F /IM Base-MVC-Core9.exe` si la app está corriendo).

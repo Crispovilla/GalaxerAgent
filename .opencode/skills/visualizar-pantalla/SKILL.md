@@ -82,3 +82,5 @@ Para `/Agent` **no** sirve (exige sesión: `AuthorizeFilter` global en `Program.
   bloom/FXAA activos, estaciones de skills).
 - Para diagnosticar: si la captura sale negra/vacía, revisar el bloque `PROBLEMAS`
   (faltan scripts CDN, error JS, canvas no montado).
+- Para acercar la cámara a una zona concreta de la escena (nave, superláser, sol):
+  usar `.opencode/scripts/capturar-cam.mjs` — ver skill `editar-escena-3d`.

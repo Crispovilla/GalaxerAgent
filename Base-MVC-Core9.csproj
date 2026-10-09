@@ -15,9 +15,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include=".agents\skills\integrar-constelacion-agent.md" />
-    <None Include=".agents\skills\crear-crud.md" />
-    <None Include=".agents\skills\db-scaffold-worlkflow.md" />
+    <None Include="AGENTS.md" />
+    <None Include="opencode.json" />
+    <None Include=".opencode\skills\**" />
+    <None Include=".opencode\agents\**" />
+    <None Include=".opencode\plugins\**" />
+    <None Include=".opencode\scripts\**" />
   </ItemGroup>
 
   <ItemGroup>
