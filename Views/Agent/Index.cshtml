@@ -296,7 +296,7 @@
         }
 
         /* ── Panel principal ──────────────────────────────── */
-        #ui-panel {
+        .hud-panel {
             position: absolute;
             top: 26px;
             left: 26px;
@@ -314,10 +314,10 @@
             box-shadow: 0 18px 55px rgba(0, 0, 0, 0.55), 0 0 35px rgba(0, 255, 204, 0.08), inset 0 0 60px rgba(0, 255, 204, 0.035);
         }
 
-        #ui-panel::before,
-        #ui-panel::after,
-        #ui-panel .brackets::before,
-        #ui-panel .brackets::after {
+        .hud-panel::before,
+        .hud-panel::after,
+        .hud-panel .brackets::before,
+        .hud-panel .brackets::after {
             content: "";
             position: absolute;
             width: 22px;
@@ -326,13 +326,13 @@
             pointer-events: none;
         }
 
-        #ui-panel::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
-        #ui-panel::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
-        #ui-panel .brackets::before { top: -1px; right: -1px; border-width: 2px 2px 0 0; border-color: rgba(0, 136, 255, 0.9); }
-        #ui-panel .brackets::after { bottom: -1px; left: -1px; border-width: 0 0 2px 2px; border-color: rgba(0, 136, 255, 0.9); }
+        .hud-panel::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+        .hud-panel::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+        .hud-panel .brackets::before { top: -1px; right: -1px; border-width: 2px 2px 0 0; border-color: rgba(0, 136, 255, 0.9); }
+        .hud-panel .brackets::after { bottom: -1px; left: -1px; border-width: 0 0 2px 2px; border-color: rgba(0, 136, 255, 0.9); }
 
         /* ── Encabezado ───────────────────────────────────── */
-        #ui-panel .panel-head {
+        .hud-panel .panel-head {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
@@ -343,7 +343,7 @@
             position: relative;
         }
 
-        #ui-panel .panel-head::after {
+        .hud-panel .panel-head::after {
             content: "";
             position: absolute;
             bottom: -1px;
@@ -354,7 +354,7 @@
             box-shadow: 0 0 10px #00ffcc;
         }
 
-        #ui-panel h3 {
+        .hud-panel h3 {
             margin: 0;
             font-family: 'Orbitron', sans-serif;
             font-size: 0.98rem;
@@ -368,13 +368,13 @@
             filter: drop-shadow(0 0 8px rgba(255, 200, 40, 0.35));
         }
 
-        #ui-panel .head-row {
+        .hud-panel .head-row {
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        #ui-panel .ship-icon {
+        .hud-panel .ship-icon {
             width: 34px;
             height: 34px;
             color: #00ffcc;
@@ -382,7 +382,7 @@
             flex-shrink: 0;
         }
 
-        #ui-panel .subtitle {
+        .hud-panel .subtitle {
             margin-top: 5px;
             font-family: 'Share Tech Mono', monospace;
             font-size: 0.62rem;
@@ -391,7 +391,7 @@
             text-transform: uppercase;
         }
 
-        #ui-panel .status {
+        .hud-panel .status {
             display: flex;
             align-items: center;
             gap: 6px;
@@ -403,7 +403,7 @@
             padding-top: 4px;
         }
 
-        #ui-panel .dot {
+        .hud-panel .dot {
             width: 8px;
             height: 8px;
             border-radius: 50%;
@@ -413,14 +413,14 @@
             animation: hudPulse 1.6s ease-in-out infinite;
         }
 
-        #ui-panel .dot.online { background: #00ff9d; color: #00ff9d; }
-        #ui-panel .dot.linking { background: #ffcc00; color: #ffcc00; }
-        #ui-panel .dot.offline { background: #ff3b6b; color: #ff3b6b; }
+        .hud-panel .dot.online { background: #00ff9d; color: #00ff9d; }
+        .hud-panel .dot.linking { background: #ffcc00; color: #ffcc00; }
+        .hud-panel .dot.offline { background: #ff3b6b; color: #ff3b6b; }
 
         /* ── Campos ───────────────────────────────────────── */
-        #ui-panel .field { margin-bottom: 14px; }
+        .hud-panel .field { margin-bottom: 14px; }
 
-        #ui-panel label {
+        .hud-panel label {
             display: block;
             margin-bottom: 6px;
             font-family: 'Share Tech Mono', monospace;
@@ -430,13 +430,13 @@
             color: #6fe3ff;
         }
 
-        #ui-panel label::before {
+        .hud-panel label::before {
             content: "\25B8 ";
             color: #00ffcc;
         }
 
-        #ui-panel input,
-        #ui-panel textarea {
+        .hud-panel input,
+        .hud-panel textarea {
             width: 100%;
             box-sizing: border-box;
             background: rgba(0, 255, 255, 0.04);
@@ -451,26 +451,26 @@
             transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
         }
 
-        #ui-panel input:focus,
-        #ui-panel textarea:focus {
+        .hud-panel input:focus,
+        .hud-panel textarea:focus {
             border-color: rgba(0, 255, 204, 0.7);
             background: rgba(0, 255, 204, 0.07);
             box-shadow: 0 0 0 1px rgba(0, 255, 204, 0.25), 0 0 18px rgba(0, 255, 204, 0.18);
         }
 
-        #ui-panel textarea { resize: vertical; min-height: 64px; }
+        .hud-panel textarea { resize: vertical; min-height: 64px; }
 
         /* ── Fila de ruta con explorador ─────────────────── */
-        #ui-panel .path-row { display: flex; gap: 0; align-items: stretch; }
+        .hud-panel .path-row { display: flex; gap: 0; align-items: stretch; }
 
-        #ui-panel .path-row input {
+        .hud-panel .path-row input {
             flex: 1 1 auto;
             min-width: 0;
             border-top-right-radius: 0;
             border-bottom-right-radius: 0;
         }
 
-        #ui-panel #btnBrowse {
+        .hud-panel .btn-browse {
             flex: 0 0 auto;
             padding: 0 15px;
             border: 1px solid rgba(120, 180, 255, 0.18);
@@ -488,7 +488,7 @@
             transition: background 0.2s, box-shadow 0.2s;
         }
 
-        #ui-panel #btnBrowse:hover {
+        .hud-panel .btn-browse:hover {
             background: rgba(0, 255, 204, 0.18);
             box-shadow: 0 0 14px rgba(0, 255, 204, 0.3);
         }
@@ -662,7 +662,7 @@
         }
 
         /* ── Botón ────────────────────────────────────────── */
-        #ui-panel #btnStart {
+        .hud-panel .btn-start {
             position: relative;
             overflow: hidden;
             width: 100%;
@@ -682,14 +682,14 @@
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        #ui-panel #btnStart:hover {
+        .hud-panel .btn-start:hover {
             transform: translateY(-2px);
             box-shadow: 0 0 32px rgba(0, 255, 204, 0.6), 0 8px 22px rgba(0, 0, 0, 0.45);
         }
 
-        #ui-panel #btnStart:active { transform: translateY(0) scale(0.985); }
+        .hud-panel .btn-start:active { transform: translateY(0) scale(0.985); }
 
-        #ui-panel #btnStart::after {
+        .hud-panel .btn-start::after {
             content: "";
             position: absolute;
             top: 0;
@@ -702,7 +702,7 @@
         }
 
         /* ── Barra de misión ─────────────────────────────── */
-        #ui-panel .mission-bar {
+        .hud-panel .mission-bar {
             display: flex;
             align-items: center;
             gap: 10px;
@@ -718,28 +718,28 @@
             min-height: 20px;
         }
 
-        #ui-panel .mission-bar .mission-label {
+        .hud-panel .mission-bar .mission-label {
             color: #0088ff;
             text-transform: uppercase;
             letter-spacing: 2px;
             flex-shrink: 0;
         }
 
-        #ui-panel .mission-bar .mission-label::before {
+        .hud-panel .mission-bar .mission-label::before {
             content: "\25C6 ";
             color: #00ffcc;
         }
 
-        #ui-panel #mission-status {
+        .hud-panel .mission-status {
             color: #9fd8ff;
             word-break: break-word;
         }
 
-        #ui-panel #mission-status.working { color: #00ffcc; text-shadow: 0 0 8px rgba(0, 255, 204, 0.5); }
-        #ui-panel #mission-status.done { color: #3dff9e; text-shadow: 0 0 8px rgba(61, 255, 158, 0.6); }
-        #ui-panel #mission-status.error { color: #ff4d6d; text-shadow: 0 0 8px rgba(255, 77, 109, 0.6); }
+        .hud-panel .mission-status.working { color: #00ffcc; text-shadow: 0 0 8px rgba(0, 255, 204, 0.5); }
+        .hud-panel .mission-status.done { color: #3dff9e; text-shadow: 0 0 8px rgba(61, 255, 158, 0.6); }
+        .hud-panel .mission-status.error { color: #ff4d6d; text-shadow: 0 0 8px rgba(255, 77, 109, 0.6); }
 
-        #ui-panel .mission-bar.is-working {
+        .hud-panel .mission-bar.is-working {
             border-color: rgba(0, 255, 204, 0.5);
             background-image: repeating-linear-gradient(115deg, rgba(0, 255, 204, 0.10) 0 10px, transparent 10px 20px);
             animation: missionSlide 1s linear infinite;
@@ -750,14 +750,14 @@
         }
 
         /* ── Telemetría del halcón ────────────────────────── */
-        #ui-panel .telemetry {
+        .hud-panel .telemetry {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 6px;
             margin-top: 12px;
         }
 
-        #ui-panel .tel {
+        .hud-panel .tel {
             border: 1px solid rgba(255, 179, 71, 0.25);
             background: rgba(60, 34, 0, 0.18);
             border-radius: 3px;
@@ -767,7 +767,7 @@
             min-width: 0;
         }
 
-        #ui-panel .tel .tel-k {
+        .hud-panel .tel .tel-k {
             display: block;
             font-size: 0.5rem;
             letter-spacing: 1.5px;
@@ -775,7 +775,7 @@
             text-transform: uppercase;
         }
 
-        #ui-panel .tel .tel-v {
+        .hud-panel .tel .tel-v {
             display: block;
             margin-top: 3px;
             font-size: 0.72rem;
@@ -786,13 +786,13 @@
             text-overflow: ellipsis;
         }
 
-        #ui-panel .tel .tel-v.on {
+        .hud-panel .tel .tel-v.on {
             color: #3dff9e;
             text-shadow: 0 0 8px rgba(61, 255, 158, 0.6);
         }
 
         /* ── Log ──────────────────────────────────────────── */
-        #ui-panel .log-head {
+        .hud-panel .log-head {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -805,14 +805,14 @@
             text-transform: uppercase;
         }
 
-        #ui-panel .log-head .live::before {
+        .hud-panel .log-head .live::before {
             content: "\25CF";
             color: #ff3b6b;
             margin-right: 6px;
             animation: hudBlink 1.3s ease-in-out infinite;
         }
 
-        #ui-panel .hud-clock {
+        .hud-panel .hud-clock {
             font-family: 'Share Tech Mono', monospace;
             font-size: 0.68rem;
             letter-spacing: 2px;
@@ -820,7 +820,7 @@
             text-shadow: 0 0 8px rgba(0, 255, 204, 0.6);
         }
 
-        #ui-panel #log-container {
+        .hud-panel .log-container {
             height: 148px;
             overflow-y: auto;
             font-family: 'Share Tech Mono', monospace;
@@ -834,35 +834,324 @@
             background-image: repeating-linear-gradient(0deg, rgba(0, 255, 204, 0.04) 0 1px, transparent 1px 3px);
         }
 
-        #ui-panel #log-container div {
+        .hud-panel .log-container div {
             border-left: 2px solid rgba(0, 255, 204, 0.35);
             padding-left: 8px;
             margin-bottom: 5px;
             word-break: break-word;
         }
 
-        #ui-panel #log-container div:first-child { border-left-color: #00ffcc; }
+        .hud-panel .log-container div:first-child { border-left-color: #00ffcc; }
 
-        #ui-panel #log-container div { animation: logIn 0.3s ease; }
-        #ui-panel #log-container div.sys { color: #72f2eb; }
-        #ui-panel #log-container div.skill { color: #ffd479; }
-        #ui-panel #log-container div.agent { color: #3dff9e; }
-        #ui-panel #log-container div.err { color: #ff6b81; border-left-color: #ff4d6d; }
+        .hud-panel .log-container div { animation: logIn 0.3s ease; }
+        .hud-panel .log-container div.sys { color: #72f2eb; }
+        .hud-panel .log-container div.skill { color: #ffd479; }
+        .hud-panel .log-container div.agent { color: #3dff9e; }
+        .hud-panel .log-container div.err { color: #ff6b81; border-left-color: #ff4d6d; }
 
         @@keyframes logIn {
             from { opacity: 0; transform: translateX(-6px); }
         }
 
-        #ui-panel #log-container::-webkit-scrollbar { width: 6px; }
-        #ui-panel #log-container::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.04); }
-        #ui-panel #log-container::-webkit-scrollbar-thumb {
+        .hud-panel .log-container::-webkit-scrollbar { width: 6px; }
+        .hud-panel .log-container::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.04); }
+        .hud-panel .log-container::-webkit-scrollbar-thumb {
             background: rgba(0, 255, 204, 0.45);
             border-radius: 3px;
         }
 
+        /* ── Botón central: nuevo agente ──────────────────── */
+        #btn-new-agent {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 30;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 10px 20px;
+            border-radius: 999px;
+            cursor: pointer;
+            border: 1px solid rgba(0, 255, 204, 0.55);
+            background: linear-gradient(135deg, rgba(0, 255, 204, 0.16), rgba(0, 136, 255, 0.16));
+            color: #9be7ff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.66rem;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            box-shadow: 0 0 18px rgba(0, 255, 204, 0.25);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+
+        #btn-new-agent .plus {
+            font-size: 1.15rem;
+            line-height: 1;
+            color: #00ffcc;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.8);
+        }
+
+        #btn-new-agent:hover {
+            transform: translateX(-50%) translateY(-2px);
+            box-shadow: 0 0 32px rgba(0, 255, 204, 0.55);
+        }
+
+        /* ── Control de vista (bajo el botón +) ───────────── */
+        #view-control {
+            position: fixed;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 29;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 7px 13px;
+            border-radius: 5px;
+            border: 1px solid rgba(255, 232, 31, 0.32);
+            background: linear-gradient(160deg, rgba(8, 14, 28, 0.9), rgba(4, 8, 18, 0.93));
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 12px 34px rgba(0, 0, 0, 0.45);
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        #view-control .vc-title {
+            font-size: 0.56rem;
+            letter-spacing: 2px;
+            color: #b99b3a;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        #view-control .vc-title::before { content: "\25B8 "; color: #ffe81f; }
+
+        #view-list {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 64vw;
+        }
+
+        #view-control .vc-item {
+            border: 1px solid rgba(120, 180, 255, 0.25);
+            background: rgba(0, 60, 120, 0.15);
+            color: #9fd8ff;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.64rem;
+            letter-spacing: 1px;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+            white-space: nowrap;
+        }
+
+        #view-control .vc-item:hover {
+            background: rgba(0, 255, 204, 0.12);
+            border-color: rgba(0, 255, 204, 0.5);
+        }
+
+        #view-control .vc-item.active {
+            border-color: #ffe81f;
+            color: #ffe81f;
+            background: rgba(90, 76, 0, 0.25);
+            box-shadow: 0 0 12px rgba(255, 232, 31, 0.35);
+        }
+
+        #view-control .vc-sep {
+            width: 1px;
+            align-self: stretch;
+            background: rgba(255, 255, 255, 0.16);
+        }
+
+        /* ── Ventanas laterales (agentes en paralelo) ─────── */
+        #side-windows {
+            position: fixed;
+            top: 26px;
+            left: 26px;
+            bottom: 150px;
+            width: 384px;
+            z-index: 12;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 2px;
+            pointer-events: none;
+        }
+
+        #side-windows .agent-window {
+            position: relative;
+            top: 0;
+            left: 0;
+            pointer-events: auto;
+            flex: 0 0 auto;
+            margin: 0;
+        }
+
+        #side-windows::-webkit-scrollbar { width: 6px; }
+        #side-windows::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.04); }
+        #side-windows::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 204, 0.45);
+            border-radius: 3px;
+        }
+
+        .agent-window { width: 100%; box-sizing: border-box; }
+        .agent-window.hidden,
+        #ui-panel.hidden { display: none; }
+
+        /* ── Acordeón: una ventana expandida a la vez ───── */
+        .agent-window .panel-head { cursor: pointer; user-select: none; }
+
+        .agent-window.collapsed { padding-bottom: 16px; }
+        .agent-window.collapsed .subtitle,
+        .agent-window.collapsed .win-extra { display: none; }
+        .agent-window.collapsed .field { margin-bottom: 9px; }
+        .agent-window.collapsed .panel-head {
+            margin-bottom: 13px;
+            padding-bottom: 10px;
+        }
+
+        .agent-window:not(.collapsed) { animation: winExpand 0.16s ease; }
+
+        @@keyframes winExpand {
+            from { opacity: 0.5; transform: translateY(-5px); }
+            to { opacity: 1; transform: none; }
+        }
+
+        .hud-panel .head-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .hud-panel .win-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-top: 4px;
+        }
+
+        .hud-panel .win-min,
+        .hud-panel .win-toggle,
+        .hud-panel .win-close {
+            width: 27px;
+            height: 27px;
+            border: 1px solid rgba(120, 180, 255, 0.3);
+            background: rgba(0, 255, 204, 0.06);
+            color: #6fe3ff;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 1rem;
+            line-height: 1;
+            transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+        }
+
+        .hud-panel .win-min:hover,
+        .hud-panel .win-toggle:hover {
+            background: rgba(0, 255, 204, 0.18);
+            color: #00ffcc;
+            box-shadow: 0 0 12px rgba(0, 255, 204, 0.35);
+        }
+
+        .hud-panel .win-close {
+            color: #ff8fa3;
+            border-color: rgba(255, 107, 129, 0.35);
+            background: rgba(255, 77, 109, 0.07);
+        }
+
+        .hud-panel .win-close:hover {
+            background: rgba(255, 77, 109, 0.22);
+            color: #ff4d6d;
+            box-shadow: 0 0 12px rgba(255, 77, 109, 0.45);
+        }
+
+        /* ── Barra inferior de agentes (resumen) ──────────── */
+        #agents-bar {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 106px;
+            z-index: 13;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 26px;
+            pointer-events: none;
+            background: linear-gradient(to top, rgba(2, 6, 14, 0.92), rgba(2, 6, 14, 0.5) 70%, transparent);
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+        #agents-bar.hidden { display: none; }
+
+        .agent-chip {
+            pointer-events: auto;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 7px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 1px solid rgba(0, 255, 204, 0.25);
+            background: linear-gradient(160deg, rgba(8, 14, 28, 0.92), rgba(4, 8, 18, 0.94));
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.66rem;
+            color: #9fd8ff;
+            max-width: 360px;
+            white-space: nowrap;
+            transition: box-shadow 0.15s, border-color 0.15s, transform 0.15s;
+        }
+
+        .agent-chip:hover {
+            box-shadow: 0 0 16px rgba(0, 255, 204, 0.35);
+            transform: translateY(-1px);
+        }
+
+        .agent-chip .chip-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #5f7a99;
+            box-shadow: 0 0 8px currentColor;
+            flex-shrink: 0;
+            animation: hudPulse 1.6s ease-in-out infinite;
+        }
+
+        .agent-chip.st-working .chip-dot { background: #ffcc00; color: #ffcc00; }
+        .agent-chip.st-done .chip-dot { background: #3dff9e; color: #3dff9e; }
+        .agent-chip.st-error .chip-dot { background: #ff3b6b; color: #ff3b6b; }
+
+        .agent-chip .chip-name {
+            color: #00ffcc;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            flex-shrink: 0;
+        }
+
+        .agent-chip .chip-mission {
+            color: #7f93a8;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 210px;
+        }
+
+        .agent-chip.minimized {
+            border-color: rgba(255, 232, 31, 0.45);
+            box-shadow: 0 0 10px rgba(255, 232, 31, 0.18);
+        }
+
+        .agent-chip.minimized .chip-mission { color: #b99b3a; }
+
         /* ── Responsivo ───────────────────────────────────── */
         @@media (max-width: 520px) {
-            #ui-panel {
+            .hud-panel {
                 left: 12px;
                 right: 12px;
                 top: 12px;
@@ -870,7 +1159,7 @@
                 padding: 16px;
             }
 
-            #ui-panel .telemetry { grid-template-columns: repeat(2, 1fr); }
+            .hud-panel .telemetry { grid-template-columns: repeat(2, 1fr); }
             #hud-fx .frame { inset: 6px; }
         }
     </style>
@@ -885,7 +1174,16 @@
     <div class="frame"></div>
 </div>
 
-<div id="ui-panel">
+<button id="btn-new-agent" type="button" title="Despegar otro agente en paralelo">
+    <span class="plus">+</span> Nuevo agente
+</button>
+
+<div id="view-control" aria-label="Control de vista">
+    <span class="vc-title">Control de vista</span>
+    <div id="view-list"></div>
+</div>
+
+<div id="ui-panel" class="hud-panel agent-window">
     <div class="brackets" aria-hidden="true"></div>
 
     <div class="panel-head">
@@ -899,51 +1197,62 @@
                 </svg>
                 <h3>Halcón Milenario</h3>
             </div>
-            <div class="subtitle">// Consola de Mando · Agente IA</div>
+            <div class="subtitle win-extra">// Consola de Mando · Agente IA</div>
         </div>
-        <div class="status">
-            <span id="status-dot" class="dot"></span>
-            <span id="status-label">STANDBY</span>
+        <div class="head-right">
+            <div class="status">
+                <span id="status-dot" class="dot"></span>
+                <span id="status-label">STANDBY</span>
+            </div>
+            <div class="win-actions">
+                <button type="button" class="win-toggle" title="Contraer/Expandir" aria-label="Contraer o expandir">&#9650;</button>
+                <button type="button" class="win-min" title="Minimizar" aria-label="Minimizar">&ndash;</button>
+                <button type="button" class="win-close" title="Cerrar agente" aria-label="Cerrar agente">&times;</button>
+            </div>
         </div>
     </div>
 
     <div class="field">
         <label for="targetPath">Ruta del Proyecto Objetivo</label>
         <div class="path-row">
-            <input type="text" id="targetPath" value="C:/Proyectos/SistemaColegio" spellcheck="false" />
-            <button type="button" id="btnBrowse" title="Explorar carpetas del servidor">Examinar</button>
+            <input type="text" id="targetPath" class="target-path" value="C:/" spellcheck="false" />
+            <button type="button" id="btnBrowse" class="btn-browse" title="Explorar carpetas del servidor">Examinar</button>
         </div>
     </div>
 
     <div class="field">
         <label for="prompt">Instrucción al Agente</label>
-        <textarea id="prompt" rows="3" spellcheck="false">Mejora el controlador Home y sus vistas asociadas</textarea>
+        <textarea id="prompt" class="prompt-input" rows="3" spellcheck="false" placeholder="Escriba su instrucción aquí..."></textarea>
     </div>
 
-    <button id="btnStart" type="button">Iniciar Hiperimpulsor</button>
+    <button id="btnStart" class="btn-start win-extra" type="button">Iniciar Hiperimpulsor</button>
 
-    <div class="mission-bar">
+    <div class="mission-bar win-extra">
         <span class="mission-label">Misión</span>
-        <span id="mission-status">En espera de despegue</span>
+        <span id="mission-status" class="mission-status">En espera de despegue</span>
     </div>
 
-    <div class="telemetry" aria-label="Telemetría del halcón">
-        <div class="tel"><span class="tel-k">Vel</span><span id="tel-vel" class="tel-v">0</span></div>
-        <div class="tel"><span class="tel-k">Objetivo</span><span id="tel-obj" class="tel-v">—</span></div>
-        <div class="tel"><span class="tel-k">Dist</span><span id="tel-dist" class="tel-v">—</span></div>
-        <div class="tel"><span class="tel-k">Motor</span><span id="tel-hyper" class="tel-v">IDLE</span></div>
+    <div class="telemetry win-extra" aria-label="Telemetría del halcón">
+        <div class="tel"><span class="tel-k">Vel</span><span id="tel-vel" class="tel-v tel-vel">0</span></div>
+        <div class="tel"><span class="tel-k">Objetivo</span><span id="tel-obj" class="tel-v tel-obj">—</span></div>
+        <div class="tel"><span class="tel-k">Dist</span><span id="tel-dist" class="tel-v tel-dist">—</span></div>
+        <div class="tel"><span class="tel-k">Motor</span><span id="tel-hyper" class="tel-v tel-hyper">IDLE</span></div>
     </div>
 
-    <div class="log-head">
+    <div class="log-head win-extra">
         <span class="live">System Log</span>
         <span id="hud-clock" class="hud-clock">--:--:--</span>
     </div>
-    <div id="log-container">
+    <div id="log-container" class="log-container win-extra">
         <div>[Sistema] Halcón Milenario en plataforma — motores listos.</div>
     </div>
 </div>
 
 <div id="canvas-container"></div>
+
+<div id="side-windows" aria-label="Ventanas de agentes en paralelo"></div>
+
+<div id="agents-bar" class="hidden" aria-label="Agentes activos"></div>
 
 <div id="hud-waypoint" aria-live="polite">
     <div class="wp-k">Computadora de navegación</div>
@@ -1055,9 +1364,10 @@
             var btnSelect = document.getElementById('pe-select');
             var btnBrowse = document.getElementById('btnBrowse');
             var input = document.getElementById('targetPath');
-            if (!modal || !btnBrowse || !input) return;
+            if (!modal || !input) return;
 
             var current = '';
+            var explorerInput = input;
             var folderIcon = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 6.5a1.5 1.5 0 0 1 1.5-1.5h4l2 2.5h8A1.5 1.5 0 0 1 20 9v8.5a1.5 1.5 0 0 1-1.5 1.5h-14A1.5 1.5 0 0 1 3 17.5z"/></svg>';
             var upIcon = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 19V6M6 12l6-6 6 6"/></svg>';
 
@@ -1067,11 +1377,14 @@
                 });
             }
 
-            function openModal() {
+            function openModal(targetInput) {
+                explorerInput = targetInput || input;
                 modal.classList.add('open');
                 modal.setAttribute('aria-hidden', 'false');
-                load(input.value.trim());
+                load(explorerInput.value.trim());
             }
+
+            window.openPathExplorer = openModal;
 
             function closeModal() {
                 modal.classList.remove('open');
@@ -1135,13 +1448,15 @@
                 }
             }
 
-            btnBrowse.addEventListener('click', openModal);
+            if (btnBrowse) {
+                btnBrowse.addEventListener('click', function () { openModal(input); });
+            }
             document.getElementById('pe-close').addEventListener('click', closeModal);
             document.getElementById('pe-cancel').addEventListener('click', closeModal);
 
             btnSelect.addEventListener('click', function () {
                 if (!current) return;
-                input.value = current;
+                if (explorerInput) explorerInput.value = current;
                 closeModal();
                 try {
                     if (typeof focusFolderBase === 'function') focusFolderBase(current);

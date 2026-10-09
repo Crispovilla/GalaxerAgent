@@ -82,6 +82,7 @@ builder.Services.AddSignalR();
 builder.Services.AddScoped<ICodeGraphService, CodeGraphService>();
 builder.Services.AddScoped<IAgentOrchestrator, AgentOrchestrator>();
 builder.Services.AddScoped<IAiWorkflowSkill, AiWorkflowSkill>();
+builder.Services.AddSingleton<IAgentSessionRegistry, AgentSessionRegistry>();
 
 
 builder.Services.AddDataProtection()

@@ -430,3 +430,6 @@ FodyWeavers.xsd
 
 # Ignora Credenciales
 **/appsettings.Development.json
+# Artefactos de build (Debug/Release)
+bin/
+obj/

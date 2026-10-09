@@ -8,11 +8,13 @@ public class ConstellationAgentFilter : IFunctionInvocationFilter
 {
     private readonly IHubContext<ConstellationHub> _hubContext;
     private readonly string _sessionId;
+    private readonly Action<string, string>? _onState;
 
-    public ConstellationAgentFilter(IHubContext<ConstellationHub> hubContext, string sessionId)
+    public ConstellationAgentFilter(IHubContext<ConstellationHub> hubContext, string sessionId, Action<string, string>? onState = null)
     {
         _hubContext = hubContext;
         _sessionId = sessionId;
+        _onState = onState;
     }
 
     public async Task OnFunctionInvocationAsync(FunctionInvocationContext context, Func<FunctionInvocationContext, Task> next)
@@ -34,8 +36,11 @@ public class ConstellationAgentFilter : IFunctionInvocationFilter
             ? "Workspace"
             : Path.GetFileNameWithoutExtension(rawTarget);
 
+        _onState?.Invoke(skillName, cleanTarget);
+
         await _hubContext.Clients.Group(_sessionId).SendAsync("OnAgentStateChanged", new
         {
+            SessionId = _sessionId,
             Skill = skillName,
             Target = cleanTarget
         });

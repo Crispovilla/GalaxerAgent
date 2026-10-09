@@ -1,12 +1,5 @@
 const container = document.getElementById('canvas-container');
-const logBox = document.getElementById('log-container');
-const missionStatus = document.getElementById('mission-status');
 const hudFx = document.getElementById('hud-fx');
-const telVel = document.getElementById('tel-vel');
-const telObj = document.getElementById('tel-obj');
-const telDist = document.getElementById('tel-dist');
-const telHyper = document.getElementById('tel-hyper');
-const missionBar = document.querySelector('#ui-panel .mission-bar');
 const radarCanvas = document.getElementById('radar');
 const radarCtx = radarCanvas ? radarCanvas.getContext('2d') : null;
 const speedoNeedle = document.getElementById('speedo-needle');
@@ -19,29 +12,22 @@ const wpName = document.getElementById('wp-name');
 const wpDist = document.getElementById('wp-dist');
 const wpArrow = document.getElementById('wp-arrow');
 
+/* ───────────────── Globales de la consola de agentes ───────────────── */
+
+let mainWin = null;      // ventana principal (#ui-panel)
+let focusedWin = null;   // ventana enfocada (su nave gobierna el cockpit)
+let hudRig = null;       // nave cuya telemetría se muestra en el dashboard
+let windowSeq = 0;       // numeración "Agente N" de ventanas secundarias
+const agentWindows = [];         // todas las ventanas de agente
+const sessionWindows = new Map(); // sessionId -> ventana
+let launchInFlight = false;       // hay un POST /api/agent/start en curso (evita duplicado con restoreSessions)
+
 function addLog(msg, cls) {
-    const div = document.createElement('div');
-    div.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
-    if (cls) {
-        div.className = cls;
-    } else if (/Error|429|fallaron|fallo|agotada|no disponible|sin conexi|inválida|undefined/i.test(msg)) {
-        div.className = 'err';
-    } else if (msg.startsWith('AGENTE')) {
-        div.className = 'agent';
-    } else if (/^(Skill:|Destino:|Objetivo)/.test(msg)) {
-        div.className = 'skill';
-    } else {
-        div.className = 'sys';
-    }
-    logBox.appendChild(div);
-    logBox.scrollTop = logBox.scrollHeight;
+    if (mainWin) mainWin.addLog(msg, cls);
 }
 
 function setMission(text, cls) {
-    if (!missionStatus) return;
-    missionStatus.textContent = text;
-    missionStatus.className = cls || '';
-    if (missionBar) missionBar.classList.toggle('is-working', cls === 'working');
+    if (mainWin) mainWin.setMission(text, cls);
 }
 
 /* ───────────────────────── Utilidades ───────────────────────── */
@@ -119,8 +105,8 @@ function makeLabelSprite(text, color) {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.shadowColor = color;
-    ctx.shadowBlur = 18;
-    ctx.fillStyle = '#ffffff';
+    ctx.shadowBlur = 9;
+    ctx.fillStyle = '#dfeaf4';
     ctx.fillText(label, 256, 64);
     const tex = new THREE.CanvasTexture(canvas);
     try { tex.anisotropy = renderer.capabilities.getMaxAnisotropy(); } catch (e) { }
@@ -154,7 +140,9 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(0x02040c, 1);
 renderer.outputEncoding = THREE.sRGBEncoding;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.08;
+renderer.toneMappingExposure = 0.92;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 container.appendChild(renderer.domElement);
 
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -175,9 +163,9 @@ if (typeof THREE.EffectComposer === 'function'
     composer.addPass(new THREE.RenderPass(scene, camera));
     composer.addPass(new THREE.UnrealBloomPass(
         new THREE.Vector2(window.innerWidth, window.innerHeight),
-        0.85,
-        0.55,
-        0.22
+        0.38,
+        0.4,
+        0.68
     ));
     if (typeof THREE.GammaCorrectionShader !== 'undefined') {
         composer.addPass(new THREE.ShaderPass(THREE.GammaCorrectionShader));
@@ -355,26 +343,180 @@ const stationsMap = new Map();
 let sunMesh = null;
 let sunGlow = null;
 let sunCorona = null;
+let sunUniforms = null;
+let nextFlareAt = 7;
+
+function sunSph(r, lat, lon) {
+    return new THREE.Vector3(
+        r * Math.cos(lat) * Math.cos(lon),
+        r * Math.sin(lat),
+        r * Math.cos(lat) * Math.sin(lon)
+    );
+}
 
 function createSun() {
+    /* Superficie de plasma: granulación FBM + limbo + manchas frías */
+    sunUniforms = {
+        uTime: { value: 0 },
+        uFlare: { value: 0 }
+    };
+    const sunVert = `
+        varying vec3 vPos;
+        varying vec3 vNormal;
+        void main() {
+            vPos = position;
+            vNormal = normalize(normalMatrix * normal);
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+    `;
+    const sunFrag = `
+        uniform float uTime;
+        uniform float uFlare;
+        varying vec3 vPos;
+        varying vec3 vNormal;
+
+        float hash(vec3 p) {
+            p = fract(p * 0.3183099 + vec3(0.1, 0.2, 0.3));
+            p *= 17.0;
+            return fract(p.x * p.y * p.z * (p.x + p.y + p.z));
+        }
+        float noise(vec3 x) {
+            vec3 i = floor(x);
+            vec3 f = fract(x);
+            f = f * f * (3.0 - 2.0 * f);
+            return mix(
+                mix(mix(hash(i + vec3(0.0, 0.0, 0.0)), hash(i + vec3(1.0, 0.0, 0.0)), f.x),
+                    mix(hash(i + vec3(0.0, 1.0, 0.0)), hash(i + vec3(1.0, 1.0, 0.0)), f.x), f.y),
+                mix(mix(hash(i + vec3(0.0, 0.0, 1.0)), hash(i + vec3(1.0, 0.0, 1.0)), f.x),
+                    mix(hash(i + vec3(0.0, 1.0, 1.0)), hash(i + vec3(1.0, 1.0, 1.0)), f.x), f.y),
+                f.z);
+        }
+        float fbm(vec3 p) {
+            float v = 0.0;
+            float a = 0.5;
+            for (int i = 0; i < 5; i++) {
+                v += a * noise(p);
+                p = p * 2.03 + vec3(1.7, 9.2, 4.1);
+                a *= 0.55;
+            }
+            return v;
+        }
+
+        void main() {
+            vec3 p = normalize(vPos);
+            float t = uTime * 0.05;
+            float gran = fbm(p * 6.5 + vec3(t, -t * 0.7, t * 0.35));
+            float cells = fbm(p * 2.3 - vec3(t * 0.4, 0.0, t * 0.2));
+            float f = 0.55 * gran + 0.45 * cells;
+
+            vec3 deep = vec3(0.70, 0.14, 0.015);
+            vec3 mid  = vec3(1.00, 0.50, 0.09);
+            vec3 hot  = vec3(1.00, 0.94, 0.62);
+            vec3 col = mix(deep, mid, smoothstep(0.22, 0.60, f));
+            col = mix(col, hot, smoothstep(0.56, 0.86, f));
+
+            /* manchas / regiones frías */
+            float spot = smoothstep(0.30, 0.16, cells) * smoothstep(0.40, 0.55, gran);
+            col *= 1.0 - spot * 0.6;
+
+            /* limbo: más brillante al centro, más profundo en el borde */
+            float facing = clamp(dot(normalize(vNormal), vec3(0.0, 0.0, 1.0)), 0.0, 1.0);
+            col *= 0.66 + 0.55 * pow(facing, 0.5);
+
+            /* fulguración global momentánea */
+            col += vec3(1.0, 0.82, 0.5) * uFlare;
+            gl_FragColor = vec4(col, 1.0);
+        }
+    `;
     sunMesh = new THREE.Mesh(
-        new THREE.SphereGeometry(5, 48, 48),
-        new THREE.MeshBasicMaterial({ color: 0xffd27d })
+        new THREE.SphereGeometry(5, 64, 64),
+        new THREE.ShaderMaterial({
+            uniforms: sunUniforms,
+            vertexShader: sunVert,
+            fragmentShader: sunFrag
+        })
     );
 
     sunGlow = new THREE.Sprite(new THREE.SpriteMaterial({
         map: glowTexture,
         color: 0xffa83e,
         transparent: true,
-        opacity: 0.95,
+        opacity: 0.7,
         depthWrite: false,
         blending: THREE.AdditiveBlending
     }));
-    sunGlow.scale.setScalar(34);
+    sunGlow.scale.setScalar(26);
     sunMesh.add(sunGlow);
 
-    const light = new THREE.PointLight(0xfff0d0, 2.2, 600, 1.4);
+    /* Corona exterior tenue (segunda capa de resplandor) */
+    const coronaOuter = new THREE.Sprite(new THREE.SpriteMaterial({
+        map: glowTexture,
+        color: 0xff5a1e,
+        transparent: true,
+        opacity: 0.22,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending
+    }));
+    coronaOuter.scale.setScalar(46);
+    sunMesh.add(coronaOuter);
+
+    /* Protuberancias solares: arcos de plasma sobre el limbo */
+    const promGroup = new THREE.Group();
+    sunMesh.add(promGroup);
+    const proms = [
+        { lat: 0.25, lon: 0.4, spread: 0.85, height: 2.3, thick: 0.38 },
+        { lat: -0.35, lon: 2.1, spread: 0.65, height: 1.6, thick: 0.28 },
+        { lat: 0.5, lon: 3.6, spread: 1.1, height: 2.8, thick: 0.45 },
+        { lat: -0.15, lon: 5.0, spread: 0.55, height: 1.3, thick: 0.24 },
+        { lat: 0.05, lon: 1.3, spread: 0.95, height: 2.0, thick: 0.3 }
+    ];
+    proms.forEach(cfg => {
+        const a = sunSph(4.92, cfg.lat, cfg.lon);
+        const b = sunSph(4.92, cfg.lat + (Math.random() - 0.5) * 0.4, cfg.lon + cfg.spread);
+        const mid = a.clone().add(b).normalize().multiplyScalar(5 + cfg.height);
+        const curve = new THREE.CatmullRomCurve3([a, mid, b]);
+        const mat = new THREE.MeshBasicMaterial({
+            color: 0xff5a22,
+            transparent: true,
+            opacity: 0,
+            depthWrite: false,
+            blending: THREE.AdditiveBlending,
+            side: THREE.DoubleSide
+        });
+        const tube = new THREE.Mesh(new THREE.TubeGeometry(curve, 36, cfg.thick, 6, false), mat);
+        promGroup.add(tube);
+        /* núcleo brillante más fino dentro del arco */
+        const coreMat = mat.clone();
+        coreMat.color.setHex(0xffb46a);
+        const core = new THREE.Mesh(new THREE.TubeGeometry(curve, 36, cfg.thick * 0.4, 5, false), coreMat);
+        promGroup.add(core);
+        /* respiración lenta del plasma */
+        const target = 0.45 + Math.random() * 0.35;
+        gsap.to(mat, { opacity: target, duration: 2.4 + Math.random() * 2.2, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: Math.random() * 3 });
+        gsap.to(coreMat, { opacity: target * 0.8, duration: 1.9 + Math.random() * 2, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: Math.random() * 2 });
+    });
+
+    const light = new THREE.PointLight(0xfff0d0, 1.4, 600, 1.4);
     solarSystem.add(light);
+
+    /* Luz principal direccional con sombras suaves (realismo) */
+    const keyLight = new THREE.DirectionalLight(0xfff2dd, 0.7);
+    keyLight.position.set(70, 110, -50);
+    keyLight.castShadow = true;
+    keyLight.shadow.mapSize.set(2048, 2048);
+    keyLight.shadow.camera.left = -170;
+    keyLight.shadow.camera.right = 170;
+    keyLight.shadow.camera.top = 170;
+    keyLight.shadow.camera.bottom = -170;
+    keyLight.shadow.camera.near = 10;
+    keyLight.shadow.camera.far = 460;
+    keyLight.shadow.bias = -0.0004;
+    scene.add(keyLight);
+    scene.add(keyLight.target);
+
+    /* Relleno ambiental frío (cielo espacial) */
+    const hemi = new THREE.HemisphereLight(0x93aed0, 0x101824, 0.5);
+    scene.add(hemi);
 
     sunCorona = new THREE.Mesh(
         new THREE.TorusGeometry(6.6, 0.12, 8, 100),
@@ -390,6 +532,113 @@ function createSun() {
     solarSystem.add(sunCorona);
 
     solarSystem.add(sunMesh);
+}
+
+/* Fulguración solar: destello, chispas, luz puntual y brillo global */
+function spawnSolarFlare() {
+    const lat = (Math.random() - 0.5) * 1.3;
+    const lon = Math.random() * Math.PI * 2;
+    const pos = sunSph(5.0, lat, lon);
+
+    /* Destello principal */
+    const fm = new THREE.SpriteMaterial({
+        map: glowTexture, color: 0xfff1c2, transparent: true,
+        opacity: 0.95, depthWrite: false, blending: THREE.AdditiveBlending
+    });
+    const flash = new THREE.Sprite(fm);
+    flash.position.copy(pos);
+    flash.scale.setScalar(0.5);
+    sunMesh.add(flash);
+    gsap.to(flash.scale, { x: 7.5, y: 7.5, z: 7.5, duration: 0.85, ease: 'power2.out' });
+    gsap.to(fm, {
+        opacity: 0, duration: 1.1, ease: 'power1.in',
+        onComplete: () => { sunMesh.remove(flash); fm.dispose(); }
+    });
+
+    /* Destello secundario anaranjado (a las 0,2 s) */
+    gsap.delayedCall(0.2, () => {
+        const fm2 = new THREE.SpriteMaterial({
+            map: glowTexture, color: 0xffb066, transparent: true,
+            opacity: 0.8, depthWrite: false, blending: THREE.AdditiveBlending
+        });
+        const f2 = new THREE.Sprite(fm2);
+        f2.position.copy(pos);
+        f2.scale.setScalar(0.3);
+        sunMesh.add(f2);
+        gsap.to(f2.scale, { x: 3.6, y: 3.6, z: 3.6, duration: 0.8, ease: 'power2.out' });
+        gsap.to(fm2, {
+            opacity: 0, duration: 1.0, ease: 'power1.in',
+            onComplete: () => { sunMesh.remove(f2); fm2.dispose(); }
+        });
+    });
+
+    /* Chispas de plasma en todas direcciones */
+    const N = 42;
+    const geo = new THREE.BufferGeometry();
+    const positions = new Float32Array(N * 3);
+    const colors = new Float32Array(N * 3);
+    const vels = [];
+    const palette = [0xfff6d8, 0xffd27f, 0xffa040, 0xffffff];
+    const c = new THREE.Color();
+    for (let i = 0; i < N; i++) {
+        c.setHex(palette[(Math.random() * palette.length) | 0]);
+        colors[i * 3] = c.r; colors[i * 3 + 1] = c.g; colors[i * 3 + 2] = c.b;
+        vels.push(new THREE.Vector3(
+            (Math.random() - 0.5) * 1.4,
+            (Math.random() - 0.5) * 1.4,
+            (Math.random() - 0.5) * 1.4
+        ).normalize().multiplyScalar(2.5 + Math.random() * 6));
+    }
+    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    const mat = new THREE.PointsMaterial({
+        size: 0.3, vertexColors: true, transparent: true,
+        opacity: 1, blending: THREE.AdditiveBlending, depthWrite: false
+    });
+    const sparks = new THREE.Points(geo, mat);
+    sparks.position.copy(pos);
+    sunMesh.add(sparks);
+    const dur = 1.4;
+    const st = { t: 0 };
+    gsap.to(st, {
+        t: dur, duration: dur, ease: 'none',
+        onUpdate: () => {
+            const arr = geo.attributes.position.array;
+            const k = st.t / dur;
+            for (let i = 0; i < N; i++) {
+                const v = vels[i];
+                arr[i * 3] = v.x * k;
+                arr[i * 3 + 1] = v.y * k;
+                arr[i * 3 + 2] = v.z * k;
+            }
+            geo.attributes.position.needsUpdate = true;
+            mat.opacity = 1 - k;
+        },
+        onComplete: () => {
+            sunMesh.remove(sparks);
+            geo.dispose();
+            mat.dispose();
+        }
+    });
+
+    /* Luz puntual que baña el entorno */
+    const fl = new THREE.PointLight(0xffc890, 0, 95, 1.8);
+    fl.position.copy(pos);
+    sunMesh.add(fl);
+    gsap.to(fl, {
+        intensity: 9, duration: 0.16, ease: 'power2.out',
+        onComplete: () => {
+            gsap.to(fl, {
+                intensity: 0, duration: 0.95, ease: 'power1.in',
+                onComplete: () => { sunMesh.remove(fl); fl.dispose(); }
+            });
+        }
+    });
+
+    /* Brillo global del sol (uFlare del shader) */
+    if (sunUniforms) {
+        gsap.fromTo(sunUniforms.uFlare, { value: 0.45 }, { value: 0, duration: 1.0, ease: 'power1.out' });
+    }
 }
 
 function createOrbits() {
@@ -422,18 +671,22 @@ function createAsteroidBelt() {
     asteroidBelt = new THREE.Group();
     const geo = new THREE.DodecahedronGeometry(1, 0);
     const mat = new THREE.MeshStandardMaterial({
-        color: 0x8b8378,
-        roughness: 0.9,
-        metalness: 0.1,
+        color: 0x5f574c,
+        roughness: 1.0,
+        metalness: 0.0,
         flatShading: true
     });
 
-    for (let i = 0; i < 140; i++) {
+    for (let i = 0; i < 170; i++) {
         const rock = new THREE.Mesh(geo, mat);
         const angle = Math.random() * Math.PI * 2;
-        const radius = 31.6 + (Math.random() - 0.5) * 2.6;
-        const s = 0.12 + Math.random() * 0.4;
-        rock.scale.setScalar(s);
+        const radius = 31.6 + (Math.random() - 0.5) * 3.4;
+        const s = 0.32 + Math.random() * 0.9;
+        rock.scale.set(
+            s * (0.7 + Math.random() * 0.7),
+            s * (0.5 + Math.random() * 0.55),
+            s * (0.7 + Math.random() * 0.7)
+        );
         rock.position.set(
             Math.cos(angle) * radius,
             (Math.random() - 0.5) * 1.8,
@@ -455,14 +708,8 @@ createAsteroidBelt();
 
 /* ───────────────────────── Nave ───────────────────────── */
 
-const ship = new THREE.Group();
-const shipLight = new THREE.PointLight(0xfff2d8, 1.3, 46, 1.6);
-let engineFlame = null;
-let engineGlow = null;
-
 const BASE_POSITION = new THREE.Vector3(0, 5, 70);
 const PORTAL_POSITION = new THREE.Vector3(0, 34, -95);
-let patrolCenter = BASE_POSITION.clone();
 
 function createHullTexture() {
     const canvas = document.createElement('canvas');
@@ -572,7 +819,8 @@ function createEngineTexture() {
 const hullTexture = createHullTexture();
 const engineTexture = createEngineTexture();
 
-function createShip() {
+function buildShipParts() {
+    const group = new THREE.Group();
     const hullMat = new THREE.MeshStandardMaterial({
         color: 0xffffff,
         map: hullTexture,
@@ -606,12 +854,12 @@ function createShip() {
         new THREE.Vector2(0.02, 0.35)
     ];
     const saucer = new THREE.Mesh(new THREE.LatheGeometry(profile, 56), hullMat);
-    ship.add(saucer);
+    group.add(saucer);
 
     /* Aro del borde */
     const rim = new THREE.Mesh(new THREE.TorusGeometry(2.57, 0.09, 10, 72), panelMat);
     rim.rotation.x = -Math.PI / 2;
-    ship.add(rim);
+    group.add(rim);
 
     /* Cúpula superior */
     const dome = new THREE.Mesh(
@@ -620,11 +868,11 @@ function createShip() {
     );
     dome.scale.set(1, 0.2, 1);
     dome.position.y = 0.30;
-    ship.add(dome);
+    group.add(dome);
 
     const hatch = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.56, 0.16, 20), panelMat);
     hatch.position.y = 0.66;
-    ship.add(hatch);
+    group.add(hatch);
 
     /* Torreta superior */
     const turret = new THREE.Group();
@@ -636,13 +884,13 @@ function createShip() {
         turret.add(barrel);
     });
     turret.position.set(0, 0.78, -0.15);
-    ship.add(turret);
+    group.add(turret);
 
     /* Torreta inferior */
     const turretB = turret.clone();
     turretB.position.set(0, -0.62, -0.15);
     turretB.rotation.z = Math.PI;
-    ship.add(turretB);
+    group.add(turretB);
 
     /* Mandíbulas biseladas (ExtrudeGeometry) */
     const mandShape = new THREE.Shape();
@@ -664,7 +912,7 @@ function createShip() {
     [-0.88, 0.88].forEach(x => {
         const mand = new THREE.Mesh(mandGeo, hullMat);
         mand.position.set(x, 0, 1.55);
-        ship.add(mand);
+        group.add(mand);
     });
 
     /* Luces de navegación en las puntas */
@@ -674,19 +922,19 @@ function createShip() {
             new THREE.MeshBasicMaterial({ color: c })
         );
         lamp.position.set(x, 0.06, 3.56);
-        ship.add(lamp);
+        group.add(lamp);
 
         const halo = new THREE.Sprite(new THREE.SpriteMaterial({
             map: glowTexture,
             color: c,
             transparent: true,
-            opacity: 0.85,
+            opacity: 0.55,
             depthWrite: false,
             blending: THREE.AdditiveBlending
         }));
         halo.scale.setScalar(0.9);
         halo.position.copy(lamp.position);
-        ship.add(halo);
+        group.add(halo);
     });
 
     /* Cabina en el estribor (cuello + tubo cónico + cúpula) */
@@ -711,7 +959,7 @@ function createShip() {
 
     cockpit.position.set(1.72, 0.06, 1.2);
     cockpit.rotation.y = -0.3;
-    ship.add(cockpit);
+    group.add(cockpit);
 
     /* Matriz de impulso curva (arco trasero con lamas) */
     const arc = 130 * Math.PI / 180;
@@ -719,7 +967,7 @@ function createShip() {
         new THREE.CylinderGeometry(2.48, 2.48, 0.5, 32, 1, true, Math.PI - arc / 2, arc),
         new THREE.MeshStandardMaterial({ color: 0x2c3238, metalness: 0.5, roughness: 0.6, side: THREE.DoubleSide })
     );
-    ship.add(engineBack);
+    group.add(engineBack);
 
     const engineBand = new THREE.Mesh(
         new THREE.CylinderGeometry(2.56, 2.56, 0.42, 40, 1, true, Math.PI - arc / 2, arc),
@@ -728,13 +976,13 @@ function createShip() {
             map: engineTexture,
             emissive: 0xffffff,
             emissiveMap: engineTexture,
-            emissiveIntensity: 1.7,
+            emissiveIntensity: 1.0,
             metalness: 0.35,
             roughness: 0.4,
             side: THREE.DoubleSide
         })
     );
-    ship.add(engineBand);
+    group.add(engineBand);
 
     /* Greebles variados sobre el casco */
     const greebleDefs = [
@@ -747,13 +995,13 @@ function createShip() {
             ? new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.2, 0.18, 10), i % 2 ? panelMat : darkMat)
             : new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.14, 0.3), i % 2 ? darkMat : panelMat);
         g.position.set(x, 0.4, z);
-        ship.add(g);
+        group.add(g);
     });
 
     /* Antena parabólica */
     const stalk = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.09, 0.5, 8), darkMat);
     stalk.position.set(-0.9, 0.85, -0.5);
-    ship.add(stalk);
+    group.add(stalk);
 
     const dish = new THREE.Mesh(
         new THREE.CylinderGeometry(0.5, 0.5, 0.07, 18),
@@ -766,84 +1014,79 @@ function createShip() {
     );
     dish.position.set(-0.9, 1.15, -0.5);
     dish.rotation.x = -0.9;
-    ship.add(dish);
+    group.add(dish);
 
     /* Anillos de acoplamiento (lado izquierdo) */
     [-0.5, 0.5].forEach(z => {
         const dock = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.45, 0.35, 12), panelMat);
         dock.rotation.z = Math.PI / 2;
         dock.position.set(-2.55, 0, z);
-        ship.add(dock);
+        group.add(dock);
     });
 
     /* Luz de cabina */
+    const shipLight = new THREE.PointLight(0xfff2d8, 1.3, 46, 1.6);
     shipLight.position.set(1.5, 3.4, 1.8);
-    ship.add(shipLight);
+    group.add(shipLight);
 
     /* Resplandor de motores */
-    engineGlow = new THREE.Sprite(new THREE.SpriteMaterial({
+    const engineGlow = new THREE.Sprite(new THREE.SpriteMaterial({
         map: glowTexture,
         color: 0x66c8ff,
         transparent: true,
-        opacity: 0.9,
+        opacity: 0.65,
         depthWrite: false,
         blending: THREE.AdditiveBlending
     }));
     engineGlow.scale.setScalar(5);
     engineGlow.position.z = -3.0;
-    ship.add(engineGlow);
+    group.add(engineGlow);
 
-    engineFlame = new THREE.Sprite(new THREE.SpriteMaterial({
+    const engineFlame = new THREE.Sprite(new THREE.SpriteMaterial({
         map: glowTexture,
         color: 0xbfe8ff,
         transparent: true,
-        opacity: 0.85,
+        opacity: 0.6,
         depthWrite: false,
         blending: THREE.AdditiveBlending
     }));
     engineFlame.scale.setScalar(2.6);
     engineFlame.position.z = -3.4;
-    ship.add(engineFlame);
+    group.add(engineFlame);
 
     const engineLight = new THREE.PointLight(0x66c8ff, 0.9, 18);
     engineLight.position.set(0, 0, -3);
-    ship.add(engineLight);
+    group.add(engineLight);
 
-    ship.position.copy(BASE_POSITION);
-    scene.add(ship);
+    return { group, engineFlame, engineGlow };
 }
 
-createShip();
-
-/* Estela */
+/* Estela (por nave) */
 const TRAIL_MAX = 110;
-const trailPoints = [];
-let trailLine = null;
-let trailColor = new THREE.Color(0x00e5ff);
 
-function resetTrail() {
-    trailPoints.length = 0;
-    trailPoints.push(ship.position.clone());
-    rebuildTrail();
+function resetTrail(rig) {
+    rig.trailPoints.length = 0;
+    rig.trailPoints.push(rig.group.position.clone());
+    rebuildTrail(rig);
 }
 
-function rebuildTrail() {
-    if (trailLine) {
-        effectsGroup.remove(trailLine);
-        disposeObject(trailLine);
-        trailLine = null;
+function rebuildTrail(rig) {
+    if (rig.trailLine) {
+        effectsGroup.remove(rig.trailLine);
+        disposeObject(rig.trailLine);
+        rig.trailLine = null;
     }
-    if (trailPoints.length < 2) return;
-    const geo = new THREE.BufferGeometry().setFromPoints(trailPoints);
+    if (rig.trailPoints.length < 2) return;
+    const geo = new THREE.BufferGeometry().setFromPoints(rig.trailPoints);
     const mat = new THREE.LineBasicMaterial({
-        color: trailColor,
+        color: rig.trailColor,
         transparent: true,
         opacity: 0.5,
         blending: THREE.AdditiveBlending,
         depthWrite: false
     });
-    trailLine = new THREE.Line(geo, mat);
-    effectsGroup.add(trailLine);
+    rig.trailLine = new THREE.Line(geo, mat);
+    effectsGroup.add(rig.trailLine);
 }
 
 /* ───────────────────────── Base y portal ───────────────────────── */
@@ -856,7 +1099,7 @@ let portalRingInner = null;
 /* ───────────────────── Modelos de estación espacial ───────────────────── */
 
 function stationHull() {
-    return new THREE.MeshStandardMaterial({ color: 0x8d99ad, metalness: 0.85, roughness: 0.38 });
+    return new THREE.MeshStandardMaterial({ color: 0x8d99ad, metalness: 0.8, roughness: 0.46 });
 }
 
 function stationDark() {
@@ -867,9 +1110,18 @@ function stationAccent(colorHex, intensity) {
     return new THREE.MeshStandardMaterial({
         color: 0x0f1724,
         emissive: colorHex,
-        emissiveIntensity: intensity === undefined ? 1.0 : intensity,
+        emissiveIntensity: (intensity === undefined ? 1.0 : intensity) * 0.55,
         metalness: 0.45,
         roughness: 0.4
+    });
+}
+
+function enableShadows(obj) {
+    obj.traverse(o => {
+        if (o.isMesh && !(o.material && o.material.transparent)) {
+            o.castShadow = true;
+            o.receiveShadow = true;
+        }
     });
 }
 
@@ -885,7 +1137,7 @@ function makeSolarWing(colorHex, span) {
         new THREE.MeshStandardMaterial({
             color: 0x0d2c52,
             emissive: 0x1a4d86,
-            emissiveIntensity: 0.55,
+            emissiveIntensity: 0.3,
             metalness: 0.55,
             roughness: 0.45
         })
@@ -1103,11 +1355,11 @@ function createPortal() {
         map: glowTexture,
         color: 0xb44bff,
         transparent: true,
-        opacity: 0.55,
+        opacity: 0.38,
         depthWrite: false,
         blending: THREE.AdditiveBlending
     }));
-    portalGlow.scale.setScalar(26);
+    portalGlow.scale.setScalar(16);
     portal.add(portalGlow);
 
     const label = makeLabelSprite('DESTINO FINAL', '#b44bff');
@@ -1192,11 +1444,11 @@ function buildSolarSystem(graph) {
             map: glowTexture,
             color,
             transparent: true,
-            opacity: 0.75,
+            opacity: 0.5,
             depthWrite: false,
             blending: THREE.AdditiveBlending
         }));
-        glow.scale.setScalar(6);
+        glow.scale.setScalar(4);
         planet.add(glow);
 
         planet.position.set(x, y, z);
@@ -1207,7 +1459,7 @@ function buildSolarSystem(graph) {
             planet,
             sphere,
             glow,
-            baseGlow: 6,
+            baseGlow: 4,
             color,
             phase: Math.random() * Math.PI * 2,
             visited: false
@@ -1303,11 +1555,11 @@ function getOrCreateStation(key, name, colorHex) {
         map: glowTexture,
         color: colorHex,
         transparent: true,
-        opacity: 0.7,
+        opacity: 0.42,
         depthWrite: false,
         blending: THREE.AdditiveBlending
     }));
-    glow.scale.setScalar(8);
+    glow.scale.setScalar(4.5);
     station.add(glow);
 
     const label = makeLabelSprite(name, '#' + colorHex.toString(16).padStart(6, '0'));
@@ -1393,11 +1645,11 @@ function buildFolderBase(name, colorHex, scale) {
         map: glowTexture,
         color: colorHex,
         transparent: true,
-        opacity: 0.65,
+        opacity: 0.4,
         depthWrite: false,
         blending: THREE.AdditiveBlending
     }));
-    glow.scale.setScalar(6);
+    glow.scale.setScalar(3.5);
     group.add(glow);
 
     const label = makeLabelSprite(name, '#' + colorHex.toString(16).padStart(6, '0'));
@@ -1412,7 +1664,7 @@ function buildFolderBase(name, colorHex, scale) {
         ring,
         glow,
         phase: Math.random() * Math.PI * 2,
-        baseGlow: 6 * (scale || 1)
+        baseGlow: 4 * (scale || 1)
     });
 
     return group;
@@ -1421,6 +1673,7 @@ function buildFolderBase(name, colorHex, scale) {
 function renderFolderBases(path, folderPaths) {
     disposeFolderBases();
     folderBasePath = path || '';
+    if (typeof refreshViewControl === 'function') refreshViewControl();
 
     const list = (folderPaths || []).slice(0, 48);
     const count = list.length;
@@ -1474,10 +1727,8 @@ function renderFolderBases(path, folderPaths) {
 }
 
 function focusFolderBase(path) {
-    if (!folderBaseCore) return false;
-    const name = folderTail(path || folderBasePath) || 'Carpeta';
-    enqueueWaypoint(folderBaseCore, 'station', name, 'Workspace');
-    return true;
+    if (typeof setViewMode === 'function') setViewMode('folders');
+    return !!folderBaseCore;
 }
 
 /* ───────────────────────── Efectos de llegada ───────────────────────── */
@@ -1508,78 +1759,169 @@ function spawnArrivalPulse(position, colorHex) {
     });
 }
 
-/* ───────────────────────── Misión: navegación de la nave ───────────────────────── */
+/* ───────────────────────── Misión: rigs de nave por agente ───────────────────────── */
 
-const shipTarget = { object: null, point: null, kind: null, name: null };
-const waypointQueue = [];
-let missionStep = 0;
-let missionEnding = false;
-let missionDone = false;
+const shipRigs = new Map();   /* sessionId -> rig */
+const liveRigs = new Set();   /* todas las naves vivas en escena (se actualizan en animate) */
+let heroRig = null;           /* nave principal: patrulla en la base hasta el 1er despegue */
+let primaryShipUsed = false;
+let dockSpawnIndex = 0;       /* desfase de las naves secundarias en la plataforma */
 const lookHelper = new THREE.Object3D();
 const SHIP_SPEED = 30;
-let bankAngle = 0;
-let warpActive = false;
-const lastMoveDir = new THREE.Vector3(0, 0, 1);
-const lastShipPos = new THREE.Vector3();
-let smoothSpeed = 0;
-let telAccum = 0;
 
-function enqueueWaypoint(target, kind, name, skill) {
-    waypointQueue.push({ target, kind, name, skill });
-    if (!shipTarget.object && !shipTarget.point) dispatchNextWaypoint();
+function makeRig(parts, spawnPos) {
+    const group = parts.group;
+    group.position.copy(spawnPos);
+    scene.add(group);
+    enableShadows(group);
+    const rig = {
+        sessionId: null,
+        win: null,
+        group,
+        dockOffset: new THREE.Vector3(0, 0, 0),
+        engineFlame: parts.engineFlame,
+        engineGlow: parts.engineGlow,
+        trailPoints: [],
+        trailLine: null,
+        trailColor: new THREE.Color(0x00e5ff),
+        target: { object: null, point: null, kind: null, name: null },
+        queue: [],
+        missionStep: 0,
+        missionEnding: false,
+        missionDone: false,
+        patrolCenter: spawnPos.clone(),
+        bankAngle: 0,
+        warpActive: false,
+        lastMoveDir: new THREE.Vector3(0, 0, 1),
+        lastShipPos: spawnPos.clone(),
+        smoothSpeed: 0,
+        telAccum: 0
+    };
+    liveRigs.add(rig);
+    return rig;
 }
 
-function dispatchNextWaypoint() {
-    if (waypointQueue.length === 0) return;
-    const wp = waypointQueue.shift();
-    shipTarget.kind = wp.kind;
-    shipTarget.name = wp.name;
+function spawnShipRig() {
+    const parts = buildShipParts();
+    const offsets = [
+        new THREE.Vector3(0, 4, 24),
+        new THREE.Vector3(12, 3, 9),
+        new THREE.Vector3(-12, 3, 9),
+        new THREE.Vector3(12, 6, 16),
+        new THREE.Vector3(-12, 6, 16),
+        new THREE.Vector3(14, 8, 24)
+    ];
+    const offset = offsets[dockSpawnIndex % offsets.length];
+    dockSpawnIndex++;
+    offset.x += (Math.random() - 0.5) * 1.8;
+    offset.y += (Math.random() - 0.5) * 0.5;
+    offset.z += (Math.random() - 0.5) * 1.8;
+    const rig = makeRig(parts, BASE_POSITION.clone().add(offset));
+    rig.dockOffset.copy(offset);
+    return rig;
+}
+
+function resetRig(rig, atBase) {
+    rig.queue.length = 0;
+    rig.target.object = null;
+    rig.target.point = null;
+    rig.target.kind = null;
+    rig.target.name = null;
+    rig.missionStep = 0;
+    rig.missionEnding = false;
+    rig.missionDone = false;
+    rig.bankAngle = 0;
+    rig.lastMoveDir.set(0, 0, 1);
+    rig.smoothSpeed = 0;
+    if (atBase) {
+        const home = BASE_POSITION.clone().add(rig.dockOffset);
+        rig.group.position.copy(home);
+        rig.group.quaternion.identity();
+        rig.patrolCenter = home;
+    }
+    rig.lastShipPos.copy(rig.group.position);
+    resetTrail(rig);
+}
+
+function rigFor(sessionId) {
+    if (sessionId && shipRigs.has(sessionId)) return shipRigs.get(sessionId);
+    return hudRig || heroRig;
+}
+
+/* Despegue cinematográfico desde la plataforma de la base de control */
+function startTakeoff(rig) {
+    const from = rig.group.position.clone();
+    const lateral = (Math.random() - 0.5) * 9;
+    const mid = from.clone().add(new THREE.Vector3(lateral * 0.35, 5.5, -3));
+    const end = from.clone().add(new THREE.Vector3(lateral, 9.5, -22));
+    rig.takeoff = { t: 0, dur: 1.8, from, mid, end };
+}
+
+function enqueueWaypoint(target, kind, name, skill, sessionId) {
+    const rig = rigFor(sessionId);
+    if (!rig) return;
+    rig.queue.push({ target, kind, name, skill });
+    if (!rig.target.object && !rig.target.point) dispatchNextWaypoint(rig);
+}
+
+function dispatchNextWaypoint(rig) {
+    if (rig.queue.length === 0) return;
+    const wp = rig.queue.shift();
+    rig.target.kind = wp.kind;
+    rig.target.name = wp.name;
 
     if (wp.target && wp.target.isObject3D) {
-        shipTarget.object = wp.target;
-        shipTarget.point = null;
+        rig.target.object = wp.target;
+        rig.target.point = null;
     } else {
-        shipTarget.object = null;
-        shipTarget.point = wp.target.clone();
+        rig.target.object = null;
+        rig.target.point = wp.target.clone();
     }
 
     const color = wp.kind === 'portal' ? 0xb44bff : skillColor(wp.skill);
-    trailColor = new THREE.Color(color);
-    rebuildTrail();
+    rig.trailColor = new THREE.Color(color);
+    rebuildTrail(rig);
 
-    setMission(`Paso ${missionStep} · Ruta hacia ${wp.name}`, 'working');
+    const win = rig.win || focusedWin || mainWin;
+    if (win) win.setMission(`Paso ${rig.missionStep} · Ruta hacia ${wp.name}`, 'working');
 }
 
-function currentTargetPosition() {
-    if (shipTarget.object) return shipTarget.object.getWorldPosition(new THREE.Vector3());
-    return shipTarget.point;
+function currentTargetPosition(rig) {
+    if (!rig) return null;
+    if (rig.target.object) return rig.target.object.getWorldPosition(new THREE.Vector3());
+    return rig.target.point;
 }
 
-function onWaypointArrived() {
-    const pos = ship.position.clone();
+function onWaypointArrived(rig) {
+    const pos = rig.group.position.clone();
     let color = 0x00ffcc;
+    const win = rig.win || focusedWin || mainWin;
 
-    if (shipTarget.kind === 'portal') {
+    if (rig.target.kind === 'portal') {
         color = 0xb44bff;
-        missionDone = true;
-        missionEnding = false;
-        patrolCenter = PORTAL_POSITION.clone();
-        setMission('Misión completada · Destino alcanzado', 'done');
-        addLog('DESTINO FINAL ALCANZADO — Misión completada.');
+        rig.missionDone = true;
+        rig.missionEnding = false;
+        rig.patrolCenter = PORTAL_POSITION.clone();
+        if (win) {
+            win.setMission('Misión completada · Destino alcanzado', 'done');
+            win.addLog('DESTINO FINAL ALCANZADO — Misión completada.');
+        }
 
         spawnArrivalPulse(pos, color);
-        gsap.to(portal.scale, { x: 1.6, y: 1.6, z: 1.6, duration: 0.6, yoyo: true, repeat: 3, ease: 'power1.inOut' });
-        gsap.to(portal.rotation, { z: Math.PI * 2, duration: 2.4, ease: 'power2.inOut' });
+        if (portal) {
+            gsap.to(portal.scale, { x: 1.6, y: 1.6, z: 1.6, duration: 0.6, yoyo: true, repeat: 3, ease: 'power1.inOut' });
+            gsap.to(portal.rotation, { z: Math.PI * 2, duration: 2.4, ease: 'power2.inOut' });
+        }
         if (portalGlow) {
-            gsap.fromTo(portalGlow.material, { opacity: 1 }, { opacity: 0.55, duration: 2 });
+            gsap.fromTo(portalGlow.material, { opacity: 0.6 }, { opacity: 0.38, duration: 2 });
         }
     } else {
-        if (shipTarget.kind === 'node' && shipTarget.object) {
-            const entry = [...nodesMap.values()].find(n => n.planet === shipTarget.object);
+        if (rig.target.kind === 'node' && rig.target.object) {
+            const entry = [...nodesMap.values()].find(n => n.planet === rig.target.object);
             if (entry && !entry.visited) entry.visited = true;
         }
-        if (shipTarget.kind === 'station' && shipTarget.name) {
-            const st = [...stationsMap.values()].find(s => s.name === shipTarget.name);
+        if (rig.target.kind === 'station' && rig.target.name) {
+            const st = [...stationsMap.values()].find(s => s.name === rig.target.name);
             if (st) {
                 st.visited = true;
                 color = st.color;
@@ -1587,146 +1929,171 @@ function onWaypointArrived() {
             }
         }
         spawnArrivalPulse(pos, color);
-        addLog(`Objetivo alcanzado: ${shipTarget.name}`);
+        if (win) win.addLog(`Objetivo alcanzado: ${rig.target.name}`);
     }
 
-    shipTarget.object = null;
-    shipTarget.point = null;
-    shipTarget.kind = null;
-    shipTarget.name = null;
+    rig.target.object = null;
+    rig.target.point = null;
+    rig.target.kind = null;
+    rig.target.name = null;
 
-    if (waypointQueue.length > 0) {
-        dispatchNextWaypoint();
-    } else if (!missionDone) {
-        if (missionEnding) {
-            setMission('Destino final en ruta…', 'working');
+    if (rig.queue.length > 0) {
+        dispatchNextWaypoint(rig);
+    } else if (!rig.missionDone && win) {
+        if (rig.missionEnding) {
+            win.setMission('Destino final en ruta…', 'working');
         } else {
-            setMission(`Paso ${missionStep} · En espera de siguiente acción`, 'working');
+            win.setMission(`Paso ${rig.missionStep} · En espera de siguiente acción`, 'working');
         }
     }
 }
 
-function updateShip(dt, elapsed) {
-    const target = currentTargetPosition();
+function updateRig(rig, dt, elapsed) {
+    const group = rig.group;
+    const target = currentTargetPosition(rig);
+    const isHud = rig === hudRig;
+    const win = rig.win;
 
     /* Velocidad real (suavizada) */
-    const frameSpeed = lastShipPos.distanceTo(ship.position) / Math.max(dt, 0.001);
-    lastShipPos.copy(ship.position);
-    smoothSpeed += (frameSpeed - smoothSpeed) * Math.min(1, dt * 4);
+    const frameSpeed = rig.lastShipPos.distanceTo(group.position) / Math.max(dt, 0.001);
+    rig.lastShipPos.copy(group.position);
+    rig.smoothSpeed += (frameSpeed - rig.smoothSpeed) * Math.min(1, dt * 4);
 
-    if (target) {
-        const toTarget = target.clone().sub(ship.position);
+    if (rig.takeoff) {
+        /* Despegue: la nave sale de la plataforma de la base de control */
+        rig.takeoff.t = Math.min(rig.takeoff.t + dt, rig.takeoff.dur);
+        const k = rig.takeoff.t / rig.takeoff.dur;
+        const e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+        const a = rig.takeoff.from.clone().lerp(rig.takeoff.mid, e);
+        const b = rig.takeoff.mid.clone().lerp(rig.takeoff.end, e);
+        const pos = a.lerp(b, e);
+        const tangent = pos.clone().sub(group.position);
+        group.position.copy(pos);
+        if (tangent.lengthSq() > 1e-8) {
+            lookHelper.position.copy(group.position);
+            lookHelper.lookAt(group.position.clone().add(tangent));
+            group.quaternion.slerp(lookHelper.quaternion, Math.min(1, dt * 8));
+        }
+        if (k >= 1) {
+            rig.takeoff = null;
+            rig.lastShipPos.copy(group.position);
+        }
+    } else if (target) {
+        const toTarget = target.clone().sub(group.position);
         const dist = toTarget.length();
 
         if (dist < 3.2) {
-            onWaypointArrived();
+            onWaypointArrived(rig);
         } else {
             const step = Math.min(SHIP_SPEED * dt, dist);
             toTarget.normalize();
-            ship.position.addScaledVector(toTarget, step);
+            group.position.addScaledVector(toTarget, step);
 
-            lookHelper.position.copy(ship.position);
+            lookHelper.position.copy(group.position);
             lookHelper.lookAt(target);
-            ship.quaternion.slerp(lookHelper.quaternion, Math.min(1, dt * 5));
+            group.quaternion.slerp(lookHelper.quaternion, Math.min(1, dt * 5));
 
             /* Alabeo al girar (estilo vuelo real) */
-            let yaw = Math.atan2(toTarget.x, toTarget.z) - Math.atan2(lastMoveDir.x, lastMoveDir.z);
+            let yaw = Math.atan2(toTarget.x, toTarget.z) - Math.atan2(rig.lastMoveDir.x, rig.lastMoveDir.z);
             if (yaw > Math.PI) yaw -= Math.PI * 2;
             if (yaw < -Math.PI) yaw += Math.PI * 2;
-            lastMoveDir.copy(toTarget);
+            rig.lastMoveDir.copy(toTarget);
             const bankTarget = THREE.MathUtils.clamp((yaw / Math.max(dt, 0.001)) * 0.04, -0.5, 0.5);
-            bankAngle += (bankTarget - bankAngle) * Math.min(1, dt * 4);
-            ship.rotateZ(bankAngle);
+            rig.bankAngle += (bankTarget - rig.bankAngle) * Math.min(1, dt * 4);
+            group.rotateZ(rig.bankAngle);
         }
     } else {
         const orbitAngle = elapsed * 0.25;
         const patrol = new THREE.Vector3(
-            patrolCenter.x + Math.cos(orbitAngle) * 9,
-            patrolCenter.y + Math.sin(elapsed * 0.7) * 2.5,
-            patrolCenter.z + Math.sin(orbitAngle) * 9
+            rig.patrolCenter.x + Math.cos(orbitAngle) * 9,
+            rig.patrolCenter.y + Math.sin(elapsed * 0.7) * 2.5,
+            rig.patrolCenter.z + Math.sin(orbitAngle) * 9
         );
-        const toPatrol = patrol.sub(ship.position);
+        const toPatrol = patrol.sub(group.position);
         if (toPatrol.length() > 0.3) {
-            ship.position.addScaledVector(toPatrol.normalize(), Math.min(6 * dt, toPatrol.length()));
-            lookHelper.position.copy(ship.position);
-            lookHelper.lookAt(patrolCenter);
-            ship.quaternion.slerp(lookHelper.quaternion, Math.min(1, dt * 2));
-            bankAngle += (0 - bankAngle) * Math.min(1, dt * 3);
-            ship.rotateZ(bankAngle);
+            group.position.addScaledVector(toPatrol.normalize(), Math.min(6 * dt, toPatrol.length()));
+            lookHelper.position.copy(group.position);
+            lookHelper.lookAt(rig.patrolCenter);
+            group.quaternion.slerp(lookHelper.quaternion, Math.min(1, dt * 2));
+            rig.bankAngle += (0 - rig.bankAngle) * Math.min(1, dt * 3);
+            group.rotateZ(rig.bankAngle);
         }
     }
 
     /* Estela */
-    const last = trailPoints[trailPoints.length - 1];
-    if (!last || last.distanceToSquared(ship.position) > 0.06) {
-        trailPoints.push(ship.position.clone());
-        if (trailPoints.length > TRAIL_MAX) trailPoints.shift();
-        rebuildTrail();
+    const last = rig.trailPoints[rig.trailPoints.length - 1];
+    if (!last || last.distanceToSquared(group.position) > 0.06) {
+        rig.trailPoints.push(group.position.clone());
+        if (rig.trailPoints.length > TRAIL_MAX) rig.trailPoints.shift();
+        rebuildTrail(rig);
     }
 
     /* Motores */
-    if (engineFlame) {
-        const flicker = 2.4 + Math.sin(elapsed * 24) * 0.5 + Math.random() * 0.3;
-        engineFlame.scale.setScalar(target ? flicker : flicker * 0.5);
-        engineFlame.material.opacity = target ? 0.85 : 0.45;
+    const thrusting = !!target || !!rig.takeoff;
+    if (rig.engineFlame) {
+        const flicker = 2.4 + Math.sin(elapsed * 24 + rig.missionStep) * 0.5 + Math.random() * 0.3;
+        rig.engineFlame.scale.setScalar(thrusting ? flicker : flicker * 0.5);
+        rig.engineFlame.material.opacity = thrusting ? 0.85 : 0.45;
     }
-    if (engineGlow) {
-        engineGlow.scale.setScalar(5 + Math.sin(elapsed * 9) * 0.9);
+    if (rig.engineGlow) {
+        rig.engineGlow.scale.setScalar(5 + Math.sin(elapsed * 9) * 0.9);
     }
 
-    /* Hipervuelo en el HUD */
+    /* Hipervuelo en el HUD (solo la nave enfocada) */
     const wantWarp = !!target;
-    if (hudFx && wantWarp !== warpActive) {
-        warpActive = wantWarp;
-        hudFx.classList.toggle('warp', wantWarp);
+    rig.warpActive = wantWarp;
+    if (isHud && hudFx) hudFx.classList.toggle('warp', wantWarp);
+
+    /* Telemetría de la ventana dueña de la nave */
+    rig.telAccum += dt;
+    if (rig.telAccum > 0.15) {
+        rig.telAccum = 0;
+        if (win && win.tel) {
+            if (win.tel.vel) win.tel.vel.textContent = Math.round(rig.smoothSpeed);
+            if (win.tel.obj) win.tel.obj.textContent = rig.target.name || (rig.queue.length ? rig.queue[0].name : 'Patrulla');
+            if (win.tel.dist) win.tel.dist.textContent = target ? group.position.distanceTo(target).toFixed(1) + ' u' : '—';
+            if (win.tel.hyper) {
+                const on = rig.smoothSpeed > SHIP_SPEED * 0.5;
+                win.tel.hyper.textContent = on ? 'HIPER' : 'IDLE';
+                win.tel.hyper.classList.toggle('on', on);
+            }
+        }
+        if (isHud) updateCockpit(rig, target);
+    }
+}
+
+/* Dashboard del cockpit: gobierna la nave enfocada */
+function updateCockpit(rig, target) {
+    const group = rig.group;
+
+    const spd = Math.min(rig.smoothSpeed / 60, 1);
+    if (speedoNeedle) speedoNeedle.setAttribute('transform', `rotate(${(-110 + spd * 220).toFixed(1)} 66 68)`);
+    if (speedoVal) speedoVal.textContent = Math.round(rig.smoothSpeed);
+
+    const lit = rig.smoothSpeed < 4 ? 0 : rig.smoothSpeed < 12 ? 1 : rig.smoothSpeed < 22 ? 2 : rig.smoothSpeed < 27 ? 3 : 4;
+    pwrBars.forEach((b, i) => b.classList.toggle('on', i < lit));
+
+    const fwdVec = new THREE.Vector3(0, 0, 1).applyQuaternion(group.quaternion);
+    if (navXyz) {
+        navXyz.textContent = `X ${group.position.x.toFixed(1)} · Y ${group.position.y.toFixed(1)} · Z ${group.position.z.toFixed(1)}`;
+    }
+    if (navHdg) {
+        const hdg = (Math.atan2(fwdVec.x, -fwdVec.z) * 180 / Math.PI + 360) % 360;
+        navHdg.textContent = String(Math.round(hdg) % 360).padStart(3, '0') + '°';
     }
 
-    /* Panel de telemetría */
-    telAccum += dt;
-    if (telAccum > 0.15) {
-        telAccum = 0;
-        if (telVel) telVel.textContent = Math.round(smoothSpeed);
-        if (telObj) telObj.textContent = shipTarget.name || (waypointQueue.length ? waypointQueue[0].name : 'Patrulla');
-        if (telDist) telDist.textContent = target ? ship.position.distanceTo(target).toFixed(1) + ' u' : '—';
-        if (telHyper) {
-            const on = smoothSpeed > SHIP_SPEED * 0.5;
-            telHyper.textContent = on ? 'HIPER' : 'IDLE';
-            telHyper.classList.toggle('on', on);
-        }
-
-        /* Velocímetro analógico */
-        const spd = Math.min(smoothSpeed / 60, 1);
-        if (speedoNeedle) speedoNeedle.setAttribute('transform', `rotate(${(-110 + spd * 220).toFixed(1)} 66 68)`);
-        if (speedoVal) speedoVal.textContent = Math.round(smoothSpeed);
-
-        /* Barra de potencia */
-        const lit = smoothSpeed < 4 ? 0 : smoothSpeed < 12 ? 1 : smoothSpeed < 22 ? 2 : smoothSpeed < 27 ? 3 : 4;
-        pwrBars.forEach((b, i) => b.classList.toggle('on', i < lit));
-
-        /* Navegación: coordenadas y rumbo */
-        const fwdVec = new THREE.Vector3(0, 0, 1).applyQuaternion(ship.quaternion);
-        if (navXyz) {
-            navXyz.textContent = `X ${ship.position.x.toFixed(1)} · Y ${ship.position.y.toFixed(1)} · Z ${ship.position.z.toFixed(1)}`;
-        }
-        if (navHdg) {
-            const hdg = (Math.atan2(fwdVec.x, -fwdVec.z) * 180 / Math.PI + 360) % 360;
-            navHdg.textContent = String(Math.round(hdg) % 360).padStart(3, '0') + '°';
-        }
-
-        /* Computadora de navegación (tarjeta superior) */
-        if (target && wpCard) {
-            const rel = target.clone().sub(ship.position);
-            const nz = new THREE.Vector3(fwdVec.x, 0, fwdVec.z).normalize();
-            const side = rel.x * nz.z + rel.z * (-nz.x);
-            const up = rel.x * nz.x + rel.z * nz.z;
-            const bearing = Math.atan2(side, up) * 180 / Math.PI;
-            if (wpArrow) wpArrow.style.transform = `rotate(${bearing.toFixed(1)}deg)`;
-            if (wpName) wpName.textContent = shipTarget.name || '—';
-            if (wpDist) wpDist.textContent = ship.position.distanceTo(target).toFixed(1) + ' u';
-            wpCard.classList.add('show');
-        } else if (wpCard) {
-            wpCard.classList.remove('show');
-        }
+    if (target && wpCard) {
+        const rel = target.clone().sub(group.position);
+        const nz = new THREE.Vector3(fwdVec.x, 0, fwdVec.z).normalize();
+        const side = rel.x * nz.z + rel.z * (-nz.x);
+        const up = rel.x * nz.x + rel.z * nz.z;
+        const bearing = Math.atan2(side, up) * 180 / Math.PI;
+        if (wpArrow) wpArrow.style.transform = `rotate(${bearing.toFixed(1)}deg)`;
+        if (wpName) wpName.textContent = rig.target.name || '—';
+        if (wpDist) wpDist.textContent = group.position.distanceTo(target).toFixed(1) + ' u';
+        wpCard.classList.add('show');
+    } else if (wpCard) {
+        wpCard.classList.remove('show');
     }
 }
 
@@ -1811,8 +2178,11 @@ function drawRadar(elapsed) {
     ctx.lineTo(cx + Math.sin(sweep) * R, cy - Math.cos(sweep) * R);
     ctx.stroke();
 
-    /* Rotación: proa de la nave arriba */
-    const fwd = new THREE.Vector3(0, 0, 1).applyQuaternion(ship.quaternion);
+    /* Rotación: proa de la nave enfocada arriba */
+    const centerRig = hudRig || heroRig;
+    if (!centerRig) return;
+    const refGroup = centerRig.group;
+    const fwd = new THREE.Vector3(0, 0, 1).applyQuaternion(refGroup.quaternion);
     let fx = fwd.x;
     let fz = fwd.z;
     const fl = Math.hypot(fx, fz) || 1;
@@ -1822,8 +2192,8 @@ function drawRadar(elapsed) {
     const rz = -fx;
 
     function toScreen(p) {
-        const dx = p.x - ship.position.x;
-        const dz = p.z - ship.position.z;
+        const dx = p.x - refGroup.position.x;
+        const dz = p.z - refGroup.position.z;
         const up = dx * fx + dz * fz;
         const side = dx * rx + dz * rz;
         let sx = (side / RADAR_RANGE) * R;
@@ -1865,8 +2235,15 @@ function drawRadar(elapsed) {
         blip(wp, '#' + s.color.toString(16).padStart(6, '0'), 3, false);
     });
 
+    /* Naves de otros agentes */
+    const others = new Set(shipRigs.values());
+    if (heroRig) others.add(heroRig);
+    others.forEach(r => {
+        if (r !== centerRig) blip(r.group.position, '#7dd7ff', 3, false);
+    });
+
     /* Objetivo actual */
-    const target = currentTargetPosition();
+    const target = currentTargetPosition(centerRig);
     if (target) {
         blip(target, '#ffe81f', 4, true);
     }
@@ -1896,16 +2273,68 @@ controls.addEventListener('end', () => {
     userControlUntil = performance.now() + 3500;
 });
 
+/* ───────────────────────── Control de vista (cámara) ─────────────────────────
+   base    → estática lejana de la base de control (por defecto)
+   solar   → encuadre del sistema solar / proyecto cargado
+   folders → encuadre de la estructura de carpetas (bases espaciales)
+   follow  → persecución de la nave de un agente activo                      */
+
+let viewMode = 'base';
+let viewRefRig = null;
+let camTween = false;
+
+const VIEW_PRESETS = {
+    base: { pos: new THREE.Vector3(82, 52, 168), target: new THREE.Vector3(0, 16, 55) },
+    solar: { pos: new THREE.Vector3(0, 100, 178), target: new THREE.Vector3(0, 0, 0) },
+    folders: { pos: new THREE.Vector3(0, 112, 92), target: new THREE.Vector3(0, 88, 0) }
+};
+
+function applyViewPreset(mode, animate) {
+    const p = VIEW_PRESETS[mode];
+    if (!p) return;
+    if (animate) {
+        camTween = true;
+        gsap.to(camera.position, { x: p.pos.x, y: p.pos.y, z: p.pos.z, duration: 1.5, ease: 'power2.inOut', onComplete: () => { camTween = false; } });
+        gsap.to(controls.target, { x: p.target.x, y: p.target.y, z: p.target.z, duration: 1.5, ease: 'power2.inOut' });
+    } else {
+        camera.position.copy(p.pos);
+        controls.target.copy(p.target);
+    }
+}
+
+function setViewMode(mode, rig) {
+    if (mode === 'follow') {
+        if (!rig) return;
+        viewMode = 'follow';
+        viewRefRig = rig;
+        camTween = false;
+        userControlUntil = 0;
+        hudRig = rig;
+        if (rig.win) focusWindow(rig.win);
+    } else {
+        viewMode = mode;
+        viewRefRig = null;
+        userControlUntil = 0;
+        applyViewPreset(mode, true);
+    }
+    if (typeof refreshViewControl === 'function') refreshViewControl();
+}
+
 function updateCamera(dt) {
+    if (camTween) return;
+    if (viewMode !== 'follow') return;   /* vistas estáticas: orbit libre */
+
+    const rig = viewRefRig;
+    if (!rig) return;
     if (performance.now() < userControlUntil) return;
 
-    const forward = new THREE.Vector3(0, 0, 1).applyQuaternion(ship.quaternion);
-    const desired = ship.position.clone()
+    const forward = new THREE.Vector3(0, 0, 1).applyQuaternion(rig.group.quaternion);
+    const desired = rig.group.position.clone()
         .addScaledVector(forward, -30)
         .add(new THREE.Vector3(0, 13, 0));
 
     camera.position.lerp(desired, Math.min(1, dt * 1.6));
-    controls.target.lerp(ship.position, Math.min(1, dt * 2.5));
+    controls.target.lerp(rig.group.position, Math.min(1, dt * 2.5));
 }
 
 /* ───────────────────────── SignalR ───────────────────────── */
@@ -1915,14 +2344,31 @@ const connection = new signalR.HubConnectionBuilder()
     .withAutomaticReconnect()
     .build();
 
-connection.on("OnCodeGraphLoaded", (graph) => {
-    addLog("Sistema solar recibido. Desplegando planetas...");
-    buildSolarSystem(graph);
+/* ───────────────────────── SignalR: enrutamiento por sesión ───────────────────────── */
+
+let graphBuilt = false;
+
+connection.on("OnCodeGraphLoaded", (data) => {
+    const sessionId = data && data.sessionId;
+    const graph = data && data.graph;
+    const win = sessionId ? sessionWindows.get(sessionId) : mainWin;
+
+    if (!graphBuilt && graph) {
+        if (win) win.addLog("Sistema solar recibido. Desplegando planetas...");
+        buildSolarSystem(graph);
+        graphBuilt = true;
+    } else if (win && graph) {
+        win.addLog('[Sistema] Mapa recibido — la escena ya está desplegada.', 'sys');
+    }
 });
 
 connection.on("OnAgentStateChanged", (data) => {
+    const sessionId = data.sessionId;
+    if (sessionId && !sessionWindows.has(sessionId)) return; /* sesión cerrada en esta pestaña */
     const skill = data.skill || '';
     const target = data.target || '';
+    const win = sessionId ? sessionWindows.get(sessionId) : (focusedWin || mainWin);
+    const rig = (sessionId && shipRigs.get(sessionId)) || hudRig || heroRig;
 
     const logLabels = {
         Error: '[ERROR]',
@@ -1933,43 +2379,45 @@ connection.on("OnAgentStateChanged", (data) => {
     };
     const logClass = { Error: 'err', Cuota: 'err', Config: 'err', Reintentando: 'err' };
 
-    if (logLabels[skill]) addLog(`${logLabels[skill]} ${target}`, logClass[skill] || 'sys');
-    else addLog(`Skill: ${skill} -> ${target}`);
+    if (win) {
+        if (logLabels[skill]) win.addLog(`${logLabels[skill]} ${target}`, logClass[skill] || 'sys');
+        else win.addLog(`Skill: ${skill} -> ${target}`);
+    }
 
     if (skill === 'Agente') {
-        setMission('Analizando la petición…', 'working');
+        if (win) win.setMission('Analizando la petición…', 'working');
         return;
     }
 
     if (skill === 'Cuota') {
-        setMission(`Cuota agotada · ${target}`, 'error');
+        if (win) win.setMission(`Cuota agotada · ${target}`, 'error');
         return;
     }
 
     if (skill === 'Config') {
-        setMission(`Configuración · ${target}`, 'error');
+        if (win) win.setMission(`Configuración · ${target}`, 'error');
         return;
     }
 
     if (skill === 'Reintentando') {
-        setMission(target, 'error');
+        if (win) win.setMission(target, 'error');
         return;
     }
 
     if (skill === 'Proveedor') {
-        setMission(target, 'working');
+        if (win) win.setMission(target, 'working');
         return;
     }
 
     if (skill === 'Error') {
-        missionStep++;
-        setMission(`Error: ${target}`, 'error');
+        if (rig) rig.missionStep++;
+        if (win) win.setMission(`Error: ${target}`, 'error');
         const st = getOrCreateStation(`error-${target.slice(0, 30)}`, 'ERROR', SKILL_COLORS.Error);
-        enqueueWaypoint(st.station, 'station', 'Error', 'Error');
+        enqueueWaypoint(st.station, 'station', 'Error', 'Error', sessionId);
         return;
     }
 
-    missionStep++;
+    if (rig) rig.missionStep++;
 
     /* Buscar el planeta correspondiente al objetivo */
     let entry = null;
@@ -1991,58 +2439,570 @@ connection.on("OnAgentStateChanged", (data) => {
     }
 
     if (entry) {
-        addLog(`Destino: planeta ${entry.id}`);
-        enqueueWaypoint(entry.planet, 'node', entry.id, skill);
+        if (win) win.addLog(`Destino: planeta ${entry.id}`);
+        enqueueWaypoint(entry.planet, 'node', entry.id, skill, sessionId);
     } else {
         const name = target === 'Workspace' ? 'WORKSPACE' : target;
         const st = getOrCreateStation(`${skill}-${target}`, name, skillColor(skill));
-        enqueueWaypoint(st.station, 'station', name, skill);
+        enqueueWaypoint(st.station, 'station', name, skill, sessionId);
     }
 });
 
 connection.on("OnAgentResponse", (data) => {
-    addLog('AGENTE: ' + data.text);
-    missionEnding = true;
-    setMission('Tarea ejecutada · Ruta al destino final…', 'working');
-    enqueueWaypoint(portal, 'portal', 'Destino final', 'Portal');
+    const sessionId = data.sessionId;
+    if (sessionId && !sessionWindows.has(sessionId)) return; /* sesión cerrada en esta pestaña */
+    const win = sessionId ? sessionWindows.get(sessionId) : (focusedWin || mainWin);
+    const rig = (sessionId && shipRigs.get(sessionId)) || hudRig || heroRig;
+
+    if (win) win.addLog('AGENTE: ' + data.text);
+    if (rig) rig.missionEnding = true;
+    if (win) win.setMission('Tarea ejecutada · Ruta al destino final…', 'working');
+    enqueueWaypoint(portal, 'portal', 'Destino final', 'Portal', sessionId);
 });
 
-connection.start()
-    .then(() => addLog('Conectado con SignalR con éxito.'))
-    .catch(err => addLog('[ERROR] Error SignalR: ' + err, 'err'));
+/* ───────────────────────── Ventanas de agente (paralelo) ───────────────────────── */
 
-connection.onclose(err => addLog('[ERROR] Conexión con el servidor cerrada' + (err ? ': ' + err : ''), 'err'));
-connection.onreconnected(() => addLog('Conexión SignalR reestablecida.', 'sys'));
-connection.onreconnecting(() => addLog('[AVISO] Reconectando con el servidor…', 'err'));
+const sideWindowsEl = document.getElementById('side-windows');
+const agentsBar = document.getElementById('agents-bar');
+const btnNewAgent = document.getElementById('btn-new-agent');
 
-/* ───────────────────────── Inicio de sesión ───────────────────────── */
+function classifyLog(msg) {
+    if (/Error|429|fallaron|fallo|agotada|no disponible|sin conexi|inválida|undefined/i.test(msg)) return 'err';
+    if (msg.startsWith('AGENTE')) return 'agent';
+    if (/^(Skill:|Destino:|Objetivo)/.test(msg)) return 'skill';
+    return 'sys';
+}
 
-document.getElementById('btnStart').addEventListener('click', async () => {
-    const targetPath = document.getElementById('targetPath').value;
-    const prompt = document.getElementById('prompt').value;
+function focusWindow(win) {
+    if (!win) return;
+    focusedWin = win;
+    if (win.rig) hudRig = win.rig;
+}
 
-    /* Reiniciar misión */
-    waypointQueue.length = 0;
-    shipTarget.object = null;
-    shipTarget.point = null;
-    shipTarget.kind = null;
-    shipTarget.name = null;
-    missionStep = 0;
-    missionEnding = false;
-    missionDone = false;
-    patrolCenter = BASE_POSITION.clone();
-    ship.position.copy(BASE_POSITION);
-    ship.quaternion.identity();
-    bankAngle = 0;
-    lastMoveDir.set(0, 0, 1);
-    lastShipPos.copy(ship.position);
-    smoothSpeed = 0;
-    resetTrail();
-    clearGroup(stationsGroup);
-    stationsMap.clear();
-    if (portal) portal.scale.setScalar(1);
-    setMission('Despegando…', 'working');
-    addLog('Enviando petición de orquestación...');
+/* ── Acordeón de ventanas laterales: una expandida a la vez ── */
+
+function isSideWin(win) {
+    return !!(win && win.el && win.el.classList.contains('agent-window'));
+}
+
+function setToggleGlyph(win, expanded) {
+    const b = win.el && win.el.querySelector('.win-toggle');
+    if (b) b.textContent = expanded ? '▴' : '▾';
+}
+
+function collapseWindow(win) {
+    if (!isSideWin(win)) return;
+    win.expanded = false;
+    win.el.classList.add('collapsed');
+    setToggleGlyph(win, false);
+}
+
+function expandWindow(win) {
+    if (!isSideWin(win)) return;
+    agentWindows.forEach(w => { if (w !== win) collapseWindow(w); });
+    win.expanded = true;
+    win.el.classList.remove('collapsed');
+    setToggleGlyph(win, true);
+}
+
+function toggleWindow(win) {
+    if (isSideWin(win) && win.expanded) collapseWindow(win);
+    else expandWindow(win);
+}
+
+function makeWindow(root, opts) {
+    const win = {
+        index: opts.index,
+        name: opts.name,
+        el: root,
+        pathInput: root.querySelector('.target-path'),
+        promptInput: root.querySelector('.prompt-input'),
+        btnStart: root.querySelector('.btn-start'),
+        btnBrowse: root.querySelector('.btn-browse'),
+        missionEl: root.querySelector('.mission-status'),
+        missionBarEl: root.querySelector('.mission-bar'),
+        logEl: root.querySelector('.log-container'),
+        tel: {
+            vel: root.querySelector('.tel-vel'),
+            obj: root.querySelector('.tel-obj'),
+            dist: root.querySelector('.tel-dist'),
+            hyper: root.querySelector('.tel-hyper')
+        },
+        chip: null,
+        sessionId: null,
+        rig: null,
+        minimized: false,
+
+        addLog(msg, cls) {
+            if (!this.logEl) return;
+            const div = document.createElement('div');
+            div.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            div.className = cls || classifyLog(msg);
+            this.logEl.appendChild(div);
+            this.logEl.scrollTop = this.logEl.scrollHeight;
+        },
+
+        setMission(text, cls) {
+            if (this.missionEl) {
+                this.missionEl.textContent = text;
+                this.missionEl.className = 'mission-status' + (cls ? ' ' + cls : '');
+            }
+            if (this.missionBarEl) this.missionBarEl.classList.toggle('is-working', cls === 'working');
+            if (this.chip) {
+                this.chip.classList.remove('st-working', 'st-done', 'st-error');
+                if (cls === 'working') this.chip.classList.add('st-working');
+                else if (cls === 'done') this.chip.classList.add('st-done');
+                else if (cls === 'error') this.chip.classList.add('st-error');
+                const m = this.chip.querySelector('.chip-mission');
+                if (m) m.textContent = text;
+            }
+        },
+
+        minimize() {
+            this.minimized = true;
+            this.el.classList.add('hidden');
+            if (this.chip) this.chip.classList.add('minimized');
+        },
+
+        restore() {
+            this.minimized = false;
+            this.el.classList.remove('hidden');
+            if (this.chip) this.chip.classList.remove('minimized');
+            focusWindow(this);
+        }
+    };
+
+    /* Chip de resumen en la barra inferior */
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'agent-chip';
+    chip.innerHTML = '<span class="chip-dot"></span><span class="chip-name"></span><span class="chip-mission"></span>';
+    chip.querySelector('.chip-name').textContent = opts.name;
+    chip.querySelector('.chip-mission').textContent = 'En espera de despegue';
+    chip.addEventListener('click', () => {
+        win.restore();
+        if (isSideWin(win)) expandWindow(win);
+    });
+    win.chip = chip;
+    if (agentsBar) {
+        agentsBar.appendChild(chip);
+        agentsBar.classList.remove('hidden');
+    }
+
+    const btnMin = root.querySelector('.win-min');
+    if (btnMin) btnMin.addEventListener('click', () => win.minimize());
+    const btnClose = root.querySelector('.win-close');
+    if (btnClose) btnClose.addEventListener('click', () => closeWindow(win));
+
+    /* Acordeón: cabecera o ▾/▴ alternan contraer/expandir */
+    const btnToggle = root.querySelector('.win-toggle');
+    if (btnToggle) btnToggle.addEventListener('click', () => toggleWindow(win));
+    const headEl = root.querySelector('.panel-head');
+    if (headEl) headEl.addEventListener('click', (e) => {
+        if (e.target.closest('button')) return;
+        if (isSideWin(win)) toggleWindow(win);
+    });
+
+    root.addEventListener('mousedown', () => focusWindow(win));
+
+    if (win.btnBrowse) {
+        win.btnBrowse.addEventListener('click', () => {
+            if (typeof window.openPathExplorer === 'function') window.openPathExplorer(win.pathInput);
+        });
+    }
+
+    if (win.btnStart) win.btnStart.addEventListener('click', () => launchAgent(win));
+
+    agentWindows.push(win);
+    if (typeof refreshViewControl === 'function') refreshViewControl();
+    return win;
+}
+
+/* Explosión estilo Star Wars: destello, onda de choque y escombros incandescentes */
+function explodeRig(rig) {
+    if (!rig || !rig.group) return;
+    const pos = rig.group.position.clone();
+
+    liveRigs.delete(rig);
+    resetTrail(rig);
+    scene.remove(rig.group);
+    disposeObject(rig.group);
+
+    /* Destello inicial (La Nave se consume en un fogonazo) */
+    const flashMat = new THREE.MeshBasicMaterial({
+        color: 0xffd9a0,
+        transparent: true,
+        opacity: 1,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+    });
+    const flash = new THREE.Mesh(new THREE.SphereGeometry(1, 16, 12), flashMat);
+    flash.position.copy(pos);
+    scene.add(flash);
+    gsap.to(flash.scale, { x: 14, y: 14, z: 14, duration: 0.4, ease: 'power2.out' });
+    gsap.to(flashMat, {
+        opacity: 0,
+        duration: 0.55,
+        ease: 'power1.out',
+        onComplete: () => {
+            scene.remove(flash);
+            flash.geometry.dispose();
+            flashMat.dispose();
+        }
+    });
+
+    /* Onda de choque expansiva */
+    const shockMat = new THREE.MeshBasicMaterial({
+        color: 0xffa050,
+        transparent: true,
+        opacity: 0.7,
+        wireframe: true,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+    });
+    const shock = new THREE.Mesh(new THREE.SphereGeometry(1, 14, 10), shockMat);
+    shock.position.copy(pos);
+    scene.add(shock);
+    gsap.to(shock.scale, { x: 24, y: 24, z: 24, duration: 1.0, ease: 'power2.out' });
+    gsap.to(shockMat, {
+        opacity: 0,
+        duration: 1.0,
+        ease: 'power1.out',
+        onComplete: () => {
+            scene.remove(shock);
+            shock.geometry.dispose();
+            shockMat.dispose();
+        }
+    });
+
+    /* Escombros incandescentes en todas las direcciones */
+    const count = 150;
+    const geo = new THREE.BufferGeometry();
+    const positions = new Float32Array(count * 3);
+    const colors = new Float32Array(count * 3);
+    const vels = [];
+    const palette = [0xffd27f, 0xff8c42, 0xfff6d8, 0xff5e3a, 0x9fb4ff];
+    const sparkColor = new THREE.Color();
+    for (let i = 0; i < count; i++) {
+        positions[i * 3] = 0;
+        positions[i * 3 + 1] = 0;
+        positions[i * 3 + 2] = 0;
+        sparkColor.setHex(palette[(Math.random() * palette.length) | 0]);
+        colors[i * 3] = sparkColor.r;
+        colors[i * 3 + 1] = sparkColor.g;
+        colors[i * 3 + 2] = sparkColor.b;
+        vels.push(new THREE.Vector3(
+            Math.random() * 2 - 1,
+            Math.random() * 2 - 1,
+            Math.random() * 2 - 1
+        ).normalize().multiplyScalar(6 + Math.random() * 22));
+    }
+    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    const mat = new THREE.PointsMaterial({
+        size: 0.75,
+        vertexColors: true,
+        transparent: true,
+        opacity: 1,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+    });
+    const sparks = new THREE.Points(geo, mat);
+    sparks.position.copy(pos);
+    scene.add(sparks);
+
+    /* Luz de la explosión iluminando el entorno */
+    const light = new THREE.PointLight(0xff9040, 16, 65, 1.5);
+    light.position.copy(pos);
+    scene.add(light);
+
+    /* Chunks del casco girando y enfriándose (estilo Star Wars) */
+    for (let c = 0; c < 14; c++) {
+        const chunkMat = new THREE.MeshStandardMaterial({
+            color: 0x7a7268,
+            roughness: 0.85,
+            metalness: 0.35,
+            emissive: 0xff7020,
+            emissiveIntensity: 1.4,
+            transparent: true,
+            opacity: 1
+        });
+        const chunk = new THREE.Mesh(new THREE.TetrahedronGeometry(0.25 + Math.random() * 0.55), chunkMat);
+        chunk.position.copy(pos);
+        scene.add(chunk);
+        const dir = new THREE.Vector3(
+            Math.random() * 2 - 1,
+            Math.random() * 2 - 1,
+            Math.random() * 2 - 1
+        ).normalize().multiplyScalar(4 + Math.random() * 10);
+        const spin = new THREE.Vector3(
+            Math.random() * 6 - 3,
+            Math.random() * 6 - 3,
+            Math.random() * 6 - 3
+        );
+        const cs = { t: 0 };
+        gsap.to(cs, {
+            t: 1.3,
+            duration: 1.3,
+            ease: 'none',
+            onUpdate: () => {
+                chunk.position.set(
+                    pos.x + dir.x * cs.t,
+                    pos.y + dir.y * cs.t - 5 * cs.t * cs.t,
+                    pos.z + dir.z * cs.t
+                );
+                chunk.rotation.set(spin.x * cs.t, spin.y * cs.t, spin.z * cs.t);
+                chunkMat.opacity = Math.max(0, 1 - cs.t / 1.3);
+                chunkMat.emissiveIntensity = Math.max(0, 1.4 * (1 - cs.t / 0.9));
+            },
+            onComplete: () => {
+                scene.remove(chunk);
+                chunk.geometry.dispose();
+                chunkMat.dispose();
+            }
+        });
+    }
+
+    const dur = 1.5;
+    const st = { k: 0 };
+    gsap.to(st, {
+        k: dur,
+        duration: dur,
+        ease: 'none',
+        onUpdate: () => {
+            const p = st.k / dur;
+            const ease = 1 - (1 - p) * (1 - p);
+            const arr = geo.attributes.position.array;
+            for (let i = 0; i < count; i++) {
+                const v = vels[i];
+                arr[i * 3] = v.x * ease;
+                arr[i * 3 + 1] = v.y * ease - 7 * p * p;
+                arr[i * 3 + 2] = v.z * ease;
+            }
+            geo.attributes.position.needsUpdate = true;
+            mat.opacity = 1 - p;
+            light.intensity = Math.max(0, 16 * (1 - p / 0.35));
+        },
+        onComplete: () => {
+            scene.remove(sparks);
+            geo.dispose();
+            mat.dispose();
+            scene.remove(light);
+        }
+    });
+}
+
+/* Cerrar una ventana de agente: suelta la nave (explosa), el chip y la sesión */
+function closeWindow(win) {
+    if (!win) return;
+
+    if (win.sessionId) {
+        sessionWindows.delete(win.sessionId);
+        fetch('/api/agent/sessions/' + encodeURIComponent(win.sessionId) + '/close', { method: 'POST' })
+            .catch(() => { });
+    }
+
+    const rig = win.rig;
+    if (rig) {
+        if (rig.sessionId) shipRigs.delete(rig.sessionId);
+        explodeRig(rig);
+        if (rig === heroRig) heroRig = null;
+        if (rig === viewRefRig) {
+            /* La cámara se queda sobre la explosión un momento… */
+            setTimeout(() => {
+                if (viewRefRig !== rig) return;
+                viewRefRig = null;
+                if (viewMode === 'follow') {
+                    viewMode = 'base';
+                    applyViewPreset('base', true);
+                }
+            }, 1300);
+        }
+        win.rig = null;
+        rig.win = null;
+    }
+
+    if (win.chip) {
+        win.chip.remove();
+        win.chip = null;
+    }
+    if (agentsBar && !agentsBar.querySelector('.agent-chip')) {
+        agentsBar.classList.add('hidden');
+    }
+
+    const idx = agentWindows.indexOf(win);
+    if (idx >= 0) agentWindows.splice(idx, 1);
+    if (win.el) win.el.remove();
+
+    if (focusedWin === win) {
+        focusedWin = agentWindows[agentWindows.length - 1] || null;
+    }
+    if (rig === hudRig) {
+        hudRig = (focusedWin && focusedWin.rig) || null;
+    }
+
+    /* Si la ventana cerrada estaba expandida, expandir la siguiente */
+    if (!agentWindows.some(w => isSideWin(w) && w.expanded)) {
+        const nextSide = agentWindows.find(isSideWin);
+        if (nextSide) expandWindow(nextSide);
+    }
+
+    refreshViewControl();
+}
+
+function createSideWindow() {
+    windowSeq++;
+    const el = document.createElement('div');
+    el.className = 'agent-window hud-panel';
+    el.innerHTML = `
+        <div class="brackets" aria-hidden="true"></div>
+        <div class="panel-head">
+            <div>
+                <div class="head-row">
+                    <svg class="ship-icon" viewBox="0 0 40 40" aria-hidden="true">
+                        <circle cx="19" cy="25" r="12.5" fill="none" stroke="currentColor" stroke-width="2" />
+                        <rect x="12.5" y="6" width="4.5" height="13" rx="1.4" fill="currentColor" />
+                        <rect x="21" y="6" width="4.5" height="13" rx="1.4" fill="currentColor" />
+                        <circle cx="33" cy="16" r="3" fill="currentColor" />
+                    </svg>
+                    <h3>Agente ${windowSeq}</h3>
+                </div>
+                <div class="subtitle win-extra">// Consola paralela</div>
+            </div>
+            <div class="win-actions">
+                <button type="button" class="win-toggle" title="Contraer/Expandir" aria-label="Contraer o expandir">&#9650;</button>
+                <button type="button" class="win-min" title="Minimizar" aria-label="Minimizar">&ndash;</button>
+                <button type="button" class="win-close" title="Cerrar agente" aria-label="Cerrar agente">&times;</button>
+            </div>
+        </div>
+        <div class="field">
+            <label>Ruta del Proyecto Objetivo</label>
+            <div class="path-row">
+                <input type="text" class="target-path" value="C:/" spellcheck="false" />
+                <button type="button" class="btn-browse" title="Explorar carpetas del servidor">Examinar</button>
+            </div>
+        </div>
+        <div class="field">
+            <label>Instrucción al Agente</label>
+            <textarea class="prompt-input" rows="3" spellcheck="false"></textarea>
+        </div>
+        <button class="btn-start win-extra" type="button">Iniciar Hiperimpulsor</button>
+        <div class="mission-bar win-extra">
+            <span class="mission-label">Misión</span>
+            <span class="mission-status">En espera de despegue</span>
+        </div>
+        <div class="telemetry win-extra" aria-label="Telemetría del halcón">
+            <div class="tel"><span class="tel-k">Vel</span><span class="tel-v tel-vel">0</span></div>
+            <div class="tel"><span class="tel-k">Objetivo</span><span class="tel-v tel-obj">—</span></div>
+            <div class="tel"><span class="tel-k">Dist</span><span class="tel-v tel-dist">—</span></div>
+            <div class="tel"><span class="tel-k">Motor</span><span class="tel-v tel-hyper">IDLE</span></div>
+        </div>
+        <div class="log-head win-extra">
+            <span class="live">System Log</span>
+        </div>
+        <div class="log-container win-extra"></div>
+    `;
+    if (sideWindowsEl) sideWindowsEl.appendChild(el);
+    const win = makeWindow(el, { index: windowSeq, name: `Agente ${windowSeq}` });
+
+    expandWindow(win); /* la nueva ventana queda expandida, las demás se contraen */
+
+    /* Nave del agente: aparece flotando en la base de control al crear la ventana */
+    const rig = spawnShipRig();
+    rig.win = win;
+    win.rig = rig;
+    refreshViewControl();
+
+    return win;
+}
+
+/* ───────────────────────── Control de vista (UI) ───────────────────────── */
+
+function refreshViewControl() {
+    const list = document.getElementById('view-list');
+    if (!list) return;
+    list.innerHTML = '';
+
+    const add = (label, active, onClick) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'vc-item' + (active ? ' active' : '');
+        b.textContent = label;
+        b.addEventListener('click', onClick);
+        list.appendChild(b);
+        return b;
+    };
+
+    add('Base de control', viewMode === 'base', () => setViewMode('base'));
+    add('Sistema solar', viewMode === 'solar', () => setViewMode('solar'));
+
+    if (folderBasePath) {
+        const tail = folderTail(folderBasePath) || folderBasePath;
+        add('Carpetas: ' + tail, viewMode === 'folders', () => setViewMode('folders'));
+    }
+
+    const withSession = agentWindows;
+    if (withSession.length) {
+        const sep = document.createElement('span');
+        sep.className = 'vc-sep';
+        list.appendChild(sep);
+    }
+    withSession.forEach(w => {
+        const active = viewMode === 'follow' && viewRefRig === w.rig;
+        const tail = w.sessionId && w.pathInput ? (folderTail(w.pathInput.value) || '') : '';
+        add(w.name + (tail ? ' · ' + tail : ''), active, () => {
+            if (w.rig) setViewMode('follow', w.rig);
+            else focusWindow(w);
+        });
+    });
+}
+
+/* ───────────────────────── Despegue de agentes ───────────────────────── */
+
+function bindRig(win, sessionId) {
+    let rig = win.rig;
+    if (!rig) {
+        if (!primaryShipUsed && heroRig) {
+            rig = heroRig;
+            primaryShipUsed = true;
+        } else {
+            rig = spawnShipRig();
+        }
+        win.rig = rig;
+        rig.win = win;
+    }
+
+    /* ¿Hay otras misiones en curso? → no limpiar la escena compartida */
+    const hasOtherSessions = [...shipRigs.values()].some(r => r !== rig && r.sessionId);
+
+    /* Desvincular el mapeo anterior de esta ventana (relanzamiento) */
+    for (const [id, r] of [...shipRigs]) {
+        if (r === rig && id !== sessionId) shipRigs.delete(id);
+    }
+
+    resetRig(rig, true);
+    if (!hasOtherSessions) {
+        clearGroup(stationsGroup);
+        stationsMap.clear();
+        if (portal) portal.scale.setScalar(1);
+    }
+
+    rig.sessionId = sessionId;
+    rig.win = win;
+    shipRigs.set(sessionId, rig);
+    hudRig = rig;
+
+    /* Una nave por agente: despega de la base de control */
+    startTakeoff(rig);
+}
+
+async function launchAgent(win) {
+    const targetPath = win.pathInput ? win.pathInput.value : '';
+    const prompt = win.promptInput ? win.promptInput.value : '';
+
+    launchInFlight = true;
+    win.setMission('Despegando…', 'working');
+    win.addLog('Enviando petición de orquestación...');
     document.body.classList.add('launching');
     setTimeout(() => document.body.classList.remove('launching'), 1400);
 
@@ -2058,21 +3018,34 @@ document.getElementById('btnStart').addEventListener('click', async () => {
 
         if (!res.ok) {
             const reason = data.message || data.Message || `HTTP ${res.status}`;
-            addLog(`[ERROR] No se pudo iniciar la misión: ${reason}`, 'err');
-            setMission('Error al iniciar la misión', 'error');
+            win.addLog(`[ERROR] No se pudo iniciar la misión: ${reason}`, 'err');
+            win.setMission('Error al iniciar la misión', 'error');
             document.body.classList.remove('launching');
             return;
         }
 
         if (!data.sessionId) {
-            addLog('[ERROR] El servidor no devolvió un id de sesión.', 'err');
-            setMission('Error al iniciar la misión', 'error');
+            win.addLog('[ERROR] El servidor no devolvió un id de sesión.', 'err');
+            win.setMission('Error al iniciar la misión', 'error');
             document.body.classList.remove('launching');
             return;
         }
 
-        addLog(`Sesión creada: ${data.sessionId}`);
+        /* La ventana pudo cerrarse mientras el POST estaba en curso */
+        if (agentWindows.indexOf(win) < 0) {
+            fetch('/api/agent/sessions/' + encodeURIComponent(data.sessionId) + '/close', { method: 'POST' }).catch(() => { });
+            document.body.classList.remove('launching');
+            return;
+        }
+
+        if (win.sessionId) sessionWindows.delete(win.sessionId);
+        win.sessionId = data.sessionId;
+        sessionWindows.set(data.sessionId, win);
         connection.invoke('JoinSession', data.sessionId);
+        bindRig(win, data.sessionId);
+        focusWindow(win);
+
+        win.addLog(`Sesión creada: ${data.sessionId}`);
 
         /* Desplegar la estructura de la ruta objetivo como bases espaciales */
         try {
@@ -2085,11 +3058,85 @@ document.getElementById('btnStart').addEventListener('click', async () => {
             }
         } catch (e) { }
     } catch (err) {
-        addLog('[ERROR] No se pudo iniciar sesión: ' + err, 'err');
-        setMission('Error al iniciar la misión', 'error');
+        win.addLog('[ERROR] No se pudo iniciar sesión: ' + err, 'err');
+        win.setMission('Error al iniciar la misión', 'error');
         document.body.classList.remove('launching');
+    } finally {
+        launchInFlight = false;
     }
-});
+}
+
+/* Restaurar sesiones activas tras (re)cargar la página */
+async function restoreSessions() {
+    try {
+        /* Si hay una misión lanzándose en esta página, su POST aún no registró la
+           ventana: restaurarla aquí crearía un duplicado. Se omite (habrá otra
+           oportunidad en la próxima carga). */
+        if (launchInFlight) return;
+
+        const res = await fetch('/api/agent/sessions');
+        if (!res.ok) return;
+        const sessions = await res.json();
+        (sessions || []).forEach(s => {
+            if (!s.sessionId || sessionWindows.has(s.sessionId)) return;
+            if (s.status === 'Closed') return;
+            if (launchInFlight) return;
+
+            const win = createSideWindow();
+            if (s.targetPath) win.pathInput.value = s.targetPath;
+            if (s.prompt) win.promptInput.value = s.prompt;
+            win.sessionId = s.sessionId;
+            sessionWindows.set(s.sessionId, win);
+            connection.invoke('JoinSession', s.sessionId);
+
+            const rig = win.rig || spawnShipRig();
+            win.rig = rig;
+            rig.win = win;
+            rig.sessionId = s.sessionId;
+            shipRigs.set(s.sessionId, rig);
+
+            if (s.status === 'Done') win.setMission('Misión completada · sesión restaurada', 'done');
+            else if (s.status === 'Error') win.setMission('Error · sesión restaurada', 'error');
+            else win.setMission('En misión · sesión restaurada', 'working');
+            win.minimize();
+        });
+        refreshViewControl();
+    } catch (e) { }
+}
+
+/* ───────────────────────── Conexión ───────────────────────── */
+
+connection.start()
+    .then(() => {
+        addLog('Conectado con SignalR con éxito.');
+        restoreSessions();
+    })
+    .catch(err => addLog('[ERROR] Error SignalR: ' + err, 'err'));
+
+connection.onclose(err => addLog('[ERROR] Conexión con el servidor cerrada' + (err ? ': ' + err : ''), 'err'));
+connection.onreconnected(() => addLog('Conexión SignalR reestablecida.', 'sys'));
+connection.onreconnecting(() => addLog('[AVISO] Reconectando con el servidor…', 'err'));
+
+/* ───────────────────────── Consola principal + botón ───────────────────────── */
+
+mainWin = makeWindow(document.getElementById('ui-panel'), { index: 1, name: 'Agente 1' });
+focusedWin = mainWin;
+windowSeq = 1;
+
+/* Todos los agentes viven en la misma columna apilada a la izquierda */
+if (sideWindowsEl) sideWindowsEl.prepend(mainWin.el);
+expandWindow(mainWin);
+
+if (btnNewAgent) {
+    btnNewAgent.addEventListener('click', () => {
+        const win = createSideWindow();
+        focusWindow(win);
+        if (win.promptInput) win.promptInput.focus();
+    });
+}
+
+refreshViewControl();
+
 
 /* ───────────────────────── Animación ───────────────────────── */
 
@@ -2112,8 +3159,13 @@ function animate() {
     if (sunMesh) sunMesh.rotation.y += dt * 0.15;
     if (sunCorona) sunCorona.rotation.z += dt * 0.06;
     if (sunGlow) {
-        const pulse = 34 + Math.sin(elapsed * 1.3) * 3.5;
+        const pulse = 26 + Math.sin(elapsed * 1.3) * 2.5;
         sunGlow.scale.setScalar(pulse);
+    }
+    if (sunUniforms) sunUniforms.uTime.value = elapsed;
+    if (elapsed > nextFlareAt) {
+        nextFlareAt = elapsed + 9 + Math.random() * 13;
+        spawnSolarFlare();
     }
 
     if (portal) {
@@ -2125,7 +3177,7 @@ function animate() {
         if (baseMarker.userData.rotor) baseMarker.userData.rotor.rotation.y += dt * 0.35;
         const beacons = baseMarker.userData.beacons;
         if (beacons) {
-            const pulse = 0.5 + Math.abs(Math.sin(elapsed * 2.6)) * 1.5;
+            const pulse = 0.28 + Math.abs(Math.sin(elapsed * 2.6)) * 0.7;
             beacons.forEach(b => { b.material.emissiveIntensity = pulse; });
         }
     }
@@ -2142,7 +3194,7 @@ function animate() {
         st.core.rotation.y += dt * 0.8;
         st.ring.rotation.z += dt * 0.6;
         const boost = st.visited ? 1.6 : 1;
-        st.glow.scale.setScalar(8 * boost * (1 + Math.sin(elapsed * 2.4) * 0.18));
+        st.glow.scale.setScalar(4.5 * boost * (1 + Math.sin(elapsed * 2.4) * 0.18));
     });
 
     folderBasesList.forEach(f => {
@@ -2151,7 +3203,7 @@ function animate() {
         if (f.glow) f.glow.scale.setScalar(f.baseGlow * (1 + Math.sin(elapsed * 2.2 + f.phase) * 0.16));
     });
 
-    updateShip(dt, elapsed);
+    liveRigs.forEach(r => updateRig(r, dt, elapsed));
     drawRadar(elapsed);
     updateCamera(dt);
 
@@ -2160,8 +3212,17 @@ function animate() {
     else renderer.render(scene, camera);
 }
 
-resetTrail();
-lastShipPos.copy(ship.position);
+heroRig = makeRig(buildShipParts(), BASE_POSITION.clone().add(new THREE.Vector3(0, 2, 13)));
+heroRig.dockOffset.set(0, 2, 13);
+hudRig = heroRig;
+mainWin.rig = heroRig;
+heroRig.win = mainWin;
+primaryShipUsed = true;
+resetTrail(heroRig);
+enableShadows(scene);
+if (sunMesh) { sunMesh.castShadow = false; sunMesh.receiveShadow = false; }
+if (sunCorona) { sunCorona.castShadow = false; sunCorona.receiveShadow = false; }
+applyViewPreset('base', false);
 setMission('En espera de despegue', '');
 animate();
 

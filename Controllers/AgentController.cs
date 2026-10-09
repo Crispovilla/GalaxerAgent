@@ -1,4 +1,5 @@
-﻿using Base_MVC_Core9.Interfaces;
+﻿using Base_MVC_Core9.Dtos;
+using Base_MVC_Core9.Interfaces;
 using Base_MVC_Core9.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,16 +8,32 @@ namespace Base_MVC_Core9.Controllers;
 public class AgentController : Controller
 {
     private readonly IAgentOrchestrator _orchestrator;
+    private readonly IAgentSessionRegistry _sessions;
 
-    public AgentController(IAgentOrchestrator orchestrator)
+    public AgentController(IAgentOrchestrator orchestrator, IAgentSessionRegistry sessions)
     {
         _orchestrator = orchestrator;
+        _sessions = sessions;
     }
 
     [HttpGet]
     public IActionResult Index()
     {
         return View();
+    }
+
+    [HttpGet("api/agent/sessions")]
+    public IActionResult Sessions()
+    {
+        return Ok(_sessions.List());
+    }
+
+    [HttpPost("api/agent/sessions/{sessionId}/close")]
+    [IgnoreAntiforgeryToken]
+    public IActionResult CloseSession(string sessionId)
+    {
+        _sessions.SetStatus(sessionId, AgentSessionStatus.Closed);
+        return Ok(new { SessionId = sessionId, Status = AgentSessionStatus.Closed });
     }
 
     [HttpPost("api/agent/start")]
