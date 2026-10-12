@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 using Base_MVC_Core9.Data;
 using Base_MVC_Core9.Entities;
 using Base_MVC_Core9.Hubs;
@@ -158,6 +160,41 @@ app.UseAuthorization();
 // ── 9. RUTAS ───────────────────────────────────────────────
 app.MapRazorPages();
 app.MapHub<ConstellationHub>("/constellationHub");
+
+// ── 10. LOGIN LOCAL DE DESARROLLO (puerta inofensiva fuera de esta máquina) ──
+// Solo se registra si se cumplen AMBAS condiciones:
+//   1) El entorno es Development (dotnet run local).
+//   2) Existe la bandera "LoginLocal": { "Activo": true } en appsettings.Development.json
+//      (archivo gitignoreado: NO se commitea ni viaja a la oficina).
+// Si falta alguna, la ruta /dev/login-local devuelve 404 y el login normal
+// (Identity + BD on-premise) queda completamente intacto.
+// Emite la MISMA cookie Identity.Application que genera el formulario de login,
+// por eso el AuthorizeFilter global la acepta sin tocar ninguna base de datos.
+var loginLocalActivo = app.Configuration.GetValue<bool>("LoginLocal:Activo");
+if (app.Environment.IsDevelopment() && loginLocalActivo)
+{
+    app.MapGet("/dev/login-local", async (HttpContext contexto) =>
+    {
+        var email = app.Configuration["LoginLocal:Email"] ?? "local@dev.local";
+        var nombre = app.Configuration["LoginLocal:Nombre"] ?? "Usuario Local Dev";
+
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString()),
+            new(ClaimTypes.Name, nombre),
+            new(ClaimTypes.Email, email),
+            new(ClaimTypes.Role, "Administrador")
+        };
+
+        var identidad = new ClaimsIdentity(claims, IdentityConstants.ApplicationScheme);
+        await contexto.SignInAsync(IdentityConstants.ApplicationScheme, new ClaimsPrincipal(identidad));
+
+        // Se va directo a /Agent: la consola no depende del menú lateral (que se
+        // carga desde la BD on-premise y no responde fuera de la oficina).
+        return Results.Redirect("/Agent");
+    }).AllowAnonymous();
+}
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

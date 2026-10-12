@@ -2518,6 +2518,8 @@ function renderFolderBases(path, folderPaths, deployKey, label) {
     const tail = folderTail(path) || 'RAÍZ';
 
     const central = buildFolderBase(tail, 0x00ffcc, 1.7, 'deathstar');
+    central.userData.structurePath = path || '';
+    central.userData.isStructureCore = true;
     group.add(central);
     dep.core = central;
 
@@ -2554,6 +2556,7 @@ function renderFolderBases(path, folderPaths, deployKey, label) {
 
             const base = buildFolderBase(name, i % 2 ? 0x6ec8ff : 0x9be7ff, 1, 'moon');
             base.position.copy(pos);
+            base.userData.structurePath = folder;
             group.add(base);
 
             const link = new THREE.Line(
@@ -4096,8 +4099,14 @@ refreshViewControl();
 
 const clock = new THREE.Clock();
 
+/* ── Pausa/reanuda la galaxia (usado por SkinManager al conmutar skins) ── */
+let galaxyPaused = false;
+window.__galaxyPause = () => { galaxyPaused = true; };
+window.__galaxyResume = () => { galaxyPaused = false; };
+
 function animate() {
     requestAnimationFrame(animate);
+    if (galaxyPaused) return;   /* skin inactiva: no invierte GPU en render */
     const dt = Math.min(clock.getDelta(), 0.05);
     const elapsed = clock.elapsedTime;
 
@@ -4248,3 +4257,39 @@ window.addEventListener('unhandledrejection', (e) => {
     const reason = (e.reason && (e.reason.message || String(e.reason))) || 'promesa rechazada';
     addLog('[ERROR] ' + reason, 'err');
 });
+
+/* ────────────── Clic en la estructura → modal de diagrama ──────────────
+   Distingue clic de arrastre (OrbitControls) con un umbral de movimiento. */
+const structureRaycaster = new THREE.Raycaster();
+const structurePointer = new THREE.Vector2();
+let structureDownPt = null;
+
+if (renderer && container) {
+    renderer.domElement.addEventListener('pointerdown', (e) => {
+        structureDownPt = { x: e.clientX, y: e.clientY };
+    });
+
+    renderer.domElement.addEventListener('pointerup', (e) => {
+        if (!structureDownPt) return;
+        const moved = Math.hypot(e.clientX - structureDownPt.x, e.clientY - structureDownPt.y);
+        structureDownPt = null;
+        if (moved > 6) return;  /* fue un arrastre, no un clic */
+
+        structurePointer.x = (e.clientX / window.innerWidth) * 2 - 1;
+        structurePointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
+        structureRaycaster.setFromCamera(structurePointer, camera);
+
+        /* Recorre las bases de carpeta buscando la etiqueta structurePath */
+        const hits = structureRaycaster.intersectObjects(folderBasesGroup.children, true);
+        for (const hit of hits) {
+            let obj = hit.object;
+            while (obj) {
+                if (obj.userData && obj.userData.structurePath !== undefined) {
+                    if (typeof StructureModal !== 'undefined') StructureModal.open(obj.userData.structurePath);
+                    return;
+                }
+                obj = obj.parent;
+            }
+        }
+    });
+}
