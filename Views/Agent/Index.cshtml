@@ -1436,6 +1436,79 @@
             .hud-panel .telemetry { grid-template-columns: repeat(2, 1fr); }
             #hud-fx .frame { inset: 6px; }
         }
+
+        /* ── Skin Cerebro: tablero neural (reemplaza al del Halcón) ── */
+        #dash-brain {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 106px;
+            z-index: 4;
+            pointer-events: none;
+            display: none;
+            align-items: center;
+            gap: 34px;
+            padding: 14px 30px 8px;
+            background: linear-gradient(to top, rgba(9, 4, 20, 0.95), rgba(9, 4, 20, 0.78) 55%, rgba(9, 4, 20, 0));
+            clip-path: polygon(0 26px, 7% 4px, 93% 4px, 100% 26px, 100% 100%, 0 100%);
+            font-family: 'Share Tech Mono', monospace;
+            color: #cbb6ff;
+        }
+
+        #dash-brain .dash-mod {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        #dash-brain .mod-k {
+            font-size: 0.52rem;
+            letter-spacing: 2px;
+            color: #8a76b8;
+            text-transform: uppercase;
+        }
+
+        #dash-brain .brain-stats {
+            align-items: flex-start;
+            gap: 3px;
+            min-width: 168px;
+        }
+
+        #dash-brain .neuro-stat {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            width: 100%;
+            font-size: 0.63rem;
+            letter-spacing: 1px;
+        }
+
+        #dash-brain .neuro-stat span { color: #8a76b8; }
+        #dash-brain .neuro-stat b {
+            color: #e9dcff;
+            font-weight: 600;
+            text-shadow: 0 0 9px rgba(180, 140, 255, 0.55);
+        }
+
+        /* Alterna tableros y acentos según la skin activa */
+        [data-skin="cerebro"] #dash { display: none; }
+        [data-skin="cerebro"] #dash-brain { display: flex; }
+        [data-skin="cerebro"] .hud-panel .ship-icon { color: #c39dff; }
+        [data-skin="cerebro"] .hud-panel h3 {
+            color: #e6d8ff;
+            text-shadow: 0 0 12px rgba(170, 130, 255, 0.6);
+        }
+        [data-skin="cerebro"] .hud-panel .subtitle { color: #9b86d6; }
+        [data-skin="cerebro"] .hud-panel .mission-label { color: #b79cff; }
+        [data-skin="cerebro"] .hud-panel .tel-k { color: #8a76b8; }
+        [data-skin="cerebro"] .hud-panel .btn-start {
+            background: linear-gradient(135deg, #6a34d6, #9a4dff);
+            border-color: rgba(190, 150, 255, 0.6);
+            box-shadow: 0 0 20px rgba(150, 90, 255, 0.4);
+            color: #f3edff;
+        }
     </style>
 }
 
@@ -1463,15 +1536,15 @@
     <div class="panel-head">
         <div>
             <div class="head-row">
-                <svg class="ship-icon" viewBox="0 0 40 40" aria-hidden="true">
+                <svg class="ship-icon" id="ship-icon" viewBox="0 0 40 40" aria-hidden="true">
                     <circle cx="19" cy="25" r="12.5" fill="none" stroke="currentColor" stroke-width="2" />
                     <rect x="12.5" y="6" width="4.5" height="13" rx="1.4" fill="currentColor" />
                     <rect x="21" y="6" width="4.5" height="13" rx="1.4" fill="currentColor" />
                     <circle cx="33" cy="16" r="3" fill="currentColor" />
                 </svg>
-                <h3>Halcón Milenario</h3>
+                <h3 id="panel-title">Halcón Milenario</h3>
             </div>
-            <div class="subtitle win-extra">// Consola de Mando · Agente IA</div>
+            <div class="subtitle win-extra" id="panel-subtitle">// Consola de Mando · Agente IA</div>
         </div>
         <div class="head-right">
             <div class="status">
@@ -1502,15 +1575,15 @@
     <button id="btnStart" class="btn-start win-extra" type="button">Iniciar Hiperimpulsor</button>
 
     <div class="mission-bar win-extra">
-        <span class="mission-label">Misión</span>
+        <span class="mission-label" id="mission-label">Misión</span>
         <span id="mission-status" class="mission-status">En espera de despegue</span>
     </div>
 
-    <div class="telemetry win-extra" aria-label="Telemetría del halcón">
-        <div class="tel"><span class="tel-k">Vel</span><span id="tel-vel" class="tel-v tel-vel">0</span></div>
-        <div class="tel"><span class="tel-k">Objetivo</span><span id="tel-obj" class="tel-v tel-obj">—</span></div>
-        <div class="tel"><span class="tel-k">Dist</span><span id="tel-dist" class="tel-v tel-dist">—</span></div>
-        <div class="tel"><span class="tel-k">Motor</span><span id="tel-hyper" class="tel-v tel-hyper">IDLE</span></div>
+    <div class="telemetry win-extra" aria-label="Telemetría del halcón" id="telemetry">
+        <div class="tel"><span class="tel-k" data-telk="0">Vel</span><span id="tel-vel" class="tel-v tel-vel">0</span></div>
+        <div class="tel"><span class="tel-k" data-telk="1">Objetivo</span><span id="tel-obj" class="tel-v tel-obj">—</span></div>
+        <div class="tel"><span class="tel-k" data-telk="2">Dist</span><span id="tel-dist" class="tel-v tel-dist">—</span></div>
+        <div class="tel"><span class="tel-k" data-telk="3">Motor</span><span id="tel-hyper" class="tel-v tel-hyper">IDLE</span></div>
     </div>
 
     <div class="log-head win-extra">
@@ -1518,7 +1591,7 @@
         <span id="hud-clock" class="hud-clock">--:--:--</span>
     </div>
     <div id="log-container" class="log-container win-extra">
-        <div>[Sistema] Halcón Milenario en plataforma — motores listos.</div>
+        <div id="boot-line">[Sistema] Halcón Milenario en plataforma — motores listos.</div>
     </div>
 </div>
 
@@ -1566,6 +1639,20 @@
     </div>
 </div>
 
+<!-- Tablero de la skin Cerebro (solo visible con data-skin="cerebro") -->
+<div id="dash-brain" aria-hidden="true">
+    <div class="dash-mod brain-mod">
+        <canvas id="neuro-gram" width="184" height="70"></canvas>
+        <span class="mod-k">Actividad Neural</span>
+    </div>
+    <div class="dash-mod brain-mod brain-stats">
+        <span class="mod-k">Red</span>
+        <div class="neuro-stat"><span>Fase</span><b id="brain-fase">Reposo</b></div>
+        <div class="neuro-stat"><span>Sinapsis</span><b id="brain-syn">0</b></div>
+        <div class="neuro-stat"><span>Neuronas</span><b id="brain-neu">0</b></div>
+    </div>
+</div>
+
 <div id="launch-fx" aria-hidden="true"></div>
 
 <div id="path-explorer" aria-hidden="true">
@@ -1604,6 +1691,7 @@
     <script src="~/js/constellation.js" asp-append-version="true"></script>
     <script src="~/js/skins/brain-scene.js" asp-append-version="true"></script>
     <script src="~/js/skins/skin-manager.js" asp-append-version="true"></script>
+    <script src="~/js/skins/skin-theme.js" asp-append-version="true"></script>
     <script>
         (function () {
             var clock = document.getElementById('hud-clock');

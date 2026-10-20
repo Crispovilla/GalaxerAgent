@@ -3245,6 +3245,11 @@ function setViewMode(mode, rig) {
         viewRefRig = null;
         userControlUntil = 0;
         applyViewPreset(mode, true);
+        /* Skin Cerebro activa: mueve también la cámara del cerebro */
+        if (window.BrainScene && typeof window.BrainScene.setView === 'function'
+            && window.SkinManager && SkinManager.isActive('cerebro')) {
+            window.BrainScene.setView(mode);
+        }
     }
     if (typeof refreshViewControl === 'function') refreshViewControl();
 }
@@ -3866,20 +3871,24 @@ function refreshViewControl() {
         return b;
     };
 
-    add('Base de control', viewMode === 'base', () => setViewMode('base'));
-    add('Sistema solar', viewMode === 'solar', () => setViewMode('solar'));
+    /* Etiquetas tematizables por skin (las provee skin-theme.js). */
+    const LV = window.__viewLabels || {};
+    const kFolders = LV.folders || 'Carpetas';
+
+    add(LV.base || 'Base de control', viewMode === 'base', () => setViewMode('base'));
+    add(LV.solar || 'Sistema solar', viewMode === 'solar', () => setViewMode('solar'));
 
     if (folderDeployments.size) {
         const deps = [...folderDeployments.values()];
         if (deps.length > 1) {
-            add('Carpetas: general', viewMode === 'folders' && !folderFocusKey, () => {
+            add(kFolders + ': general', viewMode === 'folders' && !folderFocusKey, () => {
                 folderFocusKey = null;
                 setViewMode('folders');
             });
         }
         deps.forEach(d => {
             const tail = folderTail(d.path) || d.path || 'raíz';
-            add('Carpetas: ' + tail, viewMode === 'folders' && folderFocusKey === d.key, () => {
+            add(kFolders + ': ' + tail, viewMode === 'folders' && folderFocusKey === d.key, () => {
                 folderFocusKey = d.key;
                 setViewMode('folders');
             });
